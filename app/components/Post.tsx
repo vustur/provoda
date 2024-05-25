@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image"
+import { useEffect, useState } from "react";
 
 type Props = {
     title: String
@@ -11,13 +12,22 @@ type Props = {
 }
 
 export default ({ title, author, community, textContent, rating, date }: Props) => {
+    const [width, setWidth] = useState(window.innerWidth)
+
+    useEffect(() => {
+    const onDeviceResize = () => {
+        setWidth(window.innerWidth)
+    }
+    addEventListener("resize", onDeviceResize)
+    })
+
     return (
     <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm">
         <div className="inline-flex flex-col items-start justify-center">
             <p className="text-2xl font-semibold text-[#dcdcdc]">{title}</p>
             <div className="inline-flex items-center mt-1 justify-between relative w-full h-4">
                 <p className="text-sm font-semibold text-[#7c7c7c]"># {community} </p>
-                <p className="text-sm font-semibold text-[#757474]">@ {author}  //  {date}</p>
+                {width > 370 ? <p className="text-sm font-semibold text-[#757474]">@ {author}  //  {date}</p> : null }
             </div>
             <p className="text-lg mt-1 text-[#dcdcdc]">{textContent}</p>
         </div>
