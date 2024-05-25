@@ -1,113 +1,97 @@
+'use client'
 import Image from "next/image";
+import CommunityButton from "./components/CommunityButton";
+import Post from            "./components/Post";
+import Button from          "./components/Button";
 
 export default function Home() {
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+  
+
+<div className="absolute bg-[#2a2a2a] w-full h-full flex flex-col">
+  {/* Top */}
+  <div className="inline-flex items-center justify-start w-full h-14">
+          <div className="w-4/12">
+            <p className="w-fit ml-3 font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#e0e0e0] to-[#9354B1]">Provoda</p>
+          </div>
+          <div className="relative bg-[#3a3a3a] w-5/12 h-8 rounded-lg">
+              <p className="w-max h-3 absolute left-2 top-1 text-md text-[#575757]">Type to search on Provoda...</p>
+          </div>
+          {/* Btns */}
+          <div className="w-4/12 relative h-full px-2.5 flex flex-row-reverse items-center"> {/* bg-gradient-to-r from-[#2a2a2a] via-[#323232] to-[#393939] */}
+            <div className="p-1 h-fit flex space-x-2.5 items-center justify-end bg-[#3c3c3c] rounded-md ml-4">
+              <Button src="pen" isSpecial={true}/>
+              <Button src="bell"/>
+              <Button src="gear"/>
+            </div>
+          </div>
+      </div>
+    {/* Main part of page */}
+    <div className="bg-white bg-opacity-0 w-full h-full flex flex-row">
+      {/* Communities */}
+        <div className="inline-flex flex-col items-start justify-start bg-[#2d2d2d] w-4/12 h-full px-[17px]">
+            <div className="relative w-[116px] h-3">
+            </div>
+            <div className="flex flex-col items-start justify-start relativ py-[5px]">
+                <p className="text-xl font-semibold text-[#d9d9d9]">Favorite</p>
+                <div className="flex flex-col items-start justify-center relative  py-0.5">
+                    <CommunityButton name="something" ></CommunityButton>
+                    <CommunityButton name="geography"></CommunityButton>
+                    <CommunityButton name="bikes"></CommunityButton>
+                </div>
+            </div>
+            <div className="flex flex-col items-start justify-start relative py-[5px]">
+                <p className="text-xl font-semibold text-[#d9d9d9]">Recent</p>
+                <div className="flex flex-col items-start justify-center relative  py-0.5">
+                    <CommunityButton name="something" ></CommunityButton>
+                    <CommunityButton name="geography"></CommunityButton>
+                    <CommunityButton name="bikes"></CommunityButton>
+                </div>
+            </div>
+            <div className="flex flex-col items-start justify-start relative py-[5px]">
+                <p className="text-xl font-semibold text-[#d9d9d9]">Joined</p>
+                <div className="flex flex-col items-start justify-center relative py-0.5">
+                    <CommunityButton name="something" ></CommunityButton>
+                    <CommunityButton name="geography"></CommunityButton>
+                    <CommunityButton name="bikes"></CommunityButton>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        {/* Posts */}
+        <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-2.5 rounded-tr-xl">
+            <Post
+            title={"Kafif joke"}
+            author={"floatingFrog"}
+            community={"stupid"}
+            textContent={"kafif perfectionist kafif into a kafif apparently, kafif kafif was not set kafif enough."}
+            rating={0}
+            date={"1 minute ago"}
+            ></Post>
+        </div>
+        {/* Profile */}
+        {window.innerWidth > 750 ? ( // ill fix in next commit
+        <div className="inline-flex flex-col items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4">
+            <Image
+            src={"/images/placeholder.jpg"}
+            width={140}
+            height={140}
+            className="rounded-2xl"
+            />
+            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">@tastyMeatball76</p>
+            <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] my-2"></div>
+            <div className="flex flex-col items-start justify-center relative space-y-2">
+                <p className="w-full h-3 text-lg font-semibold text-[#d8d8d8] mb-1">500 karma</p>
+                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">402 post karma</p>
+                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">98 comment karma</p>
+            </div>
+            <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
+            <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
+              <Button src="arrow_tr"/>
+              <button onClick={() => alert(window.innerWidth)}>Test button</button>
+            </div>
+        </div>) : null}
+    </div>
+</div>
   );
 }
