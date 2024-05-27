@@ -30,9 +30,8 @@ export default async function handler(req: Request, res: Response){
           token += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         token += "/" + Buffer.from(tag).toString('base64')
-        console.log(token)
         await dbPost("INSERT INTO accounts (tag, nick, token, mail, pass) VALUES (?, ?, ?, ?, ?)", [tag, tag, token, mail, hashedPass]);
-        res.status(200).json(["succ"])
+        res.status(200).json("succ")
     } catch(err) {
         console.log(err.message)
         res.status(500).json([err.message])
