@@ -1,17 +1,18 @@
 import dbPost from "./conn"
-import { Account } from "./main";
+import { Account, Community } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
         const { token, target, commun, reason } = req.body
         const mod = new Account(token)
-        const target = new Account(null, target)
+        const targetUser = new Account(null, target)
         const modrole = await mod.getRole()
-        const targetrole = await target.getRole()
+        const targetrole = await targetUser.getRole()
+        const community = new Community(commun)
         if (mod.checkIfExists() == false){
             throw new Error("Acc not found")
         }
-        if (target.checkIfExists() == false){
+        if (targetUser.checkIfExists() == false){
             throw new Error("Target not found")
         }
         if (modrole != 'owner' && modrole != 'mod'){
@@ -20,8 +21,8 @@ export default async function handler(req: Request, res: Response){
         if (targetrole == 'owner' || targetrole == 'mod'){
             throw new Error("Target is community staff, target should be unmoded first")
         }
-        await target.leaveCommunity(commun)
-        await target.banFromCommunity(commun, reason)
+        await targetUser.leaveCommunity(commun)
+        await community.ban(target, reason)
         res.status(200).json('succ')
     } catch(err) {
         console.log(err.message)

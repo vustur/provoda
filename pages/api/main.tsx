@@ -41,29 +41,27 @@ export class Account {
     async joinCommunity(commun){
         await dbPost("INSERT INTO communMembers (tag, commun) VALUES (?, ?)", [this.tag, commun]);
     }
-    async banFromCommunity(commun, reason){
-        const isAlrdBanned = await dbPost("SELECT * FROM communBans WHERE tag = ? AND commun = ?", [target, commun])
-        if (isAlrdBanned.length > 0){
-            throw new Error("User is already banned")
-        }
-        await dbPost("INSERT INTO communBans (tag, commun, reason) VALUES (?, ?, ?)", [this.tag, commun, reason]);
-    }
-    async unbanFromCommunity(commun){
-        const isAlrdBanned = await dbPost("SELECT * FROM communBans WHERE tag = ? AND commun = ?", [target, commun])
-        if (isAlrdBanned.length == 0){
-            throw new Error("User isnt banned")
-        }
-        await dbPost("DELETE FROM communBans WHERE tag = ? AND commun = ?", [this.tag, commun])
-    }
-    async checkIfBanned(commun){
-        const isAlrdBanned = await dbPost("SELECT * FROM communBans WHERE tag = ? AND commun = ?", [target, commun])
-        if (isAlrdBanned.length > 0){
-            return true
-        }
-        return false
-    }
     async getRole(commun){
         const targetRoleReq = await dbPost("SELECT role FROM communMembers WHERE tag = ? AND commun = ?", [target, commun]);
         return targetRoleReq[0]['role']
+    }
+}
+
+export class Community {
+    constructor(tag){
+        this.tag = tag
+    }
+    async ban(target, reason){
+        await dbPost("INSERT INTO communBans (tag, commun, reason) VALUES (?, ?, ?)", [target, this.tag, reason]);
+    }
+    async unban(target){
+        await dbPost("DELETE FROM communBans WHERE tag = ? AND commun = ?", [target, this.tag])
+    }
+    async checkIfBanned(target){
+        const banReq = await dbPost("SELECT * FROM communBans WHERE tag = ? AND commun = ?", [target, this.tag])
+        if (banReq.length == 0){
+            return false
+        }
+        return true
     }
 }
