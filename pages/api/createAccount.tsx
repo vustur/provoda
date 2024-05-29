@@ -1,4 +1,5 @@
 import dbPost from "./conn"
+import { Account } from "./main";
 const bcrypt = require("bcrypt")
 
 export default async function handler(req: Request, res: Response){
@@ -30,10 +31,10 @@ export default async function handler(req: Request, res: Response){
           token += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         token += "/" + Buffer.from(tag).toString('base64')
-        await dbPost("INSERT INTO accounts (tag, nick, token, mail, pass) VALUES (?, ?, ?, ?, ?)", [tag, tag, token, mail, hashedPass]);
+        new Account(tag, token).register(mail, hashedPass)
         res.status(200).json("succ")
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }

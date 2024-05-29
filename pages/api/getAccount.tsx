@@ -1,15 +1,17 @@
 import dbPost from "./conn"
+import { Account } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
         const { tag } = req.body
-        const dbReq = await dbPost("SELECT id, nick, tag, bio, pfp FROM accounts WHERE tag = ?", [tag]);
-        if(dbReq.length == 0) {
-            throw new Error("Unknown user");
+        const user = new Account(null, tag)
+        if (!await user.checkIfExists()){
+            throw new Error("Acc not found")
         }
-        res.status(200).json(dbReq[0])
+        const dbReq = await user.getFromDB("id, nick, tag, bio, pfp")
+        res.status(200).json([dbReq])
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }

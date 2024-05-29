@@ -18,6 +18,6 @@ export default async function handler(req: Request, res: Response){
         res.status(200).json(data)
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }

@@ -5,7 +5,7 @@ export default async function handler(req: Request, res: Response){
         const { token, commun } = req.body
         const tagReq = await dbPost("SELECT tag FROM accounts WHERE token = ?", [token]);
         if (tagReq[0].length == 0){
-            throw new Error("Acc with that token is not found")
+            throw new Error("Acc not found")
         }
         const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [commun]);
         if(uniqueCommunResult.length > 0) {
@@ -16,6 +16,6 @@ export default async function handler(req: Request, res: Response){
         res.status(200).json('succ')
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }

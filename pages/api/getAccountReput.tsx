@@ -10,6 +10,6 @@ export default async function handler(req: Request, res: Response){
         res.status(200).json([postRep, commRep, postRep + commRep])
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }

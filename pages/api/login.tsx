@@ -9,7 +9,7 @@ export default async function handler(req: Request, res: Response){
         const dbReq = await dbPost("SELECT token, pass FROM accounts WHERE tag = ?", tag);
         const [passHash, token] = dbReq ? [dbReq[0]['pass'], dbReq[0]['token']] : [null, null];
         if (token == null){
-            throw new Error("Acc with that tag is not found")
+            throw new Error("Acc not found")
         }
         const isRightPass = await bcrypt.compare(pass, passHash)
         if (!isRightPass){
@@ -18,6 +18,6 @@ export default async function handler(req: Request, res: Response){
         res.status(200).json(["succ"])
     } catch(err) {
         console.log(err.message)
-        res.status(500).json([err.message])
+        res.status(500).json(err.message)
     }
 }
