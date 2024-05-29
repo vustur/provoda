@@ -1,10 +1,11 @@
 import dbPost from "./conn"
+import { Account } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
         const { token, commun } = req.body
-        const tagReq = await dbPost("SELECT tag FROM accounts WHERE token = ?", [token]);
-        if (tagReq[0].length == 0){
+        const user = new Account(token)
+        if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
         const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [commun]);

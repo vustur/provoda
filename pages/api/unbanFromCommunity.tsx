@@ -1,4 +1,5 @@
 import dbPost from "./conn"
+import { Account } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {

@@ -1,5 +1,6 @@
 import dbPost from "./conn"
 const bcrypt = require("bcrypt")
+import { Account } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
