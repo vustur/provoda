@@ -5,6 +5,15 @@ export class Account {
         this.token = token
         this.tag = tag
     }
+    async fetchUnknows(){
+        if (this.token){
+            let dbReq = await dbPost("SELECT tag FROM accounts WHERE token = ?", [this.token])
+            this.tag = dbReq[0]['tag']
+        } else {
+            let dbReq = await dbPost("SELECT token FROM accounts WHERE tag = ?", [this.tag])
+            this.tag = dbReq[0]['token']
+        }
+    }
     async register(mail, hashedPass){
         await dbPost("INSERT INTO accounts (tag, nick, token, mail, pass) VALUES (?, ?, ?, ?, ?)", [this.tag, this.tag, this.token, mail, hashedPass]);
     }
@@ -26,7 +35,7 @@ export class Account {
     async checkIfExists(){
         let dbReq
         if (this.token){
-            dbReq = await dbPost("SELECT * FROM accounts WHERE token = ?", [this.tag])
+            dbReq = await dbPost("SELECT * FROM accounts WHERE token = ?", [this.token])
         } else {
             dbReq = await dbPost("SELECT * FROM accounts WHERE tag = ?", [this.tag])
         }
@@ -38,11 +47,14 @@ export class Account {
     async leaveCommunity(commun){
         await dbPost("DELETE FROM communMembers WHERE tag = ? AND commun = ?", [this.tag, commun]);
     }
-    async joinCommunity(commun){
-        await dbPost("INSERT INTO communMembers (tag, commun) VALUES (?, ?)", [this.tag, commun]);
+    async joinCommunity(commun, role = 'member'){
+        await dbPost("INSERT INTO communMembers (tag, commun, role) VALUES (?, ?, ?)", [this.tag, commun, role]);
     }
     async getRole(commun){
         const targetRoleReq = await dbPost("SELECT role FROM communMembers WHERE tag = ? AND commun = ?", [target, commun]);
+        if (targetRoleReq.length == 0){
+            return 'none'
+        }
         return targetRoleReq[0]['role']
     }
 }
@@ -64,4 +76,68 @@ export class Community {
         }
         return true
     }
+    async checkIfExists(){
+        const communReq = await dbPost("SELECT * FROM communities WHERE tag = ?", [this.tag])
+        if (communReq.length == 0){
+            return false
+        }
+        return true
+    }
+}
+
+export class Post {
+    constructor (authortag = null, commun = null, reputation = null, date = null, content = null, id = null){
+        this.authortag = authortag
+        this.commun = commun
+        this.reputation = reputation
+        this.date = date
+        this.content = content
+        this.id = id
+    }
+    async fetchUnknowns(){
+        const dbReq = await dbPost("SELECT * FROM posts WHERE id = ?", [this.id])
+        if (dbReq.length == 0){
+            return []
+        }
+        this.authortag = dbReq[0]['authortag']
+        this.reputation = dbReq[0]['reputation']
+        this.date = dbReq[0]['date']
+        this.content = dbReq[0]['content']
+        this.parseContent2Array()
+        return dbReq
+    }
+    async parseContent2Array(){
+        this.content = JSON.parse(this.content)
+    }
+    async parseContent2String(){
+        this.content = JSON.stringify(this.content)
+    }
+    async create(){
+        await dbPost("INSERT INTO posts (authortag, commun, content) VALUES (?, ?, ?)", [this.authortag, this.commun, this.content]);
+    }
+    async delete(){
+        await dbPost("DELETE FROM posts WHERE id = ?", [this.id])
+    }
+}
+
+export default function handler(req: Request, res: Response) {
+    const stArray = [
+        "Bad bad bad bad bad bad...",
+        "This is api, u should not be here",
+        "Wrong place",
+        "Return to main page, please",
+        "Really, what u wanna to see here?",
+        "Thats api, not much to say about it",
+        "Api, Api, Api, Api, Api, Api, Api",
+        "Roses are red, violets are blue, u shouldnt be here, so fck u",
+        "Stop wasting your time, get a job already",
+        "No access 403!!!! :3",
+        "What did wluffy said when he went to api? Nothing, he returned to main page as good person",
+        "Type '../..' in url for cookie",
+        "ОВИ ЗУБНОЕ ПАСТЕ ЩЯЩЬ-ЩЯЩЬ СВОБОДАРАВЕНСТВОУПЯЧКА... Oh, not that, sorry",
+    ]
+
+    return (
+        res.status(200).json(stArray[Math.floor(Math.random() * stArray.length)])
+    )
 }
