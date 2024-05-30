@@ -106,6 +106,13 @@ export class Post {
         this.parseContent2Array()
         return dbReq
     }
+    async checkIfExists(){
+        const dbReq = await dbPost("SELECT * FROM posts WHERE id = ?", [this.id])
+        if (dbReq.length == 0){
+            return false
+        }
+        return true
+    }
     async parseContent2Array(){
         this.content = JSON.parse(this.content)
     }
@@ -117,6 +124,30 @@ export class Post {
     }
     async delete(){
         await dbPost("DELETE FROM posts WHERE id = ?", [this.id])
+    }
+    async changeReput(isPositive, calltag){
+        const isAlrdRated = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ?", [this.id, calltag])
+        if (isAlrdRated.length > 0){
+            await this.deleteReput(calltag)
+        }
+        if (isPositive == "true"){ // there is no bool in json sadly
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
+        } else {
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
+        }
+        await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive, "post"])
+    }
+    async deleteReput(calltag){
+        const dbReq = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ?", [this.id, calltag])
+        if (dbReq.length == 0){
+            throw new Error("User didnt rate this post")
+        }
+        if (dbReq[0]['isPositive'] == "true"){
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
+        } else {
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
+        }
+        await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ?", [this.id, calltag])
     }
 }
 
@@ -132,7 +163,7 @@ export default function handler(req: Request, res: Response) {
         "Roses are red, violets are blue, u shouldnt be here, so fck u",
         "Stop wasting your time, get a job already",
         "No access 403!!!! :3",
-        "What did wluffy said when he went to api? Nothing, he returned to main page as good person",
+        "What did Wluffy said when he went to api? Nothing, he returned to main page as good person",
         "Type '../..' in url for cookie",
         "ОВИ ЗУБНОЕ ПАСТЕ ЩЯЩЬ-ЩЯЩЬ СВОБОДАРАВЕНСТВОУПЯЧКА... Oh, not that, sorry",
     ]
