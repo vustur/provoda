@@ -9,8 +9,8 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        const postReq = await dbPost("SELECT id, commun, title, text, reputation, date FROM posts WHERE authortag = ?", [tag]);
-        const commReq = await dbPost("SELECT id, postId, text, reputation, date FROM comments WHERE authortag = ?", [tag]);
+        const postReq = await dbPost("SELECT id, commun, title, text, reputation, date FROM posts WHERE authortag = ? ORDER BY date DESC", [tag]);
+        const commReq = await dbPost("SELECT id, postId, text, reputation, date FROM comments WHERE authortag = ? ORDER BY date DESC", [tag]);
         res.status(200).json([postReq, commReq])
     } catch(err) {
         console.log(err.message)
