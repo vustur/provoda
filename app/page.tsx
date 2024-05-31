@@ -1,19 +1,70 @@
 'use client'
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import axios from "axios";
+const Cookie = require('js-cookie')
 import CommunityButton from "./components/CommunityButton";
 import Post from            "./components/Post";
 import Button from          "./components/Button";
+import { title } from "process";
 
 export default function Home() {
-  const [width, setWidth] = useState(window.innerWidth)
+  const [width, setWidth] = useState(1000)
+  const [token, setToken] = useState(Cookie.get("token"))
+  const [posts, setPosts] = useState(["Fetching"])
 
   useEffect(() => {
-  const onDeviceResize = () => {
+    if (token == null) {
+      window.location.href = '/login'
+      return
+    }
+
     setWidth(window.innerWidth)
+    const onDeviceResize = () => {
+      setWidth(window.innerWidth)
+    }
+    addEventListener("resize", onDeviceResize)
+
+    console.log("Token = " + token)
+    fetchPosts()
+  }, [])
+
+  const warn = (err) => {
+    console.error(err)
+    // alert(err)
   }
-  addEventListener("resize", onDeviceResize)
-  })
+
+  const fetchPosts = async () => {
+    try {
+      const fetchPosts = await axios.post("/api/loadFeed", { token: token })
+      const postsReq = fetchPosts.data
+      setPosts(postsReq)
+      console.log(postsReq)
+    } catch (err) {
+      expectError(err)
+      if (err.response.data == "No communities") {
+        setPosts(["No communities"])
+      }
+    }
+  }
+
+  const expectError = (err) => {
+    if (!err.response) {
+      warn(err)
+      return
+    }
+    warn("[API Error] " + err.response.data)
+    switch (err.response.data) {
+      case "Acc not found":
+        Cookie.remove("token")
+        setToken(null)
+        window.location.href = '/login'
+        break
+
+      default:
+        break
+    }
+  }
 
   return (
 <div className="absolute bg-[#2a2a2a] w-full h-full flex flex-col">
@@ -84,14 +135,47 @@ export default function Home() {
         ) : null}
         {/* Posts */}
         <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-2.5 rounded-tr-xl">
-            <Post
-            title={"Kafif joke"}
-            author={"floatingFrog"}
-            community={"stupid"}
-            textContent={"kafif perfectionist kafif into a kafif apparently, kafif kafif was not set kafif enough."}
-            rating={0}
-            date={"1 minute ago"}
-            ></Post>
+          {
+            posts[0] == "Fetching" ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
+              </div>
+            ) : posts[0] == "No communities" ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <Image
+                src={"/images/wluffy_head_light.png"}
+                width={150}
+                height={150}
+                className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40"
+                />
+                <p className="text-xl font-semibold text-[#545454] text-center">No communities or posts in your communities yet...<br></br>Join some to load feed!</p>
+              </div>
+            ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "Fetching" ? (
+              posts.map((post) => (
+                <Post
+                  key={post.id}
+                  title={JSON.parse(post.content)['title']}
+                  author={post.authortag}
+                  date={new Date(post.date).toLocaleString('ru-RU', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(':00 ', ' ')}
+                  textContent={JSON.parse(post.content)['text']}
+                  reputation={post.reputation}
+                  community={post.commun}
+                  token={token}
+                  postid={post.id}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <Image
+                  src={"/images/wluffy_head_light.png"}
+                  width={150}
+                  height={150}
+                  className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40"
+                />
+                <p className="text-xl font-semibold text-[#545454] text-center">Smth went wrong...<br></br>Open console to see</p>
+            </div>
+            )
+          }
         </div>
         {/* Profile */}
         {width > 750 ? (

@@ -139,21 +139,22 @@ export class Post {
             await this.deleteReput(calltag)
         }
         if (isPositive == "true"){ // there is no bool in json sadly
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ? AND type = 'post'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ? AND type = 'post'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
         }
-        await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive, "post"])
+        await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive.toString(), "post"])
     }
     async deleteReput(calltag){
         const dbReq = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'post'", [this.id, calltag])
         if (dbReq.length == 0){
-            throw new Error("User didnt rate this post")
+            return
+            // throw new Error("User didnt rate this post")
         }
         if (dbReq[0]['isPositive'] == "true"){
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ? AND type = 'post'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ? AND type = 'post'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
         }
         await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ? AND type = 'post'", [this.id, calltag])
     }
@@ -201,21 +202,22 @@ export class Comment {
             await this.deleteReput(calltag)
         }
         if (isPositive == "true"){ // there is no bool in json sadly
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ? AND type = 'comment'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ? AND type = 'comment'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
         }
         await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive, "comment"])
     }
     async deleteReput(calltag){
         const dbReq = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
         if (dbReq.length == 0){
-            throw new Error("User didnt rate this post")
+            return
+            // throw new Error("User didnt rate this comment")
         }
         if (dbReq[0]['isPositive'] == "true"){
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ? AND type = 'comment'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ? AND type = 'comment'", [this.id])
+            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
         }
         await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
     }

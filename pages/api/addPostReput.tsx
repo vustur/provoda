@@ -17,7 +17,7 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Post not found")
         }
         if (mode == 'add'){
-            await post.changeReput(isPositive, user.tag)
+            await post.changeReput(isPositive.toString(), user.tag)
         }
         if (mode == 'remove'){
             await post.deleteReput(user.tag)
