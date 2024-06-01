@@ -8,7 +8,11 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        const communReq = await dbPost("SELECT commun FROM communMembers WHERE tag = ?", [tagReq[0]['tag']]);
+        await user.fetchUnknows()
+        const communReq = await dbPost("SELECT commun FROM communMembers WHERE tag = ?", [user.tag]);
+        if (communReq.length == 0){
+            throw new Error("No communities")
+        }
         res.status(200).json(communReq.map(item => item['commun']))
     } catch(err) {
         console.log(err.message)

@@ -12,6 +12,9 @@ export default function Home() {
   const [width, setWidth] = useState(1000)
   const [token, setToken] = useState(Cookie.get("token"))
   const [posts, setPosts] = useState(["Fetching"])
+  const [selfData, setSelfData] = useState(["Fetching"])
+  const [selfRep, setSelfRep] = useState(["Fetching"])
+  const [communs, setCommuns] = useState(["Fetching"])
 
   useEffect(() => {
     if (token == null) {
@@ -27,6 +30,8 @@ export default function Home() {
 
     console.log("Token = " + token)
     fetchPosts()
+    fetchSelf()
+    fetchCommuns()
   }, [])
 
   const warn = (err) => {
@@ -36,15 +41,49 @@ export default function Home() {
 
   const fetchPosts = async () => {
     try {
-      const fetchPosts = await axios.post("/api/loadFeed", { token: token })
-      const postsReq = fetchPosts.data
-      setPosts(postsReq)
-      console.log(postsReq)
+      const fetch = await axios.post("/api/loadFeed", { token })
+      const data = fetch.data
+      setPosts(data)
+      console.log(data)
     } catch (err) {
       expectError(err)
       if (err.response.data == "No communities") {
         setPosts(["No communities"])
       }
+    }
+  }
+
+  const fetchSelf = async () => {
+    try {
+      const fetch = await axios.post("/api/getAccount", { input: token })
+      const data = fetch.data[0]
+      setSelfData(data)
+      console.log(data)
+      await fetchSelfRep(data.tag)
+    } catch (err) {
+      expectError(err)
+    }
+  }
+
+  const fetchSelfRep = async (tag) => {
+    try {
+      const fetch = await axios.post("/api/getAccountReput", { tag })
+      let data = fetch.data
+      setSelfRep(data)
+      console.log(data)
+    } catch (err) {
+      expectError(err)
+    }
+  }
+
+  const fetchCommuns = async () => {
+    try {
+      const fetch = await axios.post("/api/getUserCommuns", { token })
+      const data = fetch.data
+      setCommuns(data)
+      console.log(data)
+    } catch (err) {
+      expectError(err)
     }
   }
 
@@ -68,6 +107,11 @@ export default function Home() {
 
   return (
 <div className="absolute bg-[#2a2a2a] w-full h-full flex flex-col">
+  {/* Load Screen */}
+  <div className={`absolute bg-[#343434] w-full h-full flex flex-col items-center justify-center z-50 transition duration-300 ease-in-out
+  ${posts == "Fetching" && selfData == "Fetching" && selfRep == "Fetching" ? "opacity-80" : "opacity-0 hidden"}`}>
+    <p className="text-xl font-semibold text-[#cecece]">Loading...</p>
+  </div>
   {/* Top */}
   <div className="inline-flex items-center justify-start w-full h-14">
           {width > 300 ? (
@@ -107,28 +151,26 @@ export default function Home() {
         <div className="inline-flex flex-col items-start justify-start bg-[#2d2d2d] w-4/12 h-full px-[17px]">
             <div className="relative w-[116px] h-3">
             </div>
-            <div className="flex flex-col items-start justify-start relativ py-[5px]">
-                <p className="text-xl font-semibold text-[#d9d9d9]">Favorite</p>
-                <div className="flex flex-col items-start justify-center relative  py-0.5">
-                    <CommunityButton name="something" ></CommunityButton>
-                    <CommunityButton name="geography"></CommunityButton>
-                    <CommunityButton name="bikes"></CommunityButton>
-                </div>
-            </div>
-            <div className="flex flex-col items-start justify-start relative py-[5px]">
-                <p className="text-xl font-semibold text-[#d9d9d9]">Recent</p>
-                <div className="flex flex-col items-start justify-center relative  py-0.5">
-                    <CommunityButton name="something" ></CommunityButton>
-                    <CommunityButton name="geography"></CommunityButton>
-                    <CommunityButton name="bikes"></CommunityButton>
-                </div>
-            </div>
             <div className="flex flex-col items-start justify-start relative py-[5px]">
                 <p className="text-xl font-semibold text-[#d9d9d9]">Joined</p>
                 <div className="flex flex-col items-start justify-center relative py-0.5">
-                    <CommunityButton name="something" ></CommunityButton>
-                    <CommunityButton name="geography"></CommunityButton>
-                    <CommunityButton name="bikes"></CommunityButton>
+              {communs[0] == "Fetching" ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-xl font-semibold text-[#545454] text-center">Fetching joined communities...</p>
+                </div>
+              ) : communs[0] == "No communities" ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-xl font-semibold text-[#545454] text-center">No communities</p>
+                </div>
+              ) : (
+                communs.map((community) => {
+                  return (
+                    <CommunityButton
+                      key={community}
+                      name={community}
+                    />
+                  )
+                }))}
                 </div>
             </div>
         </div>
@@ -179,19 +221,20 @@ export default function Home() {
         </div>
         {/* Profile */}
         {width > 750 ? (
-        <div className="inline-flex flex-col items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4">
+        <div className="inline-flex flex-col items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4 shadow-2xl">
             <Image
             src={"/images/placeholder.jpg"}
             width={140}
             height={140}
             className="rounded-2xl"
             />
-            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">@tastyMeatball76</p>
+            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{selfData != "Fetching" ? selfData.nick : "Fetching..."}</p>
+            <p className="text-sm -mt-3 font-semibold text-[#7f7f7f]">{selfData != "Fetching" ? "@" + selfData.tag : "Fetching..."}</p>
             <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] my-2"></div>
             <div className="flex flex-col items-start justify-center relative space-y-2">
-                <p className="w-full h-3 text-lg font-semibold text-[#d8d8d8] mb-1">500 karma</p>
-                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">402 post karma</p>
-                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">98 comment karma</p>
+                <p className="w-full h-3 text-lg font-semibold text-[#d8d8d8] mb-1">{selfRep != "Fetching" ? selfRep.allRep.toString() + " rep" : "Fetching..."}</p>
+                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">{selfRep != "Fetching" ? selfRep.postRep.toString() + " post rep" : "Fetching..."}</p>
+                <p className="w-full h-2.5 text-sm font-semibold text-[#9f9f9f]">{selfRep != "Fetching" ? selfRep.commRep.toString() + " comment rep" : "Fetching..."}</p>
             </div>
             <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
             <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">

@@ -31,8 +31,8 @@ export default async function handler(req: Request, res: Response){
           token += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         token += "/" + Buffer.from(tag).toString('base64')
-        new Account(token, tag).register(mail, hashedPass)
-        res.status(200).json("succ")
+        await new Account(token, tag).register(mail, hashedPass)
+        res.status(200).json({token : token})
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

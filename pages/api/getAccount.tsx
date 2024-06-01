@@ -3,8 +3,13 @@ import { Account } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
-        const { tag } = req.body
-        const user = new Account(null, tag)
+        const { input } = req.body
+        let user
+        if (input < 25){
+            user = new Account(null, input)
+        } else {
+            user = new Account(input)
+        }
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }

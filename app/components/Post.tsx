@@ -23,7 +23,8 @@ export default ({ title, author, community, textContent, reputation, date, token
         try {
             if (dir == picked){
                 const dbreq = await axios.post("/api/addPostReput", {"token": token, "postid": postid, "isPositive": true, "mode": "remove"})
-                // setRep(dbreq[0])
+                setRep(dbreq.data[0])
+                setPicked("none")
                 return
             }
             let isPositive
@@ -34,10 +35,8 @@ export default ({ title, author, community, textContent, reputation, date, token
                 isPositive = false
                 setPicked("down")
             }
-            console.log(isPositive)
             const dbreq = await axios.post("/api/addPostReput", {"token": token, "postid": postid, "isPositive": isPositive, "mode": "add"})
-            // setRep(dbreq[0])
-            console.log(dbreq.data[0])
+            setRep(dbreq.data[0])
         }
         catch (err){
             console.error(err)
@@ -62,7 +61,7 @@ export default ({ title, author, community, textContent, reputation, date, token
             </div>
             <p className="text-lg mt-1 text-[#dcdcdc]">{textContent}</p>
         </div>
-        <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-5 h-fit">
+        <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
             <Image
             src={"/icons/chevron_up.svg"}
             alt="Up"
