@@ -5,10 +5,15 @@ import { useEffect, useState } from "react"
 import Button from "./Button"
 import { addProgress } from "./LoadScreen"
 
-export default function ProfileTab() {
+type Props = {
+  commun: any
+}
+
+export default function ProfileTab( { commun } : Props ) {
     const [width, setWidth] = useState(1000)
     const [selfData, setSelfData] = useState(["Fetching"])
     const [selfRep, setSelfRep] = useState(["Fetching"])
+    const [communData, setCommunData] = useState(["Fetching"])
     let token = Cookie.get("token")
 
     useEffect(() => {
@@ -17,7 +22,12 @@ export default function ProfileTab() {
             setWidth(window.innerWidth)
         }
     addEventListener("resize", onDeviceResize)
-    fetchSelf()
+    
+    if (commun == null) {
+      fetchSelf()
+    } else {
+      fetchCommun()
+    }
     }, [])
 
     const fetchSelf = async () => {
@@ -45,9 +55,24 @@ export default function ProfileTab() {
         }
       }
 
+      const fetchCommun = async () => {
+        try {
+          const fetch = await axios.post("/api/getCommun", { token, commun })
+          const data = fetch.data
+          setCommunData(data)
+          console.log(data)
+        } catch (err) {
+          console.error(err.response.data)
+          setCommunData("Error")
+        }
+        addProgress("communData")
+      }
+
     return (
-            <div className={`inline-flex flex-col items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4 shadow-2xl
-            ${width <= 750 ? "hidden" : ""} `}>
+        <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4 shadow-2xl
+        ${width <= 750 ? "hidden" : ""} `}>
+          { commun == null ? (
+            <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
                 <Image
                 src={"/images/placeholder.jpg"}
                 width={140}
@@ -67,5 +92,23 @@ export default function ProfileTab() {
                   <Button src="arrow_tr"/>
                 </div>
             </div>
+          ) : communData != "Error" ? (
+          <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
+            <Image
+            src={"/images/placeholder.jpg"}
+            width={140}
+            height={140}
+            className="rounded-2xl"
+            />
+            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{communData != "Fetching" ? "#" + communData.main.tag : "Fetching..."}</p>
+            <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>
+            <p className="text-lg my-2 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>
+            <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>
+            <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
+              <Button src="gear"/>
+            </div>
+        </div>
+          ) : null }
+          </div>
     )
 }

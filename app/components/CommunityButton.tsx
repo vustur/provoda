@@ -7,7 +7,7 @@ type Props = {
 export default ({ name }: Props) => {
     return (
         <button className="text-lg text-[#c1c1c1] hover:text-purple-300 transition ease-in-out duration-300 truncate"
-        onClick={() => null}
+        onClick={() => window.location = "/c/" + name}
         ># {name}
         </button>
     )

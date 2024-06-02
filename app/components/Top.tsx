@@ -15,7 +15,9 @@ export default function Top() {
     <div className="inline-flex items-center justify-start w-full h-14">
         {width > 300 ? (
         <div className="w-4/12">
-          <p className="w-fit ml-3 font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#e0e0e0] to-[#9354B1]">Provoda</p>
+          <p className="w-fit ml-3 cursor-pointer font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#e0e0e0] to-[#9354B1]"
+          onClick={() => window.location = "/"}
+          >Provoda</p>
         </div>
         ) : null}
         {width > 570 ? (
