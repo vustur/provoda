@@ -3,6 +3,7 @@ import axios from "axios"
 const Cookie = require('js-cookie')
 import { useEffect, useState } from "react"
 import Button from "./Button"
+import { addProgress } from "./LoadScreen"
 
 export default function ProfileTab() {
     const [width, setWidth] = useState(1000)
@@ -26,6 +27,7 @@ export default function ProfileTab() {
           setSelfData(data)
           console.log(data)
           await fetchSelfRep(data.tag)
+          addProgress("self")
         } catch (err) {
           console.error(err.response.data)
         }
@@ -37,6 +39,7 @@ export default function ProfileTab() {
           let data = fetch.data
           setSelfRep(data)
           console.log(data)
+          addProgress("selfRep")
         } catch (err) {
           console.error(err.response.data)
         }

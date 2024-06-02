@@ -60,11 +60,11 @@ export default function Home() {
                 }
                 {errText ? <p className="text-red-300 text-sm mt-2">{errText}</p> : null}
                 <button
-                className="mt-3 w-60 h-10 rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300"
+                className="mt-3 w-full h-10 rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300"
                 onClick={isLogin ? login : register}
                 >{isLogin ? "Login" : "Register"}</button>
                 <button
-                className="w-60 h-5 rounded-md text-white text-sm p-2"
+                className="w-full h-5 rounded-md text-white text-sm p-2"
                 onClick={() => setIsLogin(!isLogin)}
                 >{isLogin ? "No account?" : "Already registered?"}</button>
             </div>

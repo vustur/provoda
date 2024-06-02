@@ -3,6 +3,7 @@ import axios from "axios"
 const Cookie = require('js-cookie')
 import { useEffect, useState } from "react"
 import CommunityButton from "./CommunityButton"
+import { addProgress } from "./LoadScreen"
 
 // type Props = {
 //     communs: any
@@ -28,6 +29,7 @@ export default function CommunityTab() {
               const data = fetch.data
               setCommuns(data)
               console.log(data)
+              addProgress("communs")
             } catch (err) {
               console.error(err.response.data)
             }
