@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react"
 import Button from "./Button"
+import axios from "axios"
+
 
 export default function Top() {
     const [width, setWidth] = useState(1000)
+    let token = localStorage.getItem("token")
   
     useEffect(() => {  
       setWidth(window.innerWidth)
@@ -10,7 +13,25 @@ export default function Top() {
         setWidth(window.innerWidth)
       }
       addEventListener("resize", onDeviceResize)
+      checkIfExists()
     }, [])
+
+    const checkIfExists = async () => {
+      try{
+          const req = await axios.post("/api/getAccount", {"input" : token})
+          const data = req.data
+          console.log(data)
+      }
+      catch(err){
+          console.error(err.response.data)
+          if (err.response.data == "Acc not found"){
+              console.log("Looks like token is invalid, going to login page")
+              console.log(localStorage)
+              // window.location = "/login"
+          }
+      }
+    }
+
     return (
     <div className="inline-flex items-center justify-start w-full h-14">
         {width > 300 ? (

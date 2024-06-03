@@ -1,9 +1,8 @@
 import Image from "next/image"
 import axios from "axios"
-const Cookie = require('js-cookie')
+
 import { useEffect, useState } from "react"
 import CommunityButton from "./CommunityButton"
-import { addProgress } from "./LoadScreen"
 
 // type Props = {
 //     communs: any
@@ -12,7 +11,7 @@ import { addProgress } from "./LoadScreen"
 export default function CommunityTab() {
     const [width, setWidth] = useState(1000)
     const [communs, setCommuns] = useState(["Fetching"])
-    let token = Cookie.get("token")
+    let token = localStorage.getItem("token")
 
     useEffect(() => {
         setWidth(window.innerWidth)
@@ -29,7 +28,6 @@ export default function CommunityTab() {
               const data = fetch.data
               setCommuns(data)
               console.log(data)
-              addProgress("communs")
             } catch (err) {
               console.error(err.response.data)
             }

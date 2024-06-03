@@ -1,6 +1,5 @@
-const Cookie = require('js-cookie')
+
 import Post from "./Post";
-import { addProgress } from "./LoadScreen"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -13,7 +12,7 @@ export default function PostsTab({ commun }: Props) {
     const [width, setWidth] = useState(1000)
     const [posts, setPosts] = useState(["Fetching"])
     const [communData, setCommunData] = useState(["Fetching"])
-    let token = Cookie.get("token")
+    let token = localStorage.getItem("token")
 
     useEffect(() => {
         setWidth(window.innerWidth)
@@ -35,7 +34,6 @@ export default function PostsTab({ commun }: Props) {
           const data = fetch.data
           setPosts(data)
           console.log(data)
-          addProgress("posts")
         } catch (err) {
           console.error(err.response.data)
           if (err.response.data == "No communities") {
@@ -49,8 +47,6 @@ export default function PostsTab({ commun }: Props) {
           const fetch = await axios.post("/api/loadCommunityPosts", { token, commun })
           const data = fetch.data
           setPosts(data)
-          console.log(data)
-          addProgress("posts")
         } catch (err) {
           console.error(err.response.data)
           if (err.response.data == "No posts") {
@@ -60,7 +56,6 @@ export default function PostsTab({ commun }: Props) {
             setPosts(["Community not found"])
           }
         }
-        addProgress("posts")
       }
 
     const fetchCommun = async () => {
@@ -72,7 +67,6 @@ export default function PostsTab({ commun }: Props) {
         } catch (err) {
           console.error(err.response.data)
         }
-        addProgress("communData")
     }
 
     return (

@@ -1,9 +1,8 @@
 import Image from "next/image"
 import axios from "axios"
-const Cookie = require('js-cookie')
+
 import { useEffect, useState } from "react"
 import Button from "./Button"
-import { addProgress } from "./LoadScreen"
 
 type Props = {
   commun: any
@@ -14,7 +13,7 @@ export default function ProfileTab( { commun } : Props ) {
     const [selfData, setSelfData] = useState(["Fetching"])
     const [selfRep, setSelfRep] = useState(["Fetching"])
     const [communData, setCommunData] = useState(["Fetching"])
-    let token = Cookie.get("token")
+    let token = localStorage.getItem("token")
 
     useEffect(() => {
         setWidth(window.innerWidth)
@@ -37,7 +36,6 @@ export default function ProfileTab( { commun } : Props ) {
           setSelfData(data)
           console.log(data)
           await fetchSelfRep(data.tag)
-          addProgress("self")
         } catch (err) {
           console.error(err.response.data)
         }
@@ -49,7 +47,6 @@ export default function ProfileTab( { commun } : Props ) {
           let data = fetch.data
           setSelfRep(data)
           console.log(data)
-          addProgress("selfRep")
         } catch (err) {
           console.error(err.response.data)
         }
@@ -65,7 +62,6 @@ export default function ProfileTab( { commun } : Props ) {
           console.error(err.response.data)
           setCommunData("Error")
         }
-        addProgress("communData")
       }
 
     return (

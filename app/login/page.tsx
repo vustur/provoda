@@ -1,7 +1,7 @@
 'use client'
 import axios from "axios"
 import { useState } from "react"
-const Cookie = require('js-cookie')
+
 
 export default function Home() {
     const [isLogin, setIsLogin] = useState(true)
@@ -13,8 +13,7 @@ export default function Home() {
     const login = async () => {
         try {
             const req = await axios.post("/api/login", { tag: username, pass: password })
-            Cookie.set("token", req.data.token)
-            window.location.href = "/"
+            succLogin(req.data.token)
         }
         catch (err) {
             console.log(err.response.data)
@@ -25,13 +24,19 @@ export default function Home() {
     const register = async () => {
         try {
             const req = await axios.post("/api/createAccount", { tag: username, pass: password, mail: mail })
-            Cookie.set("token", req.data.token)
-            window.location.href = "/"
+            succLogin(req.data.token)
         }
         catch (err) {
             console.log(err.response.data)
             setErrText(err.response.data)
         }
+    }
+
+    const succLogin = async (token) => {
+        localStorage.setItem("token", token)
+        setErrText(null)
+        await new Promise(res => setTimeout(res, 1000))
+        window.location.href = "/"
     }
 
     return(

@@ -12,12 +12,14 @@ type Props = {
     date: String
     token: String
     postid: Number
+    isFS: boolean
 }
 
-export default ({ title, author, community, textContent, reputation, date, token, postid }: Props) => {
+export default ({ title, author, community, textContent, reputation, date, token, postid, isFS }: Props) => {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
+    const [isFullScreen, setIsFullScreen] = useState(false) // ill use later probably
 
     const upvote = async (dir) => {
         try {
@@ -49,15 +51,21 @@ export default ({ title, author, community, textContent, reputation, date, token
             setWidth(window.innerWidth)
         }
     addEventListener("resize", onDeviceResize)
-    })
+    if (isFS){
+        setIsFullScreen(true)
+    }
+    }, [])
 
     return (
     <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm">
         <div className="inline-flex flex-col items-start justify-center w-full">
-            <p className="text-2xl font-semibold text-[#dcdcdc]">{title}</p>
+            <p className="text-2xl font-semibold text-[#dcdcdc] cursor-pointer"
+            onClick={() => window.location = `/p/${postid}`}>{title}</p>
             <div className="inline-flex items-center mt-1 justify-between relative w-full h-4">
-                <p className="text-sm font-semibold text-[#7c7c7c] truncate"># {community}</p>
-                {width > 400 ? <p className="text-sm font-semibold text-[#757474] truncate">@ {author} // {date}</p> : null }
+                <p className="text-sm font-semibold text-[#7c7c7c] truncate cursor-pointer"
+                onClick={() => window.location = `/c/${community}`}># {community}</p>
+                {width > 400 ? <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer"
+                onClick={() => window.location = `/u/${author}`}>@ {author} // {date}</p> : null }
             </div>
             <p className="text-lg mt-1 text-[#dcdcdc]">{textContent}</p>
         </div>

@@ -109,6 +109,7 @@ export class Post {
         this.authortag = dbReq[0]['authortag']
         this.reputation = dbReq[0]['reputation']
         this.date = dbReq[0]['date']
+        this.commun = dbReq[0]['commun']
         this.content = dbReq[0]['content']
         this.parseContent2Array()
         return dbReq
