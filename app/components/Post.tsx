@@ -15,11 +15,12 @@ type Props = {
     isFS: boolean
 }
 
-export default ({ title, author, community, textContent, reputation, date, token, postid, isFS }: Props) => {
+export default ({ title, author, community, textContent, reputation, date, token, postid, isOpen }: Props) => {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
-    const [isFullScreen, setIsFullScreen] = useState(false) // ill use later probably
+    const [isOpened, setIsOpened] = useState(false) // ill use later probably
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
     const upvote = async (dir) => {
         try {
@@ -51,13 +52,22 @@ export default ({ title, author, community, textContent, reputation, date, token
             setWidth(window.innerWidth)
         }
     addEventListener("resize", onDeviceResize)
-    if (isFS){
-        setIsFullScreen(true)
+    if (isOpen){
+        setIsOpened(true)
     }
     }, [])
 
+    const onRightClick = (e) => {
+        if (isContextMenuOpen){
+            setIsContextMenuOpen(false)
+        } else {
+            setIsContextMenuOpen(true)
+        }
+    }
+
     return (
-    <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm">
+    <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm"
+    onClick={(e) => {if (e.button == 2){onRightClick(e)}}}>
         <div className="inline-flex flex-col items-start justify-center w-full">
             <p className="text-2xl font-semibold text-[#dcdcdc] cursor-pointer"
             onClick={() => window.location = `/p/${postid}`}>{title}</p>

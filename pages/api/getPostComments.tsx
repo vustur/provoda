@@ -9,7 +9,10 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Post not found")
         }
         const dbReq = await dbPost("SELECT * FROM comments WHERE postId = ? ORDER BY reputation DESC", [postid]);
-        res.status(200).json([dbReq])
+        if (dbReq.length == 0){
+            throw new Error("No comments")
+        }
+        res.status(200).json(dbReq)
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)
