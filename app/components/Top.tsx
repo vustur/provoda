@@ -21,6 +21,7 @@ export default function Top() {
           const req = await axios.post("/api/getAccount", {"input" : token})
           const data = req.data
           console.log(data)
+          sessionStorage.setItem("tag", data[0].tag)
       }
       catch(err){
           console.error(err.response.data)
