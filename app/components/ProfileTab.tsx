@@ -96,7 +96,7 @@ export default function ProfileTab( { commun } : Props ) {
             height={140}
             className="rounded-2xl"
             />
-            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{communData != "Fetching" ? "#" + communData.main.tag : "Fetching..."}</p>
+            <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
             <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>
             <p className="text-lg my-2 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>
             <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>

@@ -17,12 +17,12 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
     const [btns, setBtns] = useState([
         {
             name: "Share",
-            icon: "gear",
+            icon: "share",
             function: () => navigator.clipboard.writeText(window.location.origin + "/p/" + postid)
         },
         {
             name: "Report",
-            icon: "gear",
+            icon: "flag",
             function: () => alert("Reports will be added later :/")
         },
     ])
@@ -42,7 +42,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
               ...btns,
               {
                 name: "Leave",
-                icon: "gear",
+                icon: "minus",
                 function: () => leaveCommun()
               }
             ])
@@ -51,7 +51,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
               ...btns,
               {
                 name: "Join",
-                icon: "gear",
+                icon: "plus",
                 function: () => joinCommun()
               }
             ])
