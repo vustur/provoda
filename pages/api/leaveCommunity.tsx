@@ -8,6 +8,10 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
+        await user.fetchUnknows()
+        if (!user.checkIfJoined(commun)){
+            throw new Error("Not joined")
+        }
         await user.leaveCommunity(commun)
         res.status(200).json('succ')
     } catch(err) {

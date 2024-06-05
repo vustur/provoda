@@ -30,6 +30,9 @@ export default function CommunityTab() {
               console.log(data)
             } catch (err) {
               console.error(err.response.data)
+              if (err.response.data == "No communities") {
+                setCommuns(["No communities"])
+              }
             }
         }
 

@@ -2,6 +2,8 @@
 import Image from "next/image"
 import axios from "axios";
 import { useEffect, useState } from "react";
+import PostContextMenu from "./PostContextMenu";
+import { on } from "process";
 
 type Props = {
     title: String
@@ -12,7 +14,7 @@ type Props = {
     date: String
     token: String
     postid: Number
-    isFS: boolean
+    isOpen: boolean
 }
 
 export default ({ title, author, community, textContent, reputation, date, token, postid, isOpen }: Props) => {
@@ -21,6 +23,7 @@ export default ({ title, author, community, textContent, reputation, date, token
     const [rep, setRep] = useState(reputation)
     const [isOpened, setIsOpened] = useState(false) // ill use later probably
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+    const [cursorPos, setCursorPos] = useState({x: 0, y: 0})
 
     const upvote = async (dir) => {
         try {
@@ -47,27 +50,38 @@ export default ({ title, author, community, textContent, reputation, date, token
     }
 
     useEffect(() => {
+    setWidth(window.innerWidth)
+    const onDeviceResize = () => {
         setWidth(window.innerWidth)
-        const onDeviceResize = () => {
-            setWidth(window.innerWidth)
-        }
+    }
     addEventListener("resize", onDeviceResize)
+    addEventListener("click", onLeftClick)
+    addEventListener("contextmenu", onRClickAnywhere)
     if (isOpen){
         setIsOpened(true)
     }
     }, [])
 
+    const onLeftClick = (e) => {
+        if (e.target.id == "postsettings") return
+        setIsContextMenuOpen(false)
+    }
+
+    const onRClickAnywhere = () => {
+        setIsContextMenuOpen(false)
+    }
+
     const onRightClick = (e) => {
-        if (isContextMenuOpen){
-            setIsContextMenuOpen(false)
-        } else {
-            setIsContextMenuOpen(true)
-        }
+        e.preventDefault()
+        setCursorPos({x: e.clientX, y: e.clientY})
+        setTimeout(() => {
+            setIsContextMenuOpen(!isContextMenuOpen)
+        }, 1)
     }
 
     return (
     <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm"
-    onClick={(e) => {if (e.button == 2){onRightClick(e)}}}>
+    onContextMenu={(e) => onRightClick(e)}>
         <div className="inline-flex flex-col items-start justify-center w-full">
             <p className="text-2xl font-semibold text-[#dcdcdc] cursor-pointer"
             onClick={() => window.location = `/p/${postid}`}>{title}</p>
@@ -97,7 +111,17 @@ export default ({ title, author, community, textContent, reputation, date, token
             className="rotate-180 cursor-pointer"
             onClick={() => upvote("down")}
             />
+            <Image
+            src={"/icons/adjst.svg"}
+            alt="Up"
+            height={32}
+            width={32} 
+            className="cursor-pointer opacity-40"
+            id="postsettings"
+            onClick={(e) => onRightClick(e)}
+            />
         </div>
+        <PostContextMenu show={isContextMenuOpen} postid={postid} token={token} authortag={author} mousePos={cursorPos} postcommun={community}></PostContextMenu>
     </div>
     )
 }

@@ -57,6 +57,13 @@ export class Account {
     async joinCommunity(commun, role = 'member'){
         await dbPost("INSERT INTO communMembers (tag, commun, role) VALUES (?, ?, ?)", [this.tag, commun, role]);
     }
+    async checkIfJoined(commun){
+        const existsReq = await dbPost("SELECT * FROM communMembers WHERE tag = ? AND commun = ?", [this.tag, commun]);
+        if (existsReq.length == 0){
+            return false
+        }
+        return true
+    }
     async getRole(commun){
         const targetRoleReq = await dbPost("SELECT role FROM communMembers WHERE tag = ? AND commun = ?", [target, commun]);
         if (targetRoleReq.length == 0){

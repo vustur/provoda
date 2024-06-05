@@ -8,7 +8,11 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        if (await user.checkIfBanned(commun)){
+        await user.fetchUnknows()
+        if (await user.checkIfJoined(commun)){
+            throw new Error("Already joined")
+        }
+        if (await user.checkIfBannedFrom(commun)){
             throw new Error("Acc is banned from this community")
         }
         await user.joinCommunity(commun)

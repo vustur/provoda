@@ -1,4 +1,3 @@
-
 import Post from "./Post";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,6 +11,7 @@ export default function PostsTab({ commun }: Props) {
     const [width, setWidth] = useState(1000)
     const [posts, setPosts] = useState(["Fetching"])
     const [communData, setCommunData] = useState(["Fetching"])
+    const [communs, setCommuns] = useState([])
     let token = localStorage.getItem("token")
 
     useEffect(() => {
@@ -23,6 +23,7 @@ export default function PostsTab({ commun }: Props) {
     if (commun != null) {
         fetchPostsByCommun(commun)
         fetchCommun()
+        fetchCommuns()
     } else {
       fetchFeed()
     }
@@ -69,6 +70,39 @@ export default function PostsTab({ commun }: Props) {
         }
     }
 
+    const fetchCommuns = async () => {
+      try {
+        const fetch = await axios.post("/api/getUserCommuns", { token })
+        const data = fetch.data
+        setCommuns(data)
+        console.log(data)
+      } catch (err) {
+        console.error(err.response.data)
+      }
+    }
+
+    const joinCommun = async () => {
+      try {
+        const fetch = await axios.post("/api/joinCommunity", { token, commun })
+        const data = fetch.data
+        console.log(data)
+        fetchCommuns()
+      } catch (err) {
+        console.error(err.response.data)
+      }
+    }
+
+    const leaveCommun = async () => {
+      try {
+        const fetch = await axios.post("/api/leaveCommunity", { token, commun })
+        const data = fetch.data
+        console.log(data)
+        fetchCommuns()
+      } catch (err) {
+        console.error(err.response.data)
+      }
+    }
+
     return (
         <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl">
             { commun != null && communData[0] != "Fetching" ? (
@@ -80,9 +114,20 @@ export default function PostsTab({ commun }: Props) {
                 className="rounded-2xl mr-4"
                 />
                 <div className="inline-flex flex-col items-start justify-start">
-                  <p className="text-2xl font-semibold text-[#f1f1f1]"># {communData['main']['tag']}</p>
-                  <p className="text-lg font-semibold text-[#bababa]">{communData['mems'] + " members"}</p>
+                  <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData['main']['tag']}</p>
+                  <p className="text-lg  font-semibold text-[#bababa] truncate">{communData['mems'] + " members"}</p>
                 </div>
+                { !communs.includes(commun) && communs.length > 0 ? (
+                <div className="flex flex-row-reverse w-full mr-10">
+                  <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
+                  onClick={() => joinCommun()}>Join</button>
+                </div>
+                ) : communs.includes(commun) && communs.length > 0 ? (
+                <div className="flex flex-row-reverse w-full mr-10">
+                  <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
+                  onClick={() => leaveCommun()}>Leave</button>
+                </div>
+                ) : null}
               </div>
             ) : null
             }

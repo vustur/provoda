@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Button from "./Button"
+import Button from "./IconButton"
 import axios from "axios"
 
 
@@ -12,11 +12,7 @@ export default function Top() {
       const onDeviceResize = () => {
         setWidth(window.innerWidth)
       }
-      const onRightClick = (e) => {
-        e.preventDefault()
-      }
       addEventListener("resize", onDeviceResize)
-      addEventListener("contextmenu", onRightClick)
       checkIfExists()
     }, [])
 

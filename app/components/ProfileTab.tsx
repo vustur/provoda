@@ -2,7 +2,7 @@ import Image from "next/image"
 import axios from "axios"
 
 import { useEffect, useState } from "react"
-import Button from "./Button"
+import Button from "./IconButton"
 
 type Props = {
   commun: any
