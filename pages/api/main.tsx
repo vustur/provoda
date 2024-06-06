@@ -65,7 +65,7 @@ export class Account {
         return true
     }
     async getRole(commun){
-        const targetRoleReq = await dbPost("SELECT role FROM communMembers WHERE tag = ? AND commun = ?", [target, commun]);
+        const targetRoleReq = await dbPost("SELECT role FROM communMembers WHERE tag = ? AND commun = ?", [this.tag, commun]);
         if (targetRoleReq.length == 0){
             return 'none'
         }

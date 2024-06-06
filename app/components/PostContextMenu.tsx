@@ -26,30 +26,41 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
       function: () => alert("Reports will be added later :/")
     },
   ])
-  const [reqToLoadSlowBtns, setReqToLoadSlowBtns] = useState(btns.length + 1)
 
   useEffect(() => {
     fetchCommuns()
   }, [])
 
   useEffect(() => {
-    if (reqToLoadSlowBtns != btns.length) return
-    if (authortag == sessionStorage.getItem("tag")) {
-      setBtns([
-        ...btns,
-        {
-          name: "Delete",
-          icon: "gear",
-          function: null
-        },
-        {
-          name: "Edit",
-          icon: "gear",
-          function: null
-        }
-      ])
+    addSpecBtns()
+  }, [show])
+
+  const addSpecBtns = async () => {
+    if (show != true) return
+    if (btns.find((btn) => btn.name == "Delete")) return
+    let role = "member"
+    const check = () => {
+      if (authortag == sessionStorage.getItem("tag") || role == "owner" || role == "mod") {
+        setBtns([
+          ...btns,
+          {
+            name: "Delete",
+            icon: "gear",
+            function: () => deletePost()
+          },
+          {
+            name: "Edit",
+            icon: "gear",
+            function: null
+          }
+        ])
+      }
     }
-  }, [btns])
+
+    role = await getPost()
+    console.log(role)
+    check()
+  }
 
   const fetchCommuns = async () => {
     try {
@@ -76,27 +87,6 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
             function: () => joinCommun()
           }
         ])
-      }
-
-      if (authortag == "smth") {
-        console.log("Authortag is smth")
-        const a = "smth"
-        if (a === "smth") {
-          console.log("a is smth")
-          setBtns([
-            ...btns,
-            {
-              name: "Delete",
-              icon: "gear",
-              function: null
-            },
-            {
-              name: "Edit",
-              icon: "gear",
-              function: null
-            },
-          ])
-        }
       }
     } catch (err) {
       console.error(err)
@@ -129,6 +119,26 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
     }
   }
 
+  const deletePost = async () => {
+    try {
+      const fetch = await axios.post("/api/deletePost", { token, postid })
+      const data = fetch.data
+      console.log(data)
+    } catch (err) {
+      console.error(err.response.data)
+    }
+  }
+
+  const getPost = async () => {
+    try {
+      const fetch = await axios.post("/api/getPost", { id : postid, token })
+      const data = fetch.data
+      console.log(data)
+      return data.role
+    } catch (err) {
+      console.error(err.response.data)
+    }
+  }
 
   return (
     show && (
