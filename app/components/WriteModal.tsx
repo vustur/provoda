@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Button from "./IconButton"
 import axios from "axios"
 
 let isOpenOu = false
@@ -10,6 +11,7 @@ export default function WriteModal() {
     const [choosenCommun, setChoosenCommun] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     const [errText, setErrText] = useState(null)
+    const [isDropdown, setIsDropdown] = useState(true)
     let token = localStorage.getItem("token")
 
     useEffect(() => {
@@ -49,8 +51,7 @@ export default function WriteModal() {
                 title,
                 text: textContent
             }
-            console.log("post sent")
-            const fetch = await axios.post("/api/createPost", { token, commun : choosenCommun, content })
+            const fetch = await axios.post("/api/createPost", { token, commun: choosenCommun, content })
             const data = fetch.data
             console.log(data)
             setErrText(null)
@@ -65,16 +66,32 @@ export default function WriteModal() {
         <div id="backdrop" className={`absolute w-screen h-screen top-0 left-0 z-30 backdrop-blur-sm bg-black bg-opacity-10 flex flex-col items-center justify-center ${isOpen ? " " : "hidden"}`}
             onClick={(e) => onLeftClick(e)}>
             <div className="flex flex-col bg-[#4b4b4b] p-2 rounded-lg shadow-sm w-[50%] h-[80%]">
-                <p className="text-white font-semibold text-2xl">Write a post</p>
-                <select className="bg-[#393939] text-white mt-1 p-1 rounded-lg" onChange={(e) => setChoosenCommun(e.target.value)}>
-                    {communs[0] != "Fetching" && communs[0] != "No communities" ? (
-                        communs.map((community) => (
-                            <option key={community} value={community}>{community}</option>
-                        ))
-                    ) : communs == "No communities" ? (
-                        <option selected={true} disabled={true}>No communities</option>
-                    ) : null}
-                </select>
+                <p className="mb-2 text-white font-semibold text-2xl text-center">Write a post</p>
+                <div className="inline-flex items-center w-full h-16">
+                    <Button
+                        src={isDropdown ? "search" : "house"}
+                        onClick={() => setIsDropdown(!isDropdown)}
+                        isSpecial={true}
+                    />
+                    {isDropdown ? (
+                        <select className="bg-[#393939] text-white ml-2 w-full h-full p-1 rounded-lg" onChange={(e) => setChoosenCommun(e.target.value)}>
+                            {communs[0] != "Fetching" && communs[0] != "No communities" ? (
+                                communs.map((community) => (
+                                    <option key={community} value={community}>{community}</option>
+                                ))
+                            ) : communs == "No communities" ? (
+                                <option selected={true} disabled={true}>No communities</option>
+                            ) : null}
+                        </select>
+                    ) : (
+                        <input
+                            type="text"
+                            placeholder="Community tag"
+                            className="w-full h-full ml-2 rounded-md bg-[#393939] text-white text-lg p-1"
+                            onChange={(e) => setChoosenCommun(e.target.value)}
+                        />
+                    )}
+                </div>
                 <input
                     type="text"
                     placeholder="Title"
@@ -84,15 +101,15 @@ export default function WriteModal() {
                 <textarea
                     type="text"
                     placeholder="Text content (description)"
-                    className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-sm p-2 h-full"
+                    className="mt-3 w-full rounded-md bg-[#393939] text-white text-sm p-2 h-full"
                     onChange={(e) => setTextContent(e.target.value)}
                     row={5}
                 />
                 {errText ? <p className="text-red-300 text-sm mt-2">{errText}</p> : null}
                 <button
-                    className="mt-3 w-full h-10 rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300"
+                    className="mt-3 w-full h-10 rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300 truncate"
                     onClick={() => Post()}
-                >Post</button>
+                >Post to {choosenCommun}</button>
             </div>
         </div>
     )

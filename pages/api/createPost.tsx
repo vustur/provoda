@@ -27,7 +27,6 @@ export default async function handler(req: Request, res: Response){
         }
         const post = new Post(user.tag, commun, null, null, content)
         await post.parseContent2String()
-        console.log(post)
         await post.create()
         res.status(200).json('succ')
     } catch(err) {
