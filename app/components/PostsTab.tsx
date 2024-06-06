@@ -104,7 +104,8 @@ export default function PostsTab({ commun }: Props) {
     }
 
     return (
-        <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl">
+        <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl pb-16"
+        style={{ overflowY: "scroll" }}>
             { commun != null && communData[0] != "Fetching" ? (
               <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
                 <Image
@@ -112,6 +113,7 @@ export default function PostsTab({ commun }: Props) {
                 width={80}
                 height={80}
                 className="rounded-2xl mr-4"
+                alt="placeholder"
                 />
                 <div className="inline-flex flex-col items-start justify-start">
                   <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData['main']['tag']}</p>
@@ -143,6 +145,7 @@ export default function PostsTab({ commun }: Props) {
               width={300}
               height={300}
               className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40 -mt-10"
+              alt="placeholder"
               />
               { posts[0] == "No communities" ?
               <p className="text-xl font-semibold text-[#545454] text-center">No communities or no posts in your communities yet...<br></br>Join some to load feed!</p>
@@ -159,7 +162,7 @@ export default function PostsTab({ commun }: Props) {
                 key={post.id}
                 title={JSON.parse(post.content)['title']}
                 author={post.authortag}
-                date={new Date(post.date).toLocaleString('ru-RU', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(':00 ', ' ')}
+                date={post.date}
                 textContent={JSON.parse(post.content)['text']}
                 reputation={post.reputation}
                 community={post.commun}
@@ -174,6 +177,7 @@ export default function PostsTab({ commun }: Props) {
                 width={150}
                 height={150}
                 className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40"
+                alt="placeholder"
               />
               <p className="text-xl font-semibold text-[#545454] text-center">Smth went wrong...<br></br>Open console to see</p>
           </div>

@@ -14,7 +14,7 @@ export default async function handler(req: Request, res: Response){
         if (communs.length == 0){
             throw new Error("No communities")
         }
-        const postsReq = await dbPost("SELECT * FROM posts WHERE commun IN (?) ORDER BY date DESC LIMIT ? OFFSET ?", [communs, limit, offset]);
+        const postsReq = await dbPost("SELECT * FROM posts WHERE commun IN (?) ORDER BY id DESC LIMIT ? OFFSET ?", [communs, limit, offset]);
         if (postsReq.length == 0){
             throw new Error("No communities")
         }

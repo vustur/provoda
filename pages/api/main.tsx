@@ -135,7 +135,10 @@ export class Post {
         this.content = JSON.stringify(this.content)
     }
     async create(){
-        await dbPost("INSERT INTO posts (authortag, commun, content) VALUES (?, ?, ?)", [this.authortag, this.commun, this.content]);
+        const now = new Date()
+        const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
+        this.date = dateStr
+        await dbPost("INSERT INTO posts (authortag, commun, content, date) VALUES (?, ?, ?, ?)", [this.authortag, this.commun, this.content, this.date]);
     }
     async delete(){
         await dbPost("DELETE FROM comments WHERE postId = ?", [this.id])
@@ -199,7 +202,10 @@ export class Comment {
         return true
     }
     async create(){
-        await dbPost("INSERT INTO comments (postid, authortag, text, attach) VALUES (?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach]);
+        const now = new Date()
+        const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
+        this.date = dateStr
+        await dbPost("INSERT INTO comments (postid, authortag, text, attach, date) VALUES (?, ?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach, this.date]);
     }
     async delete(){
         await dbPost("DELETE FROM comments WHERE id = ?", [this.id])

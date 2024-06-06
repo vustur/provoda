@@ -40,25 +40,33 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
     if (btns.find((btn) => btn.name == "Delete")) return
     let role = "member"
     const check = () => {
-      if (authortag == sessionStorage.getItem("tag") || role == "owner" || role == "mod") {
+      if (authortag == sessionStorage.getItem("tag")) {
         setBtns([
           ...btns,
           {
             name: "Delete",
-            icon: "gear",
+            icon: "trash",
             function: () => deletePost()
           },
           {
             name: "Edit",
-            icon: "gear",
+            icon: "pentwo",
             function: null
+          }
+        ])
+      } else if (role == "owner" || role == "mod"){
+        setBtns([
+          ...btns,
+          {
+            name: "Delete",
+            icon: "trash",
+            function: () => deletePost()
           }
         ])
       }
     }
 
     role = await getPost()
-    console.log(role)
     check()
   }
 

@@ -27,7 +27,7 @@ export default function PostsTab({ id }: Props) {
     const fetchPost = async (id) => {
       try {
         const fetch = await axios.post("/api/getPost", { id })
-        const data = fetch.data
+        const data = fetch.data.post
         console.log(data)
         setPostData(data)
       } catch (err) {
@@ -63,7 +63,7 @@ export default function PostsTab({ id }: Props) {
         <Post                 
           title={postData.content.title}
           author={postData.authortag}
-          date={new Date(postData.date).toLocaleString('ru-RU', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(':00 ', ' ')}
+          date={postData.date}
           textContent={postData.content.text}
           reputation={postData.reputation}
           community={postData.commun}
@@ -95,7 +95,7 @@ export default function PostsTab({ id }: Props) {
               key={comment.id}
               authortag={comment.authortag}
               textContent={comment.text}
-              date={new Date(comment.date).toLocaleString('ru-RU', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(':00 ', ' ')}
+              date={comment.date}
               postid={comment.postid}
               reputation={comment.reputation}
             />
