@@ -1,12 +1,7 @@
 import Image from "next/image"
 import axios from "axios"
-
 import { useEffect, useState } from "react"
 import CommunityButton from "./CommunityButton"
-
-// type Props = {
-//     communs: any
-// }
 
 export default function CommunityTab() {
     const [width, setWidth] = useState(1000)

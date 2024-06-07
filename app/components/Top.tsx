@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Button from "./IconButton"
 import WriteModal from "./WriteModal"
-import { openWriteModal } from "./WriteModal"
+import { mainContext } from "./PageBase"
 import axios from "axios"
 
 export default function Top() {
   const [width, setWidth] = useState(1000)
+  const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = localStorage.getItem("token")
 
   useEffect(() => {
@@ -68,15 +69,15 @@ export default function Top() {
               src="search"
             />
           ) : null}
-          <Button src="pen" 
-            isSpecial={true} 
-            onClick={() => openWriteModal()} 
+          <Button src="pen"
+            isSpecial={true}
+            onClick={() => ctxVal.openWriteFunc("write")}
           />
           <Button src="bell" />
           <Button src="gear" />
         </div>
       </div>
-      <WriteModal type="write"/>
+      <WriteModal type="write" />
     </div>
   )
 }

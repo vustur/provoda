@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import axios from "axios"
@@ -28,10 +27,6 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
   ])
 
   useEffect(() => {
-    fetchCommuns()
-  }, [])
-
-  useEffect(() => {
     addSpecBtns()
   }, [show])
 
@@ -54,7 +49,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
             function: null
           }
         ])
-      } else if (role == "owner" || role == "mod"){
+      } else if (role == "owner" || role == "mod") {
         setBtns([
           ...btns,
           {
@@ -70,63 +65,6 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
     check()
   }
 
-  const fetchCommuns = async () => {
-    try {
-      const fetch = await axios.post("/api/getUserCommuns", { token })
-      const data = fetch.data
-      console.log(data)
-      let reqNumBtn = btns.length + 1
-
-      if (data.includes(postcommun)) {
-        setBtns([
-          ...btns,
-          {
-            name: "Leave",
-            icon: "minus",
-            function: () => leaveCommun()
-          }
-        ])
-      } else {
-        setBtns([
-          ...btns,
-          {
-            name: "Join",
-            icon: "plus",
-            function: () => joinCommun()
-          }
-        ])
-      }
-    } catch (err) {
-      console.error(err)
-      console.error(err.response.data)
-      if (err.response.data == "No communities") {
-        setCommuns(["No communities"])
-      }
-    }
-  }
-
-  const joinCommun = async () => {
-    try {
-      const fetch = await axios.post("/api/joinCommunity", { token, commun: postcommun })
-      const data = fetch.data
-      console.log(data)
-      fetchCommuns()
-    } catch (err) {
-      console.error(err.response.data)
-    }
-  }
-
-  const leaveCommun = async () => {
-    try {
-      const fetch = await axios.post("/api/leaveCommunity", { token, commun: postcommun })
-      const data = fetch.data
-      console.log(data)
-      fetchCommuns()
-    } catch (err) {
-      console.error(err.response.data)
-    }
-  }
-
   const deletePost = async () => {
     try {
       const fetch = await axios.post("/api/deletePost", { token, postid })
@@ -139,7 +77,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
 
   const getPost = async () => {
     try {
-      const fetch = await axios.post("/api/getPost", { id : postid, token })
+      const fetch = await axios.post("/api/getPost", { id: postid, token })
       const data = fetch.data
       console.log(data)
       return data.role

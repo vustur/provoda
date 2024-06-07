@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
+import { mainContext } from "./PageBase"
 import Button from "./IconButton"
 import axios from "axios"
-
-let isOpenOu = false
 
 export default function WriteModal() {
     const [title, setTitle] = useState()
@@ -12,17 +11,14 @@ export default function WriteModal() {
     const [isOpen, setIsOpen] = useState(false)
     const [errText, setErrText] = useState(null)
     const [isDropdown, setIsDropdown] = useState(true)
+    const [writeType, setWriteType] = useState("write") // write or edit
+    const { ctxVal, setCtxVal } = useContext(mainContext)
     let token = localStorage.getItem("token")
 
-    useEffect(() => {
-        fetchCommuns()
-        const interval = setInterval(() => {
-            if (isOpenOu) {
-                isOpenOu = false
-                setIsOpen(true)
-            }
-        }, 100)
-    }, [])
+    const openWriteModal = (type) => {
+        setIsOpen(true)
+        setWriteType(type)
+    }
 
     const fetchCommuns = async () => {
         try {
@@ -61,6 +57,11 @@ export default function WriteModal() {
             setErrText(err.response.data)
         }
     }
+
+    useEffect(() => {
+        // console.log(mainContext._currentValue)
+        setCtxVal(prevVal => ({ ...prevVal, openWriteFunc: openWriteModal }))
+    }, [mainContext])
 
     return (
         <div id="backdrop" className={`absolute w-screen h-screen top-0 left-0 z-30 backdrop-blur-sm bg-black bg-opacity-10 flex flex-col items-center justify-center ${isOpen ? " " : "hidden"}`}
@@ -113,8 +114,4 @@ export default function WriteModal() {
             </div>
         </div>
     )
-}
-
-export function openWriteModal() {
-    isOpenOu = true
 }
