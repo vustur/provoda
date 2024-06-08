@@ -1,5 +1,6 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { mainContext } from "./PageBase"
 import Image from "next/image"
 import axios from "axios"
 
@@ -10,9 +11,10 @@ type Props = {
   mousePos: { x: number, y: number }
   authortag: string
   postcommun: string
+  content: string
 }
 
-export default function PostContextMenu({ show, postid, token, mousePos, authortag, postcommun }: Props) {
+export default function PostContextMenu({ show, postid, token, mousePos, authortag, postcommun, content }: Props) {
   const [btns, setBtns] = useState([
     {
       name: "Share",
@@ -25,6 +27,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
       function: () => alert("Reports will be added later :/")
     },
   ])
+  const { ctxVal, setCtxVal } = useContext(mainContext)
 
   useEffect(() => {
     addSpecBtns()
@@ -46,7 +49,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
           {
             name: "Edit",
             icon: "pentwo",
-            function: null
+            function: () => ctxVal.openWriteFunc("edit", content, postid)
           }
         ])
       } else if (role == "owner" || role == "mod") {
@@ -70,6 +73,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
       const fetch = await axios.post("/api/deletePost", { token, postid })
       const data = fetch.data
       console.log(data)
+      ctxVal.refreshPosts()
     } catch (err) {
       console.error(err.response.data)
     }

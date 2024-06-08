@@ -1,9 +1,9 @@
 'use client'
-import ProfileTab from "./components/ProfileTab";
-import CommunityTab from "./components/CommunityTab";
-import PostsTab from "./components/PostsTab";
-import Top from "./components/Top";
-import PageBase from "./components/PageBase";
+import ProfileTab from "@/app/components/ProfileTab";
+import CommunityTab from "@/app/components/CommunityTab";
+import PostsTab from "@/app/components/PostsTab";
+import Top from "@/app/components/Top";
+import PageBase from "@/app/components/PageBase";
 
 export default function Home() {
   return (

@@ -121,7 +121,7 @@ export default ({ title, author, community, textContent, reputation, date, token
             onClick={(e) => onRightClick(e)}
             />
         </div>
-        <PostContextMenu show={isContextMenuOpen} postid={postid} token={token} authortag={author} mousePos={cursorPos} postcommun={community}></PostContextMenu>
+        <PostContextMenu show={isContextMenuOpen} postid={postid} token={token} authortag={author} mousePos={cursorPos} postcommun={community} content={textContent}></PostContextMenu>
     </div>
     )
 }

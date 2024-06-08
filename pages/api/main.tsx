@@ -169,6 +169,11 @@ export class Post {
         }
         await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ? AND type = 'post'", [this.id, calltag])
     }
+    async editTextContent(newTextContent){
+        this.content.text = newTextContent
+        await this.parseContent2String()
+        await dbPost("UPDATE posts SET content = ? WHERE id = ?", [this.content, this.id])
+    }
 }
 
 export class Comment {
