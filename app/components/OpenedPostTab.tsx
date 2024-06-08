@@ -105,6 +105,7 @@ export default function PostsTab({ id }: Props) {
             date={comment.date}
             postid={comment.postid}
             reputation={comment.reputation}
+            postTitle={postData.content.title}
           />
         ))
       ) : comments == "Fetching" ? (

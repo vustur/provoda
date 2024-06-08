@@ -12,7 +12,7 @@ export default async function handler(req: Request, res: Response){
         if (!await community.checkIfExists()){
             throw new Error("Community not found")
         }
-        const postsReq = await dbPost("SELECT * FROM posts WHERE commun = ? ORDER BY date DESC LIMIT ? OFFSET ?", [commun, limit, offset]);
+        const postsReq = await dbPost("SELECT * FROM posts WHERE commun = ? ORDER BY id DESC LIMIT ? OFFSET ?", [commun, limit, offset]);
         if (postsReq.length == 0){
             throw new Error("No posts")
         }

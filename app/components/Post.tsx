@@ -80,7 +80,7 @@ export default ({ title, author, community, textContent, reputation, date, token
     }
 
     return (
-    <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm"
+    <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-sm mb-2"
     onContextMenu={(e) => onRightClick(e)}>
         <div className="inline-flex flex-col items-start justify-center w-full">
             <p className="text-2xl font-semibold text-[#dcdcdc] cursor-pointer"

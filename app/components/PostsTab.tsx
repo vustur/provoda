@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { mainContext } from "./PageBase"
 import axios from "axios";
 import Image from "next/image";
+import Button from "./IconButton";
 
 type Props = {
   commun: String
@@ -164,19 +165,27 @@ export default function PostsTab({ commun }: Props) {
             }
           </div>
         ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "No posts" && posts[0] != "Fetching" ? (
-          posts.map((post) => (
-            <Post
-              key={post.id}
-              title={JSON.parse(post.content)['title']}
-              author={post.authortag}
-              date={post.date}
-              textContent={JSON.parse(post.content)['text']}
-              reputation={post.reputation}
-              community={post.commun}
-              token={token}
-              postid={post.id}
-            />
-          ))
+          <div>
+            <Button
+              src="refresh"
+              onClick={() => refresh()}
+              isSpecial={true}
+              text="Refresh"
+              className="mb-2 bg-opacity-70"/>
+            {posts.map((post) => (
+              <Post
+                key={post.id}
+                title={JSON.parse(post.content)['title']}
+                author={post.authortag}
+                date={post.date}
+                textContent={JSON.parse(post.content)['text']}
+                reputation={post.reputation}
+                community={post.commun}
+                token={token}
+                postid={post.id}
+              />
+            ))}
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
             <Image

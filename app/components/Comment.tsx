@@ -7,9 +7,11 @@ type Props = {
     date: string
     postid: number
     reputation: number
+    showOrig: boolean
+    postTitle: string
 }
 
-export default function main({ authortag, textContent, date, postid, reputation }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, postTitle }: Props) {
     const [width, setWidth] = useState(1000)
 
     useEffect(() => {
@@ -25,10 +27,11 @@ export default function main({ authortag, textContent, date, postid, reputation 
     }
 
     return (
-        <div className="w-full inline-flex items-start justify-center bg-[#333333] p-2.5 rounded-xl">
+        <div className="w-full inline-flex items-start justify-center bg-[#2d2d2d] p-2.5 rounded-xl">
         <div className="inline-flex flex-col items-start justify-center w-full">
+        {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
             <div className={`inline-flex relative w-full h-fit ${ width > 400 ? "justify-between" : "flex-col"} `}>
-                <p className="text-base font-semibold text-[#b7b7b7] truncate cursor-pointer"
+                <p className="text-base font-semibold text-[#8a8a8a] truncate cursor-pointer"
                 onClick={() => window.location = `/u/${authortag}`}>@ {authortag}</p>
                 <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer">
                 {date}</p>

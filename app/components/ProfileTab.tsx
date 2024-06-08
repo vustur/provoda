@@ -13,6 +13,7 @@ export default function ProfileTab({ commun }: Props) {
   const [selfData, setSelfData] = useState(["Fetching"])
   const [selfRep, setSelfRep] = useState(["Fetching"])
   const [communData, setCommunData] = useState(["Fetching"])
+  const [role, setRole] = useState("member")
   let token = localStorage.getItem("token")
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function ProfileTab({ commun }: Props) {
       fetchSelf()
     } else {
       fetchCommun()
+      fetchRole()
     }
   }, [])
 
@@ -64,6 +66,16 @@ export default function ProfileTab({ commun }: Props) {
     }
   }
 
+  const fetchRole = async () => {
+    try {
+      const fetch = await axios.post("/api/getRole", { token, commun })
+      const data = fetch.data
+      setRole(data)
+    } catch (err) {
+      console.error(err.response.data)
+    }
+  }
+
   return (
     <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4 shadow-2xl
         ${width <= 750 ? "hidden" : ""} `}>
@@ -86,7 +98,10 @@ export default function ProfileTab({ commun }: Props) {
           </div>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
-            <Button src="arrow_tr" />
+            <Button 
+            src="arrow_tr"
+            onClick={() => window.location = "/u/" + selfData.tag}
+            />
           </div>
         </div>
       ) : communData != "Error" ? (
@@ -98,10 +113,11 @@ export default function ProfileTab({ commun }: Props) {
             className="rounded-2xl"
             alt="placeholder"
           />
-          <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
-          <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>
-          <p className="text-lg my-2 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>
-          <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-2"></div>
+          <p className="text-xl my-2 font-semibold text-[#dbdbdb] truncate">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
+          <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
+          <p className="text-lg mt-1 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>
+          <p className="text-lg mb-1 font-semibold text-[#b99ce1] text-left">{role != "member" ? role : null}</p>
+          <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
             <Button src="gear" />
           </div>
