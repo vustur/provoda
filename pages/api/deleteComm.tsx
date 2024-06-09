@@ -13,7 +13,7 @@ export default async function handler(req: Request, res: Response){
         if (!await commnt.checkIfExists()){
             throw new Error("Comment not found")
         }
-        commnt.fetchUnknowns()
+        await commnt.fetchUnknowns()
         const post = new Post(user.tag, null, null, null, null, commnt.postid)
         if (!await post.checkIfExists()){
             throw new Error("Post not found")

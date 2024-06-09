@@ -116,7 +116,7 @@ export default function ProfileTab({ commun }: Props) {
           <p className="text-xl my-2 font-semibold text-[#dbdbdb] truncate">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
           <p className="text-lg mt-1 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>
-          <p className="text-lg mb-1 font-semibold text-[#b99ce1] text-left">{role != "member" ? role : null}</p>
+          <p className="text-lg mb-1 font-semibold text-[#b99ce1] text-left">{role != "member" && role != "none" ? role : null}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
             <Button src="gear" />

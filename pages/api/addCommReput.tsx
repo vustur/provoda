@@ -17,18 +17,17 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Comment not found")
         }
         await commnt.fetchUnknowns()
-        const post = new Post(user.tag, null, null, null, null, commnt.authortag)
-        if (!await post.checkIfExists()){
-            throw new Error("Post not found")
+        if (isPositive != true && isPositive != false){
+            throw new Error("isPositive is invalid")
         }
         if (mode == 'add'){
-            await commnt.changeReput(isPositive, user.tag)
+            await commnt.changeReput(isPositive.toString(), user.tag)
         }
         if (mode == 'remove'){
             await commnt.deleteReput(user.tag)
         }
         await commnt.fetchUnknowns()
-        res.status(200).json([post.reputation])
+        res.status(200).json([commnt.reputation])
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

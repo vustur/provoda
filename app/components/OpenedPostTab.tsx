@@ -24,6 +24,7 @@ export default function PostsTab({ id }: Props) {
     addEventListener("resize", onDeviceResize)
     refresh()
     setCtxVal(prevVal => ({ ...prevVal, refreshPosts: () => refresh() }))
+    setCtxVal(prevVal => ({ ...prevVal, refresh: () => fetchComments(id) }))
   }, [])
 
   const refresh = () => {
@@ -105,7 +106,7 @@ export default function PostsTab({ id }: Props) {
             date={comment.date}
             postid={comment.postid}
             reputation={comment.reputation}
-            postTitle={postData.content.title}
+            commid={comment.id}
           />
         ))
       ) : comments == "Fetching" ? (

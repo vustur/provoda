@@ -191,7 +191,7 @@ export class Comment {
         if (dbReq.length == 0){
             return []
         }
-        this.postid = dbReq[0]['postid']
+        this.postid = dbReq[0]['postId']
         this.authortag = dbReq[0]['authortag']
         this.text = dbReq[0]['text']
         this.attach = dbReq[0]['attach']
@@ -221,22 +221,21 @@ export class Comment {
             await this.deleteReput(calltag)
         }
         if (isPositive == "true"){ // there is no bool in json sadly
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
+            await dbPost("UPDATE comments SET reputation = reputation + 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
+            await dbPost("UPDATE comments SET reputation = reputation - 1 WHERE id = ?", [this.id])
         }
-        await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive, "comment"])
+        await dbPost("INSERT INTO reputs (id, usertag, isPositive, type) VALUES (?, ?, ?, ?)", [this.id, calltag, isPositive.toString(), "comment"])
     }
     async deleteReput(calltag){
         const dbReq = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
         if (dbReq.length == 0){
             return
-            // throw new Error("User didnt rate this comment")
         }
         if (dbReq[0]['isPositive'] == "true"){
-            await dbPost("UPDATE posts SET reputation = reputation - 1 WHERE id = ?", [this.id])
+            await dbPost("UPDATE comments SET reputation = reputation - 1 WHERE id = ?", [this.id])
         } else {
-            await dbPost("UPDATE posts SET reputation = reputation + 1 WHERE id = ?", [this.id])
+            await dbPost("UPDATE comments SET reputation = reputation + 1 WHERE id = ?", [this.id])
         }
         await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
     }
@@ -255,7 +254,7 @@ export default function handler(req: Request, res: Response) {
         "Stop wasting your time, get a job already",
         "No access 403!!!! :3",
         "What did Wluffy said when he went to api? Nothing, he returned to main page as good person",
-        "Type '../..' in url for cookie",
+        "Type '/../..' in url for cookie",
         "ОВИ ЗУБНОЕ ПАСТЕ ЩЯЩЬ-ЩЯЩЬ СВОБОДАРАВЕНСТВОУПЯЧКА... Oh, not that, sorry",
     ]
 

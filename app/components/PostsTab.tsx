@@ -165,7 +165,7 @@ export default function PostsTab({ commun }: Props) {
             }
           </div>
         ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "No posts" && posts[0] != "Fetching" ? (
-          <div>
+          <div className="w-full">
             <Button
               src="refresh"
               onClick={() => refresh()}

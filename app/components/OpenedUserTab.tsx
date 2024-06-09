@@ -24,7 +24,7 @@ export default function PostsTab({ nick }: Props) {
     }
     addEventListener("resize", onDeviceResize)
     refresh()
-    setCtxVal(prevVal => ({ ...prevVal, refreshPosts: () => refresh() }))
+    setCtxVal(prevVal => ({ ...prevVal, refresh: () => refresh() }))
   }, [])
 
   const refresh = () => {
@@ -118,7 +118,7 @@ export default function PostsTab({ nick }: Props) {
           </div>
         </div>
       ) : accountData == "Fetching" ? (
-        <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
+        <p className="text-xl font-semibold text-[#545454] text-center">Fetching account...</p>
       ) : accountData == "Not found" ? (
         <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center">
           <Image
@@ -157,6 +157,7 @@ export default function PostsTab({ nick }: Props) {
                 authortag={cntn.authortag}
                 reputation={cntn.reputation}
                 showOrig={true}
+                commid={cntn.id}
               />
             )
           }
