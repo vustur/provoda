@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import { mainContext } from "./PageBase"
 import axios from "axios";
 import Image from "next/image";
+import WluffyError from "./WluffyError";
 
 type Props = {
   nick: String
@@ -114,21 +115,16 @@ export default function PostsTab({ nick }: Props) {
           <div className="inline-flex flex-col items-start justify-start">
             <p className="text-2xl   font-semibold text-[#f1f1f1] truncate">{accountData.nick}</p>
             <p className="text-lg    font-semibold text-[#bababa] truncate">@ {accountData.tag}</p>
-            <p className="text-base  font-semibold text-[#bababa]         ">{accRep != "Fetching" ? `Rep: ${accRep.allRep} // Comment rep: ${accRep.commRep} // Post rep: ${accRep.postRep}` : null }</p>
+            <p className="text-base  font-semibold text-[#bababa]         ">{accRep != "Fetching" ? `Rep: ${accRep.allRep} // Comment rep: ${accRep.commRep} // Post rep: ${accRep.postRep}` : null}</p>
           </div>
         </div>
       ) : accountData == "Fetching" ? (
         <p className="text-xl font-semibold text-[#545454] text-center">Fetching account...</p>
       ) : accountData == "Not found" ? (
-        <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center">
-          <Image
-            src={"/images/wluffy_wires_light.png"}
-            width={300}
-            height={300}
-            className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40 mt-14"
-          />
-          <p className="text-xl font-semibold text-[#545454] text-center">User not found...</p>
-        </div>
+        <WluffyError
+          image="wluffy_wires_light.png"
+          textOne="Account not found"
+        />
       ) : null}
       {accountContent != "Fetching" && accountContent != "No content" && accountData != "Not found" && accountData != "Error" ? (
         accountContent.map((cntn) => {

@@ -27,11 +27,9 @@ export default function Top() {
     }
     catch (err) {
       console.error(err.response.data)
-      if (err.response.data == "Acc not found") {
-        console.log("Looks like token is invalid, going to login page")
-        console.log(localStorage)
-        window.location = "/login"
-      }
+      console.log("Looks like token is invalid, going to login page")
+      console.log(localStorage)
+      window.location = "/login"
     }
   }
 

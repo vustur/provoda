@@ -73,6 +73,8 @@ export default function Home() {
                 onClick={() => setIsLogin(!isLogin)}
                 >{isLogin ? "No account?" : "Already registered?"}</button>
             </div>
+            <p className="text-[#575656] text-sm font-semibold text-center mt-2">Currently, app accesible only for registered users.
+<br/> This may change in future</p>
         </div>
     )
 }

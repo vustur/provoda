@@ -75,7 +75,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
     }
 
     return (
-        <div className="w-full inline-flex items-start justify-center bg-[#2d2d2d] p-2.5 rounded-xl"
+        <div className="w-full inline-flex items-start justify-center bg-[#2d2d2d] my-1.5 p-2.5 rounded-xl"
         onContextMenu={(e) => onRightClick(e)}>
         <div className="inline-flex flex-col items-start justify-center w-full">
         {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}

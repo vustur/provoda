@@ -135,7 +135,7 @@ export class Post {
         this.content = JSON.stringify(this.content)
     }
     async create(){
-        const now = new Date(Date.UTC(0));
+        const now = new Date();
         const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
         this.date = dateStr
         await dbPost("INSERT INTO posts (authortag, commun, content, date) VALUES (?, ?, ?, ?)", [this.authortag, this.commun, this.content, this.date]);
@@ -207,13 +207,16 @@ export class Comment {
         return true
     }
     async create(){
-        const now = new Date(Date.UTC(0));
+        const now = new Date();
         const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
         this.date = dateStr
         await dbPost("INSERT INTO comments (postid, authortag, text, attach, date) VALUES (?, ?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach, this.date]);
     }
     async delete(){
         await dbPost("DELETE FROM comments WHERE id = ?", [this.id])
+    }
+    async edit(){
+        await dbPost("UPDATE comments SET text = ? WHERE id = ?", [this.text, this.id])
     }
     async changeReput(isPositive, calltag){
         const isAlrdRated = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])

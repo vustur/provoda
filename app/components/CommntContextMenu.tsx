@@ -49,7 +49,13 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
           {
             name: "Edit",
             icon: "pentwo",
-            function: () => ctxVal.openWriteFunc("edit", content, postid)
+            function: () => {
+              if (ctxVal.editComment != null) {
+                ctxVal.editComment(content, commid)
+              } else {
+                alert("Comment cannot be edited at this page. Go to post page to edit it")
+              }
+            }
           }
         ])
       } else if (role == "owner" || role == "mod") {

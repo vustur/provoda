@@ -4,6 +4,7 @@ import { mainContext } from "./PageBase"
 import axios from "axios";
 import Image from "next/image";
 import Button from "./IconButton";
+import WluffyError from "./WluffyError";
 
 type Props = {
   commun: String
@@ -147,57 +148,44 @@ export default function PostsTab({ commun }: Props) {
             <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
           </div>
         ) : posts[0] == "No communities" || posts[0] == "No posts" || posts[0] == "Community not found" ? (
-          <div className="flex flex-col items-center justify-center h-full">
-            <Image
-              src={"/images/wluffy_wires_light.png"}
-              width={300}
-              height={300}
-              className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40 -mt-10"
-              alt="placeholder"
-            />
-            {posts[0] == "No communities" ?
-              <p className="text-xl font-semibold text-[#545454] text-center">No communities or no posts in your communities yet...<br></br>Join some to load feed!</p>
-              : posts[0] == "No posts" ?
-                <p className="text-xl font-semibold text-[#545454] text-center">No posts in this community yet...<br></br>Post something first!</p>
-                : posts[0] == "Community not found" ?
-                  <p className="text-xl font-semibold text-[#545454] text-center">Community not found...</p>
-                  : null
+          <WluffyError
+            image="wluffy_wires_light.png"
+            textOne={
+              posts[0] == "No communities" ? "No communities or no posts in your communities yet..." 
+              : posts[0] == "No posts" ? "No posts in this community yet..." 
+              : "Community not found..."
             }
-          </div>
+            textTwo={
+              posts[0] == "No communities" ? "Join some to load feed!"
+              : posts[0] == "No posts" ? "Post something first!"
+              : ""
+            }
+          />
         ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "No posts" && posts[0] != "Fetching" ? (
-          <div className="w-full">
-            <Button
-              src="refresh"
-              onClick={() => refresh()}
-              isSpecial={true}
-              text="Refresh"
-              className="mb-2 bg-opacity-70"/>
-            {posts.map((post) => (
-              <Post
-                key={post.id}
-                title={JSON.parse(post.content)['title']}
-                author={post.authortag}
-                date={post.date}
-                textContent={JSON.parse(post.content)['text']}
-                reputation={post.reputation}
-                community={post.commun}
-                token={token}
-                postid={post.id}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full">
-            <Image
-              src={"/images/wluffy_head_light.png"}
-              width={150}
-              height={150}
-              className="rounded-2xl mb-2 grayscale-1 brightness-50 opacity-40"
-              alt="placeholder"
-            />
-            <p className="text-xl font-semibold text-[#545454] text-center">Smth went wrong...<br></br>Open console to see</p>
-          </div>
-        )
+      <div className="w-full">
+        <Button
+          src="refresh"
+          onClick={() => refresh()}
+          isSpecial={true}
+          text="Refresh"
+          className="mb-2 bg-opacity-70" />
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            title={JSON.parse(post.content)['title']}
+            author={post.authortag}
+            date={post.date}
+            textContent={JSON.parse(post.content)['text']}
+            reputation={post.reputation}
+            community={post.commun}
+            token={token}
+            postid={post.id}
+          />
+        ))}
+      </div>
+      ) : (
+        null
+      )
       }
     </div>
   )
