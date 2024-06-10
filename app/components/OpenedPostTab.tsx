@@ -110,9 +110,9 @@ export default function PostsTab({ id }: Props) {
   }
 
   return (
-    <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl pb-16"
+    <div className={`inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl`}
       style={{ overflowY: "scroll" }}>
-      <div className="inline-flex flex-col items-start justify-start w-full h-[90%] overflow-scroll">
+      <div className="inline-flex flex-col items-start justify-start w-full h-[83%] overflow-scroll">
         {postData != "Fetching" && postData != "Not found" ? (
           <Post
             title={postData.content.title}
@@ -153,8 +153,11 @@ export default function PostsTab({ id }: Props) {
         ) : comments == "Fetching" ? (
           <p className="text-xl font-semibold text-[#545454] text-center">Fetching comments...</p>
         ) : comments == "None" ? (
-          <p className="text-2xl font-semibold text-[#545454] text-center">No comments<br />
-            <span className="text-base">Be the first to comment</span></p>
+          <WluffyError
+            image="wluffy_with_box_light.png"
+            textOne="No comments"
+            textTwo="Be the first to comment!"
+          />
         ) : null
         }
       </div>
@@ -170,6 +173,7 @@ export default function PostsTab({ id }: Props) {
           onChange={(e) => setCommentInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key == "Enter" && commentInput != "" && !isShift) {
+              e.preventDefault()
               if (inEditCommId != 0) {
                 editComment()
               } else {

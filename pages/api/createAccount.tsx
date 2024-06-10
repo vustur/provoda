@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt")
 export default async function handler(req: Request, res: Response){
     try {
         const { tag, mail, pass } = req.body
+        console.log(req.body)
         const tagAllowedChars = /^[a-z0-9_]*$/;
         if (tag.length > 15) {
             throw new Error("Tag too long");

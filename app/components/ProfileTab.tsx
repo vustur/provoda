@@ -1,8 +1,8 @@
 import Image from "next/image"
 import axios from "axios"
-
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Button from "./IconButton"
+import { mainContext } from "./PageBase"
 
 type Props = {
   commun: any
@@ -14,6 +14,8 @@ export default function ProfileTab({ commun }: Props) {
   const [selfRep, setSelfRep] = useState(["Fetching"])
   const [communData, setCommunData] = useState(["Fetching"])
   const [role, setRole] = useState("member")
+  const [isShow, setIsShow] = useState(false)
+  const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = localStorage.getItem("token")
 
   useEffect(() => {
@@ -29,7 +31,12 @@ export default function ProfileTab({ commun }: Props) {
       fetchCommun()
       fetchRole()
     }
+    setCtxVal(prevVal => ({ ...prevVal, toggleProfile: (mode) => toggleProfile(mode) }))
   }, [])
+
+  const toggleProfile = (mode) => {
+    setIsShow(mode)
+  }
 
   const fetchSelf = async () => {
     try {
@@ -77,10 +84,11 @@ export default function ProfileTab({ commun }: Props) {
   }
 
   return (
-    <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full mt-8 px-4 shadow-2xl
-        ${width <= 750 ? "hidden" : ""} `}>
+    <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full px-4 shadow-2xl overflow-y-auto
+        ${width <= 750 && !isShow ? "hidden" : ""} ${width <= 750 && isShow ? "absolute right-0 top-0 w-fit h-full" : ""} `}>
       {commun == null ? (
-        <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
+        <div className={`inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4
+        ${width <= 750 && isShow ? "" : ""}`}>
           <Image
             src={"/images/placeholder.jpg"}
             width={140}
@@ -98,9 +106,9 @@ export default function ProfileTab({ commun }: Props) {
           </div>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
-            <Button 
-            src="arrow_tr"
-            onClick={() => window.location = "/u/" + selfData.tag}
+            <Button
+              src="arrow_tr"
+              onClick={() => window.location = "/u/" + selfData.tag}
             />
           </div>
         </div>

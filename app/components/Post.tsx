@@ -21,7 +21,6 @@ export default ({ title, author, community, textContent, reputation, date, token
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
-    const [isOpened, setIsOpened] = useState(false) // ill use later probably
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [cursorPos, setCursorPos] = useState({x: 0, y: 0})
 
@@ -57,9 +56,6 @@ export default ({ title, author, community, textContent, reputation, date, token
     addEventListener("resize", onDeviceResize)
     addEventListener("click", onLeftClick)
     addEventListener("contextmenu", onRClickAnywhere)
-    if (isOpen){
-        setIsOpened(true)
-    }
     }, [])
 
     const onLeftClick = (e) => {
@@ -91,7 +87,8 @@ export default ({ title, author, community, textContent, reputation, date, token
                 {width > 400 ? <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer"
                 onClick={() => window.location = `/u/${author}`}>@ {author} // {date}</p> : null }
             </div>
-            <p className="text-lg mt-1 text-[#dcdcdc]">{textContent}</p>
+            <p className="text-lg mt-1 text-[#dcdcdc]"
+            >{ !isOpen && textContent.length > 150 ? textContent.substring(0, 150) + "..." : textContent}</p>
         </div>
         <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
             <Image

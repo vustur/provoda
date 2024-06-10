@@ -139,6 +139,7 @@ export default function PostsTab({ nick }: Props) {
                 author={cntn.authortag}
                 community={cntn.commun}
                 reputation={cntn.reputation}
+                isOpen={false}
               />
             )
           }

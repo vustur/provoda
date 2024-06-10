@@ -149,7 +149,7 @@ export default function PostsTab({ commun }: Props) {
           </div>
         ) : posts[0] == "No communities" || posts[0] == "No posts" || posts[0] == "Community not found" ? (
           <WluffyError
-            image="wluffy_wires_light.png"
+            image={posts[0] == "No posts" ? "wluffy_with_box_light.png" : "wluffy_wires_light.png"}
             textOne={
               posts[0] == "No communities" ? "No communities or no posts in your communities yet..." 
               : posts[0] == "No posts" ? "No posts in this community yet..." 
@@ -180,6 +180,7 @@ export default function PostsTab({ commun }: Props) {
             community={post.commun}
             token={token}
             postid={post.id}
+            isOpen={false}
           />
         ))}
       </div>

@@ -6,6 +6,7 @@ import axios from "axios"
 
 export default function Top() {
   const [width, setWidth] = useState(1000)
+  const [isProfileShow, setIsProfileShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = localStorage.getItem("token")
 
@@ -34,7 +35,7 @@ export default function Top() {
   }
 
   return (
-    <div className="inline-flex items-center justify-start w-full">
+    <div className="inline-flex items-center justify-start w-full z-30">
       {width > 300 ? (
         <div className="w-4/12">
           <p className="w-fit ml-3 cursor-pointer font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#e0e0e0] to-[#9354B1]"
@@ -43,9 +44,13 @@ export default function Top() {
         </div>
       ) : null}
       {width > 570 ? (
-        <div className="relative bg-[#3a3a3a] w-5/12 h-8 rounded-lg">
-          <p className="w-max h-3 absolute left-2 top-1 text-md text-[#575757]">Type to search on Provoda...</p>
-        </div>
+        // <div className="relative bg-[#3a3a3a] w-5/12 h-8 rounded-lg">
+        //   <p className="w-max h-3 absolute left-2 top-1 text-md text-[#575757]">Type to search on Provoda...</p>
+        // </div>
+        <input
+          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg"
+          placeholder="Type to search on Provoda..."
+        />
       ) : null}
       {/* Btns */}
       <div className={`relative h-12 px-2.5 flex items-center
@@ -60,6 +65,10 @@ export default function Top() {
           {width <= 750 ? (
             <Button
               src="user"
+              onClick={() => {
+                ctxVal.toggleProfile(!isProfileShow)
+                setIsProfileShow(!isProfileShow)
+              }}
             />
           ) : null}
           {width <= 570 ? (
