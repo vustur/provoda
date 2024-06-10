@@ -115,7 +115,8 @@ export default function PostsTab({ nick }: Props) {
           <div className="inline-flex flex-col items-start justify-start">
             <p className="text-2xl   font-semibold text-[#f1f1f1] truncate">{accountData.nick}</p>
             <p className="text-lg    font-semibold text-[#bababa] truncate">@ {accountData.tag}</p>
-            <p className="text-base  font-semibold text-[#bababa]         ">{accRep != "Fetching" ? `Rep: ${accRep.allRep} // Comment rep: ${accRep.commRep} // Post rep: ${accRep.postRep}` : null}</p>
+            <p className="text-base  font-semibold text-[#8f8f8f]         ">{accRep != "Fetching" ? `Rep: ${accRep.allRep} // Comment rep: ${accRep.commRep} // Post rep: ${accRep.postRep}` : null}</p>
+            <p className="text-base  font-semibold text-[#bababa]         ">{accountData.bio}</p>
           </div>
         </div>
       ) : accountData == "Fetching" ? (

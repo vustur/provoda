@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react"
 import Button from "./IconButton"
 import WriteModal from "./WriteModal"
+import SearchMenu from "./SearchMenu"
 import { mainContext } from "./PageBase"
 import axios from "axios"
 
 export default function Top() {
   const [width, setWidth] = useState(1000)
   const [isProfileShow, setIsProfileShow] = useState(false)
+  const [searchText, setSearchText] = useState("")
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = localStorage.getItem("token")
 
@@ -44,12 +46,18 @@ export default function Top() {
         </div>
       ) : null}
       {width > 570 ? (
-        // <div className="relative bg-[#3a3a3a] w-5/12 h-8 rounded-lg">
-        //   <p className="w-max h-3 absolute left-2 top-1 text-md text-[#575757]">Type to search on Provoda...</p>
-        // </div>
         <input
           className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg"
           placeholder="Type to search on Provoda..."
+          onChange={(e) => {
+            setSearchText(e.target.value)
+          }}
+          onKeyDown={(e) => {
+            if (e.key == "Enter" && searchText != "") {
+              e.preventDefault()
+              ctxVal.search(searchText)
+            }
+          }}
         />
       ) : null}
       {/* Btns */}
@@ -85,6 +93,7 @@ export default function Top() {
         </div>
       </div>
       <WriteModal type="write" />
+      <SearchMenu isOpen={searchText.length > 0} />
     </div>
   )
 }

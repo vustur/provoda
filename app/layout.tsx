@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Provoda",
+  icon: "/logo.png",
 };
 
 export default function RootLayout({ children }) {
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <style>{`body { background-color: #2a2a2a; }`}</style>
+        <link rel="icon" href={metadata.icon} type="image/x-icon"/>
       </head>
       <body className={inter.className}>{children}</body>
     </html>

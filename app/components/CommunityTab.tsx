@@ -44,7 +44,7 @@ export default function CommunityTab() {
           <Button
             src="plus"
             onClick={() => ctxVal.toggleCommunsCreation()}
-            text="Create Community"
+            text="Create"
             isSpecial={true}
             className="mb-2"
           />
