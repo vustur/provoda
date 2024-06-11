@@ -47,7 +47,7 @@ export default function Top() {
       ) : null}
       {width > 570 ? (
         <input
-          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg"
+          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-40"
           placeholder="Type to search on Provoda..."
           onChange={(e) => {
             setSearchText(e.target.value)

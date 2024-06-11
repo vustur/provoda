@@ -34,8 +34,8 @@ export default function SearchMenu({ isOpen }: Props) {
     }, [])
 
     return (
-        <div id="backdrop" className={`absolute w-screen h-[93%] bottom-0 left-0 backdrop-blur-sm bg-black bg-opacity-40 flex flex-col items-center ${isOpen ? " " : "hidden"}`}>
-            <div className={`w-3/4 p-4 h-fit flex flex-col rounded-xl items-center mt-4 mb-2 bg-[#2a2a2a] bg-opacity-90 overflow-scroll ${data.acc.length == 0 && data.comm.length == 0 && data.post.length == 0 && !isSearched ? "hidden" : " "} `}>
+        <div id="backdrop" className={`absolute w-screen h-[100%] bottom-0 left-0 backdrop-blur-sm bg-black bg-opacity-40 flex flex-col items-center ${isOpen ? " " : "hidden"}`}>
+            <div className={`w-3/4 p-4 h-fit flex flex-col rounded-xl items-center mt-16 mb-2 bg-[#2a2a2a] bg-opacity-90 overflow-scroll ${data.acc.length == 0 && data.comm.length == 0 && data.post.length == 0 && !isSearched ? "hidden" : " "} `}>
                 {data.acc.length > 0 && <p className="text-[#8f8f8f] text-xl mb-2 font-bold">Users</p>}
                 {data.acc.length > 0 &&
                     data.acc.map((acc) =>
