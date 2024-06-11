@@ -128,12 +128,12 @@ export default function PostsTab({ commun }: Props) {
             <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData['main']['tag']}</p>
             <p className="text-lg  font-semibold text-[#bababa] truncate">{communData['mems'] + " members"}</p>
           </div>
-          {!communs.includes(commun) && communs.length > 0 ? (
+          {!communs.includes(commun) ? (
             <div className="flex flex-row-reverse w-full mr-10">
               <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
                 onClick={() => joinCommun()}>Join</button>
             </div>
-          ) : communs.includes(commun) && communs.length > 0 ? (
+          ) : communs.includes(commun) ? (
             <div className="flex flex-row-reverse w-full mr-10">
               <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
                 onClick={() => leaveCommun()}>Leave</button>
