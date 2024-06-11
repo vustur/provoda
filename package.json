@@ -13,6 +13,7 @@
     "bcrypt": "^5.1.1",
     "js-cookie": "^3.0.5",
     "next": "14.2.3",
+    "rate-limiter-flexible": "^5.0.3",
     "react-dom": "^18",
     "serverless-mysql": "^1.5.5"
   },
