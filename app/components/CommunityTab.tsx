@@ -2,6 +2,7 @@ import Image from "next/image"
 import axios from "axios"
 import { useEffect, useState, useContext } from "react"
 import CommunityButton from "./CommunityButton"
+import CommunityCreateModal from "./CommunityCreateModal"
 import Button from "./IconButton"
 import { mainContext } from "./PageBase"
 
@@ -18,6 +19,7 @@ export default function CommunityTab() {
     }
     addEventListener("resize", onDeviceResize)
     fetchCommuns()
+    setCtxVal(prevVal => ({ ...prevVal, refreshCommuns: () => fetchCommuns() }))
   }, [])
 
   const fetchCommuns = async () => {
@@ -43,7 +45,7 @@ export default function CommunityTab() {
         {communs[0] != "Fetching" ? (
           <Button
             src="plus"
-            onClick={() => ctxVal.toggleCommunsCreation()}
+            onClick={() => ctxVal.openCommunCreate()}
             text="Create"
             isSpecial={true}
             className="mb-2"
@@ -70,6 +72,7 @@ export default function CommunityTab() {
             }))}
         </div>
       </div>
+      <CommunityCreateModal />
     </div>
   )
 }

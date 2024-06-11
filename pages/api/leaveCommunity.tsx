@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Account } from "./main";
+import { Account, Community } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
@@ -11,6 +11,13 @@ export default async function handler(req: Request, res: Response){
         await user.fetchUnknows()
         if (!user.checkIfJoined(commun)){
             throw new Error("Not joined")
+        }
+        const communtiy = new Community(commun)
+        if (!await communtiy.checkIfExists()){
+            throw new Error("Commun not found")
+        }
+        if (await user.getRole(commun) == 'owner'){
+            throw new Error("Owner cant leave")
         }
         await user.leaveCommunity(commun)
         res.status(200).json('succ')
