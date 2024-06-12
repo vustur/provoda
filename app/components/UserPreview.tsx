@@ -8,7 +8,8 @@ type Props = {
 
 export default function UserPreview({ nick, tag, bio }: Props) {
     return (
-        <div className="inline-flex flex-row items-center justify-start bg-[#333333] w-full rounded-lg p-3 mb-2">
+        <div className="inline-flex flex-row items-center justify-start bg-[#333333] w-full rounded-lg p-3 mb-2 cursor-pointer"
+        onClick={() => window.location = "/u/" + tag}>
             <Image
                 src={"/images/placeholder.jpg"}
                 width={40}

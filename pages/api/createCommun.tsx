@@ -1,22 +1,23 @@
 import dbPost from "./conn"
 import { Account } from "./main";
 
-export default async function handler(req: Request, res: Response){
+export default async function handler(req: Request, res: Response) {
     try {
         const { token, commun } = req.body
+        const actualCommun = commun.toLowerCase();
         const user = new Account(token)
-        if (!await user.checkIfExists()){
+        if (!await user.checkIfExists()) {
             throw new Error("Acc not found")
         }
-        const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [commun]);
-        if(uniqueCommunResult.length > 0) {
+        const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [actualCommun]);
+        if (uniqueCommunResult.length > 0) {
             throw new Error("Community tag already used");
         }
-        await dbPost("INSERT INTO communities (tag) VALUES (?)", [commun])
+        await dbPost("INSERT INTO communities (tag) VALUES (?)", [actualCommun])
         await user.fetchUnknows()
-        await user.joinCommunity(commun, 'owner')
+        await user.joinCommunity(actualCommun, 'owner')
         res.status(200).json('succ')
-    } catch(err) {
+    } catch (err) {
         console.log(err.message)
         res.status(500).json(err.message)
     }

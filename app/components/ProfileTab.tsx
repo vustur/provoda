@@ -32,6 +32,7 @@ export default function ProfileTab({ commun }: Props) {
       fetchRole()
     }
     setCtxVal(prevVal => ({ ...prevVal, toggleProfile: (mode) => toggleProfile(mode) }))
+    setCtxVal(prevVal => ({ ...prevVal, refreshAccount: () => fetchSelf() }))
   }, [])
 
   const toggleProfile = (mode) => {
@@ -84,11 +85,11 @@ export default function ProfileTab({ commun }: Props) {
   }
 
   return (
-    <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full px-4 shadow-2xl overflow-y-auto
+    <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full px-4 shadow-2xl
         ${width <= 750 && !isShow ? "hidden" : ""} ${width <= 750 && isShow ? "absolute right-0 top-0 w-fit h-full" : ""} `}>
       {commun == null ? (
         <div className={`inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4
-        ${width <= 750 && isShow ? "" : ""}`}>
+        ${width <= 750 && isShow ? "mt-32" : ""}`}>
           <Image
             src={"/images/placeholder.jpg"}
             width={140}

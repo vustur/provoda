@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react"
 import Button from "./IconButton"
 import WriteModal from "./WriteModal"
+import AccountSettingsModal from "./AccountSettingsModal"
 import SearchMenu from "./SearchMenu"
 import { mainContext } from "./PageBase"
 import axios from "axios"
@@ -47,7 +48,7 @@ export default function Top() {
       ) : null}
       {width > 570 ? (
         <input
-          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-40"
+          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20"
           placeholder="Type to search on Provoda..."
           onChange={(e) => {
             setSearchText(e.target.value)
@@ -89,10 +90,12 @@ export default function Top() {
             onClick={() => ctxVal.openWriteFunc("write")}
           />
           <Button src="bell" />
-          <Button src="gear" />
+          <Button src="gear"
+          onClick={() => ctxVal.openAccountSettings()}/>
         </div>
       </div>
-      <WriteModal type="write" />
+      <WriteModal />
+      <AccountSettingsModal />
       <SearchMenu isOpen={searchText.length > 0} />
     </div>
   )

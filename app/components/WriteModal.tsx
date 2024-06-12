@@ -60,6 +60,8 @@ export default function WriteModal() {
             console.log(data)
             setErrText(null)
             setIsOpen(false)
+            setTitle(null)
+            setTextContent(null)
             ctxVal.refreshPosts()
         } catch (err) {
             console.error(err.response.data)
@@ -74,6 +76,9 @@ export default function WriteModal() {
             console.log(data)
             setErrText(null)
             setIsOpen(false)
+            setOrigPostId(null)
+            setTitle(null)
+            setTextContent(null)
             ctxVal.refreshPosts()
         } catch (err) {
             console.error(err)

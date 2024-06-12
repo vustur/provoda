@@ -118,7 +118,7 @@ export class Post {
         this.date = dbReq[0]['date']
         this.commun = dbReq[0]['commun']
         this.content = dbReq[0]['content']
-        this.parseContent2Array()
+        await this.parseContent2Array()
         return dbReq
     }
     async checkIfExists(){

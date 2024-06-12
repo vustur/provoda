@@ -6,7 +6,8 @@ type Props = {
 
 export default function CommunPreview({ tag }: Props) {
     return (
-        <div className="inline-flex flex-row mb-2 items-center justify-start bg-[#333333] w-full rounded-lg p-3">
+        <div className="inline-flex flex-row mb-2 items-center justify-start bg-[#333333] w-full rounded-lg p-3 cursor-pointer"
+        onClick={() => window.location = "/c/" + tag}>
             <Image
                 src={"/images/placeholder.jpg"}
                 width={40}
