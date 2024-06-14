@@ -59,6 +59,7 @@ export default function Top() {
               ctxVal.search(searchText)
             }
           }}
+          value={searchText}
         />
       ) : null}
       {/* Btns */}

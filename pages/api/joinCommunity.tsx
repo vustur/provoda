@@ -12,9 +12,6 @@ export default async function handler(req: Request, res: Response){
         if (await user.checkIfJoined(commun)){
             throw new Error("Already joined")
         }
-        if (await user.checkIfBannedFrom(commun)){
-            throw new Error("Acc is banned from this community")
-        }
         await user.joinCommunity(commun)
         res.status(200).json('succ')
     } catch(err) {

@@ -4,6 +4,7 @@ import { mainContext } from "./PageBase"
 import axios from "axios";
 import Image from "next/image";
 import Button from "./IconButton";
+import CommunitySettings from "./CommunitySettingsModal"
 import WluffyError from "./WluffyError";
 
 type Props = {
@@ -151,42 +152,47 @@ export default function PostsTab({ commun }: Props) {
           <WluffyError
             image={posts[0] == "No posts" ? "wluffy_with_box_light.png" : "wluffy_wires_light.png"}
             textOne={
-              posts[0] == "No communities" ? "No communities or no posts in your communities yet..." 
-              : posts[0] == "No posts" ? "No posts in this community yet..." 
-              : "Community not found..."
+              posts[0] == "No communities" ? "No communities or no posts in your communities yet..."
+                : posts[0] == "No posts" ? "No posts in this community yet..."
+                  : "Community not found..."
             }
             textTwo={
               posts[0] == "No communities" ? "Join some to load feed!"
-              : posts[0] == "No posts" ? "Post something first!"
-              : ""
+                : posts[0] == "No posts" ? "Post something first!"
+                  : ""
             }
           />
         ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "No posts" && posts[0] != "Fetching" ? (
-      <div className="w-full">
-        <Button
-          src="refresh"
-          onClick={() => refresh()}
-          isSpecial={true}
-          text="Refresh"
-          className="mb-2 bg-opacity-70" />
-        {posts.map((post) => (
-          <Post
-            key={post.id}
-            title={JSON.parse(post.content)['title']}
-            author={post.authortag}
-            date={post.date}
-            textContent={JSON.parse(post.content)['text']}
-            reputation={post.reputation}
-            community={post.commun}
-            token={token}
-            postid={post.id}
-            isOpen={false}
-          />
-        ))}
-      </div>
-      ) : (
-        null
-      )
+          <div className="w-full">
+            <Button
+              src="refresh"
+              onClick={() => refresh()}
+              isSpecial={true}
+              text="Refresh"
+              className="mb-2 bg-opacity-70" />
+            {posts.map((post) => (
+              <Post
+                key={post.id}
+                title={JSON.parse(post.content)['title']}
+                author={post.authortag}
+                date={post.date}
+                textContent={JSON.parse(post.content)['text']}
+                reputation={post.reputation}
+                community={post.commun}
+                token={token}
+                postid={post.id}
+                isOpen={false}
+              />
+            ))}
+          </div>
+        ) : (
+          null
+        )
+      }
+      { commun != null && communData[0] != "Fetching" &&
+        <CommunitySettings
+          commun={commun}
+        />
       }
     </div>
   )

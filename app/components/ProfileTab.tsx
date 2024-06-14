@@ -29,7 +29,6 @@ export default function ProfileTab({ commun }: Props) {
       fetchSelf()
     } else {
       fetchCommun()
-      fetchRole()
     }
     setCtxVal(prevVal => ({ ...prevVal, toggleProfile: (mode) => toggleProfile(mode) }))
     setCtxVal(prevVal => ({ ...prevVal, refreshAccount: () => fetchSelf() }))
@@ -67,20 +66,11 @@ export default function ProfileTab({ commun }: Props) {
       const fetch = await axios.post("/api/getCommun", { token, commun })
       const data = fetch.data
       setCommunData(data)
+      setRole(data.role)
       console.log(data)
     } catch (err) {
       console.error(err.response.data)
       setCommunData("Error")
-    }
-  }
-
-  const fetchRole = async () => {
-    try {
-      const fetch = await axios.post("/api/getRole", { token, commun })
-      const data = fetch.data
-      setRole(data)
-    } catch (err) {
-      console.error(err.response.data)
     }
   }
 
@@ -128,7 +118,10 @@ export default function ProfileTab({ commun }: Props) {
           <p className="text-lg mb-1 font-semibold text-[#b99ce1] text-left">{role != "member" && role != "none" ? role : null}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
-            <Button src="gear" />
+            { role == "owner" || role == "mod" ? (
+            <Button src="gear"
+            onClick={() => ctxVal.openCommunSettings()} />
+            ) : null}
           </div>
         </div>
       ) : null}

@@ -7,15 +7,17 @@ export default async function handler(req: Request, res: Response){
         const mod = new Account(token)
         await mod.fetchUnknows()
         const targetUser = new Account(null, target)
-        const modrole = await mod.getRole()
-        const targetrole = await targetUser.getRole()
         const community = new Community(commun)
-        if (mod.checkIfExists() == false){
+        if (!await mod.checkIfExists()){
             throw new Error("Acc not found")
         }
-        if (targetUser.checkIfExists() == false){
+        if (!await targetUser.checkIfExists()){
             throw new Error("Target not found")
         }
+        await mod.fetchUnknows()
+        await targetUser.fetchUnknows()
+        const modrole = await mod.getRole(commun)
+        const targetrole = await targetUser.getRole(commun)
         if (modrole != 'owner' && modrole != 'mod'){
             throw new Error("No permissions")
         }
@@ -25,7 +27,6 @@ export default async function handler(req: Request, res: Response){
         if (target == mod.tag){
             throw new Error("Ban... yourself? Seriously? Not today")
         }
-        await targetUser.leaveCommunity(commun)
         await community.ban(target, reason)
         res.status(200).json('succ')
     } catch(err) {

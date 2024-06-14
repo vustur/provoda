@@ -13,6 +13,7 @@ export default function WriteModal() {
     const [isDropdown, setIsDropdown] = useState(true)
     const [writeType, setWriteType] = useState("write") // write or edit
     const [origPostId, setOrigPostId] = useState(null)
+    const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
     let token = localStorage.getItem("token")
 
@@ -51,6 +52,7 @@ export default function WriteModal() {
 
     const Post = async () => {
         try {
+            setIsBtnDisabled(true)
             let content = {
                 title,
                 text: textContent
@@ -63,15 +65,18 @@ export default function WriteModal() {
             setTitle(null)
             setTextContent(null)
             ctxVal.refreshPosts()
+            setIsBtnDisabled(false)
         } catch (err) {
             console.error(err.response.data)
             setErrText(err.response.data)
+            setIsBtnDisabled(false)
         }
     }
 
     const EditPost = async () => {
         try {
-            const fetch = await axios.post("/api/editPost", { token, postid : origPostId, textContent })
+            setIsBtnDisabled(true)
+            const fetch = await axios.post("/api/editPost", { token, postid: origPostId, textContent })
             const data = fetch.data
             console.log(data)
             setErrText(null)
@@ -80,9 +85,11 @@ export default function WriteModal() {
             setTitle(null)
             setTextContent(null)
             ctxVal.refreshPosts()
+            setIsBtnDisabled(false)
         } catch (err) {
             console.error(err)
             setErrText(err.response.data)
+            setIsBtnDisabled(false)
         }
     }
 
@@ -93,7 +100,7 @@ export default function WriteModal() {
     return (
         <div id="backdrop" className={`absolute w-screen h-screen top-0 left-0 z-30 backdrop-blur-sm bg-black bg-opacity-10 flex flex-col items-center justify-center ${isOpen ? " " : "hidden"}`}
             onClick={(e) => onLeftClick(e)}>
-            <div className="flex flex-col bg-[#4b4b4b] p-2 rounded-lg shadow-sm w-[50%] h-[80%]">
+            <div className="flex flex-col bg-[#414141] p-2 rounded-lg shadow-sm w-[50%] h-[80%]">
                 <p className="mb-2 text-white font-semibold text-2xl text-center">{writeType == "write" ? "Write post" : "Edit post"}</p>
                 {writeType == "write" ?
                     <div className="inline-flex items-center w-full h-16">
@@ -138,10 +145,18 @@ export default function WriteModal() {
                     row={5}
                 />
                 {errText ? <p className="text-red-300 text-sm mt-2">{errText}</p> : null}
-                <button
+                {/* <button
                     className="mt-3 w-full rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300 truncate"
                     onClick={writeType == "write" ? () => Post() : () => EditPost()}
-                >{writeType == "write" ? `Post to ${choosenCommun}` : `Edit post ${origPostId}`}</button>
+                >{writeType == "write" ? `Post to ${choosenCommun}` : `Edit post ${origPostId}`}</button> */}
+                <Button
+                    onClick={writeType == "write" ? () => Post() : () => EditPost()}
+                    text={writeType == "write" ? `Post to ${choosenCommun}` : `Edit post ${origPostId}`}
+                    isSpecial={true}
+                    className="mt-2 w-full text-center"
+                    isTextCentered={true}
+                    isDisabled={isBtnDisabled}>
+                </Button>
             </div>
         </div>
     )
