@@ -8,11 +8,21 @@ export default async function handler(req: Request, res: Response){
         if (!await post.checkIfExists()){
             throw new Error("Post not found")
         }
-        const dbReq = await dbPost("SELECT * FROM comments WHERE postId = ? ORDER BY reputation DESC", [postid]);
-        if (dbReq.length == 0){
+        let comReq = await dbPost("SELECT * FROM comments WHERE postId = ? AND replyto  = 0 ORDER BY reputation DESC", [postid]);
+        let rplReq = await dbPost("SELECT * FROM comments WHERE postId = ? AND replyto != 0 ORDER BY id ASC", [postid]);
+        if (comReq.length == 0){
             throw new Error("No comments")
         }
-        res.status(200).json(dbReq)
+        comReq.forEach(comment => {
+            comment.replies = []
+        });
+        rplReq.forEach(reply => {
+            const comment = comReq.find(comment => comment.id === reply.replyto)
+            if (comment) {
+                comment.replies.push(reply)
+            }
+        });
+        res.status(200).json(comReq)
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

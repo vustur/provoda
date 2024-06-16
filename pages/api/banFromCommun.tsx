@@ -21,6 +21,9 @@ export default async function handler(req: Request, res: Response){
         if (modrole != 'owner' && modrole != 'mod'){
             throw new Error("No permissions")
         }
+        if (await community.checkIfBanned(target)){
+            throw new Error("Target is already banned")
+        }
         if (targetrole == 'owner' || targetrole == 'mod'){
             throw new Error("Target is community staff, target should be unmoded first")
         }

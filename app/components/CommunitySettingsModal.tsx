@@ -19,6 +19,7 @@ export default function CommunSettings({ commun }: Props) {
     const [choosenTab, setChoosenTab] = useState("Main")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const [banInput, setBanInput] = useState("")
+    const [banReason, setBanReason] = useState("")
     const { ctxVal, setCtxVal } = useContext(mainContext)
     let token = localStorage.getItem("token")
 
@@ -60,11 +61,13 @@ export default function CommunSettings({ commun }: Props) {
 
     const ban = async () => {
         try {
-            const req = await axios.post("/api/banFromCommun", { token, commun, target: banInput, reason: "No reason provided (DEF)" })
+            const sendBR = banReason == "" ? "Reason not provided" : banReason
+            const req = await axios.post("/api/banFromCommun", { token, commun, target: banInput, reason: sendBR })
             const data = req.data
             console.log(data)
             setBanInput("")
             setErrText("")
+            fetchBans()
         }
         catch (err) {
             console.error(err.response.data)
@@ -78,6 +81,7 @@ export default function CommunSettings({ commun }: Props) {
             const data = req.data
             console.log(data)
             setErrText("")
+            fetchBans()
         }
         catch (err) {
             console.error(err.response.data)
@@ -104,7 +108,10 @@ export default function CommunSettings({ commun }: Props) {
     }
 
     useEffect(() => {
-        setCtxVal(prevVal => ({ ...prevVal, openCommunSettings: (commun) => openCSModal(commun) }))
+        setCtxVal(prevVal => ({
+            ...prevVal,
+            openCommunSettings: (commun) => openCSModal(commun)
+        }))
     }, [])
 
     return (
@@ -162,6 +169,14 @@ export default function CommunSettings({ commun }: Props) {
                                 className="mt-3 px-1"
                             />
                         </div>
+                        { banInput.length > 0 &&
+                        <input
+                            value={banReason}
+                            onChange={(e) => setBanReason(e.target.value)}
+                            placeholder="Ban reason"
+                            className="mb-2 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
+                        />
+                        }
                         {bans.length > 0 ? (
                             <div className="w-full flex flex-col">
                                 {bans.map((ban) => (

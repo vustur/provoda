@@ -2,7 +2,6 @@ import Image from "next/image"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import CommntContextMenu from "./CommntContextMenu"
-import CommentReply from "./CommentReply"
 
 type Props = {
     authortag: string
@@ -12,15 +11,13 @@ type Props = {
     reputation: number
     showOrig: boolean
     commid: number
-    replies: any
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, replies }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-    const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
     let token = localStorage.getItem("token")
 
@@ -87,8 +84,9 @@ export default function main({ authortag, textContent, date, postid, reputation,
     }
 
     return (
-        <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl">
-            <div className="inline-flex items-start justify-center my-1.5 p-2.5"
+        <div className="flex flex-row w-full bg-[#2d2d2d] my-2 rounded-xl">
+            <div className="bg-[#4e4e4e] border-1 w-[2px] h-full mx-3"></div>
+            <div className="inline-flex items-start justify-center my-1.5 p-2.5 w-full"
                 onContextMenu={(e) => onRightClick(e)}>
                 <div className="inline-flex flex-col items-start justify-center w-full h-full">
                     {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
@@ -128,27 +126,8 @@ export default function main({ authortag, textContent, date, postid, reputation,
                         onClick={(e) => onRightClick(e)}
                     />
                 </div>
-                <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent}></CommntContextMenu>
+                <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent} isreply={true}></CommntContextMenu>
             </div>
-            { replies && replies.length != 0 &&
-                <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer mx-3 mb-2" onClick={() => setShowReplies(!showReplies)}>{showReplies ? "Hide replies" : "Show replies"}</p>
-            }
-            { replies && showReplies &&
-                replies.map((reply) => {
-                    return (
-                        <CommentReply
-                            key={reply.id}
-                            authortag={reply.authortag}
-                            textContent={reply.text}
-                            date={reply.date}
-                            postid={reply.postid}
-                            reputation={reply.reputation}
-                            commid={reply.id}
-                            replies={reply.replies}
-                        />
-                    )
-                })
-            }
         </div>
     )
 }

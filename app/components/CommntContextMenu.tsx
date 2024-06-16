@@ -12,9 +12,10 @@ type Props = {
   authortag: string
   postcommun: string
   content: string
+  isreply: boolean
 }
 
-export default function PostContextMenu({ show, commid, token, mousePos, authortag, postcommun, content }: Props) {
+export default function PostContextMenu({ show, commid, token, mousePos, authortag, postcommun, content, isreply }: Props) {
   const [btns, setBtns] = useState([
     {
       name: "Share",
@@ -31,6 +32,24 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
 
   useEffect(() => {
     addSpecBtns()
+
+    if (btns.find((btn) => btn.name == "Reply")) return
+    if (!isreply){
+      setBtns([
+        ...btns,
+        {
+          name: "Reply",
+          icon: "halfarrow",
+          function: () => {
+            if (ctxVal.commReplyTo != null) {
+              ctxVal.commReplyTo(commid)
+            } else {
+              alert("Comment cannot be replied at this page. Go to post page to edit it")
+            }
+          }
+        },
+      ])
+    }
   }, [show])
 
   const addSpecBtns = async () => {

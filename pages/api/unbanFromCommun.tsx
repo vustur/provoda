@@ -20,6 +20,9 @@ export default async function handler(req: Request, res: Response){
         if (modrole != 'owner' && modrole != 'mod'){
             throw new Error("No permissions")
         }
+        if (!community.checkIfBanned(target)){
+            throw new Error("Target isnt banned")
+        }
         await community.unban(target)
         res.status(200).json('succ')
     } catch(err) {

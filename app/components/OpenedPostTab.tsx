@@ -17,6 +17,7 @@ export default function PostsTab({ id }: Props) {
   const [commentInput, setCommentInput] = useState("")
   const [isShift, setIsShift] = useState(false)
   const [inEditCommId, setInEditCommId] = useState(0)
+  const [replyCommId, setReplyCommId] = useState(0)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = localStorage.getItem("token")
 
@@ -37,12 +38,18 @@ export default function PostsTab({ id }: Props) {
       }
     })
     refresh()
-    setCtxVal(prevVal => ({ ...prevVal, refreshPosts: () => refresh() }))
-    setCtxVal(prevVal => ({ ...prevVal, refresh: () => fetchComments(id) }))
     setCtxVal(prevVal => ({
-      ...prevVal, editComment: (content, commid) => {
+      ...prevVal,
+      refreshPosts: () => refresh(),
+      refresh: () => fetchComments(id),
+      editComment: (content, commid) => {
         setCommentInput(content)
+        setReplyCommId(0)
         setInEditCommId(commid)
+      },
+      commReplyTo: (commid) => {
+        setInEditCommId(0)
+        setReplyCommId(commid)
       }
     }))
   }, [])
@@ -87,7 +94,7 @@ export default function PostsTab({ id }: Props) {
   const submitComment = async () => {
     try {
       setCommentInput("")
-      const fetch = await axios.post("/api/createComm", { postid: id, text: commentInput, token })
+      const fetch = await axios.post("/api/createComm", { postid: id, text: commentInput, token, replyid: replyCommId })
       const data = fetch.data
       console.log(data)
       refresh()
@@ -112,7 +119,7 @@ export default function PostsTab({ id }: Props) {
   return (
     <div className={`inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl`}
       style={{ overflowY: "scroll" }}>
-      <div className="inline-flex flex-col items-start justify-start w-full h-[83%] overflow-scroll">
+      <div className="inline-flex flex-col items-start justify-start w-full h-[77vh] overflow-scroll">
         {postData != "Fetching" && postData != "Not found" ? (
           <Post
             title={postData.content.title}
@@ -148,6 +155,7 @@ export default function PostsTab({ id }: Props) {
               postid={comment.postid}
               reputation={comment.reputation}
               commid={comment.id}
+              replies={comment.replies}
             />
           ))
         ) : comments == "Fetching" ? (
@@ -163,6 +171,8 @@ export default function PostsTab({ id }: Props) {
       </div>
       {inEditCommId != 0 ? (
         <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
+      ) : replyCommId != 0 ? (
+        <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
       ) : null}
       {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
         <textarea

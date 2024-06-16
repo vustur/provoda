@@ -3,7 +3,7 @@ import { Account, Post, Comment } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
-        const { token, postid, text, attach = null } = req.body
+        const { token, postid, text, attach = null, replyid } = req.body
         const user = new Account(token)
         const post = new Post(null, null, null, null, null, postid)
         if (!await user.checkIfExists()){
@@ -18,7 +18,7 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Acc is banned from this community")
         }
         const comment = new Comment(null, postid, user.tag, text, attach, null, null)
-        await comment.create()
+        await comment.create(replyid)
         res.status(200).json('succ')
     } catch(err) {
         console.log(err.message)
