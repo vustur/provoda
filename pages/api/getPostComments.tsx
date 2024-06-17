@@ -13,6 +13,16 @@ export default async function handler(req: Request, res: Response){
         if (comReq.length == 0){
             throw new Error("No comments")
         }
+        for (let i = 0; i < comReq.length; i++){ // for comments
+            let comm = comReq[i]
+            let base64 = Buffer.from(comm["content"]).toString('base64')
+            comReq[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+        }
+        for (let i = 0; i < rplReq.length; i++){ // for replies
+            let comm = rplReq[i]
+            let base64 = Buffer.from(comm["content"]).toString('base64')
+            rplReq[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+        }
         comReq.forEach(comment => {
             comment.replies = []
         });

@@ -88,6 +88,7 @@ export default ({ title, author, community, textContent, reputation, date, token
                 onClick={() => window.location = `/u/${author}`}>@ {author} // {date}</p> : null }
             </div>
             <p className="text-lg mt-1 text-[#dcdcdc]"
+            style={{whiteSpace: "pre-wrap"}}
             >{ !isOpen && textContent.length > 150 ? textContent.substring(0, 150) + "..." : textContent}</p>
         </div>
         <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">

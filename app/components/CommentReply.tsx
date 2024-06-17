@@ -96,7 +96,9 @@ export default function main({ authortag, textContent, date, postid, reputation,
                         <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer">
                             {date}</p>
                     </div>
-                    <p className="text-lg text-[#dcdcdc]">{textContent}</p>
+                    <p className="text-lg text-[#dcdcdc]"
+                    style={{ whiteSpace: "pre-wrap" }}
+                    >{textContent}</p>
                 </div>
                 <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
                     <Image

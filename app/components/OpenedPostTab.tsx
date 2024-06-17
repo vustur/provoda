@@ -27,7 +27,7 @@ export default function PostsTab({ id }: Props) {
       setWidth(window.innerWidth)
     }
     addEventListener("resize", onDeviceResize)
-    window.addEventListener("keypress", (e) => {
+    window.addEventListener("keydown", (e) => {
       if (e.key == "Shift") {
         setIsShift(true)
       }
@@ -116,6 +116,18 @@ export default function PostsTab({ id }: Props) {
     }
   }
 
+  const onKeyDownInCommWrite = (e) => {
+    console.log(isShift)
+    if (e.key == "Enter" && commentInput != "" && !isShift) {
+      e.preventDefault()
+      if (inEditCommId != 0) {
+        editComment()
+      } else {
+        submitComment()
+      }
+    }
+  }
+
   return (
     <div className={`inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl`}
       style={{ overflowY: "scroll" }}>
@@ -150,7 +162,7 @@ export default function PostsTab({ id }: Props) {
             <Comment
               key={comment.id}
               authortag={comment.authortag}
-              textContent={comment.text}
+              textContent={comment.content}
               date={comment.date}
               postid={comment.postid}
               reputation={comment.reputation}
@@ -182,14 +194,7 @@ export default function PostsTab({ id }: Props) {
           value={commentInput}
           onChange={(e) => setCommentInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == "Enter" && commentInput != "" && !isShift) {
-              e.preventDefault()
-              if (inEditCommId != 0) {
-                editComment()
-              } else {
-                submitComment()
-              }
-            }
+            onKeyDownInCommWrite(e)
           }}
         />
       ) : null}

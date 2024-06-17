@@ -206,7 +206,7 @@ export class Comment {
         }
         this.postid = dbReq[0]['postId']
         this.authortag = dbReq[0]['authortag']
-        this.text = dbReq[0]['text']
+        this.text = dbReq[0]['content']
         this.attach = dbReq[0]['attach']
         this.reputation = dbReq[0]['reputation']
         this.date = dbReq[0]['date']
@@ -223,13 +223,13 @@ export class Comment {
         const now = new Date();
         const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
         this.date = dateStr
-        await dbPost("INSERT INTO comments (postid, authortag, text, attach, date, replyto) VALUES (?, ?, ?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach, this.date, replyid]);
+        await dbPost("INSERT INTO comments (postid, authortag, content, attach, date, replyto) VALUES (?, ?, ?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach, this.date, replyid]);
     }
     async delete() {
         await dbPost("DELETE FROM comments WHERE id = ?", [this.id])
     }
     async edit() {
-        await dbPost("UPDATE comments SET text = ? WHERE id = ?", [this.text, this.id])
+        await dbPost("UPDATE comments SET content = ? WHERE id = ?", [this.text, this.id])
     }
     async changeReput(isPositive, calltag) {
         const isAlrdRated = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
