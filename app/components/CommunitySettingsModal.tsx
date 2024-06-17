@@ -15,18 +15,21 @@ export default function CommunSettings({ commun }: Props) {
     const [errText, setErrText] = useState(null)
     const [communData, setCommunData] = useState(null)
     const [bans, setBans] = useState([])
+    const [mods, setMods] = useState([])
     const [currentPassword, setCurrentPassword] = useState(null)
     const [choosenTab, setChoosenTab] = useState("Main")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const [banInput, setBanInput] = useState("")
+    const [modInput, setModInput] = useState("")
     const [banReason, setBanReason] = useState("")
+    const [selfRole, setSelfRole] = useState("none")
     const { ctxVal, setCtxVal } = useContext(mainContext)
     let token = localStorage.getItem("token")
 
-    const openCSModal = () => {
+    const openCSModal = (commun, role) => {
         setIsOpen(true)
         fetchCommun()
-        fetchBans()
+        setSelfRole(role)
     }
 
     const onLeftClick = (e) => {
@@ -89,6 +92,47 @@ export default function CommunSettings({ commun }: Props) {
         }
     }
 
+    const fetchMods = async () => {
+        try {
+            const req = await axios.post("/api/getModsByCommun", { token, commun })
+            const data = req.data
+            console.log(data)
+            setMods(data)
+        }
+        catch (err) {
+            console.error(err.response.data)
+        }
+    }
+
+    const mod = async () => {
+        try {
+            const req = await axios.post("/api/modInCommun", { token, commun, target: modInput })
+            const data = req.data
+            console.log(data)
+            setModInput("")
+            setErrText("")
+            fetchMods()
+        }
+        catch (err) {
+            console.error(err.response.data)
+            setErrText(err.response.data)
+        }
+    }
+
+    const unmod = async (target) => {
+        try {
+            const req = await axios.post("/api/unmodInCommun", { token, commun, target })
+            const data = req.data
+            console.log(data)
+            setErrText("")
+            fetchMods()
+        }
+        catch (err) {
+            console.error(err.response.data)
+            setErrText(err.response.data)
+        }
+    }
+
     const saveCommun = async () => {
         try {
             setIsBtnDisabled(true)
@@ -110,7 +154,7 @@ export default function CommunSettings({ commun }: Props) {
     useEffect(() => {
         setCtxVal(prevVal => ({
             ...prevVal,
-            openCommunSettings: (commun) => openCSModal(commun)
+            openCommunSettings: (commun, role) => openCSModal(commun, role)
         }))
     }, [])
 
@@ -127,9 +171,22 @@ export default function CommunSettings({ commun }: Props) {
                     </button>
                     <button className={`text-lg text-[#c1c1c1] font-semibold hover:text-purple-300 transition ease-in-out duration-100
                     ${choosenTab == "Bans" ? "text-purple-300 underline font-bold" : ""}`}
-                        onClick={() => setChoosenTab("Bans")}>
+                        onClick={() => {
+                            setChoosenTab("Bans")
+                            bans.length == 0 && fetchBans()
+                    }}>
                         Bans
                     </button>
+                    { selfRole == "owner" &&
+                        <button className={`text-lg text-[#c1c1c1] font-semibold hover:text-purple-300 transition ease-in-out duration-100
+                    ${choosenTab == "Mods" ? "text-purple-300 underline font-bold" : ""}`}
+                            onClick={
+                            () => {setChoosenTab("Mods")
+                            mods.length == 0 && fetchMods()
+                        }}>
+                            Mods
+                        </button>
+                    }
                 </div>
                 { /* Settings tabs */}
                 {choosenTab == "Main" ? (
@@ -169,13 +226,13 @@ export default function CommunSettings({ commun }: Props) {
                                 className="mt-3 px-1"
                             />
                         </div>
-                        { banInput.length > 0 &&
-                        <input
-                            value={banReason}
-                            onChange={(e) => setBanReason(e.target.value)}
-                            placeholder="Ban reason"
-                            className="mb-2 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
-                        />
+                        {banInput.length > 0 &&
+                            <input
+                                value={banReason}
+                                onChange={(e) => setBanReason(e.target.value)}
+                                placeholder="Ban reason"
+                                className="mb-2 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
+                            />
                         }
                         {bans.length > 0 ? (
                             <div className="w-full flex flex-col">
@@ -194,7 +251,47 @@ export default function CommunSettings({ commun }: Props) {
                                 <WluffyError
                                     image="wluffy_with_box_light.png"
                                     textOne="No bans"
-                                    textTwo="All banned users will be shown here"
+                                    textTwo="Banned users cannot post or comment on this community"
+                                    scale={280}
+                                />
+                            </div>
+                        )
+                        }
+                    </div>
+                ) : choosenTab == "Mods" ? (
+                    <div className="flex flex-col w-[60vw] items-center">
+                        <div className="w-full mb-4 flex flex-row gap-3">
+                            <input
+                                value={modInput}
+                                onChange={(e) => setModInput(e.target.value)}
+                                placeholder="Input tag..."
+                                className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
+                            />
+                            <Button
+                                isSpecial={true}
+                                isTextCentered={true}
+                                text="Mod"
+                                onClick={() => mod()}
+                                className="mt-3 px-1"
+                            />
+                        </div>
+                        {mods.length > 0 ? (
+                            <div className="w-full flex flex-col">
+                                {mods.map((mod) => (
+                                    <UserPreview
+                                        tag={mod.tag}
+                                        specButton="trash"
+                                        specFunc={() => unmod(mod.tag)}
+                                        key={mod.tag}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="mt-10">
+                                <WluffyError
+                                    image="wluffy_with_box_light.png"
+                                    textOne="No mods"
+                                    textTwo="Mods can ban users, delete posts and comments from this community"
                                     scale={280}
                                 />
                             </div>
@@ -208,7 +305,7 @@ export default function CommunSettings({ commun }: Props) {
                     text="Save"
                     isSpecial={true}
                     isTextCentered={true}
-                    className={`${choosenTab == "Bans" ? "hidden" : null} mt-2 w-full`}
+                    className={`${choosenTab == "Bans" || choosenTab == "Mods" ? "hidden" : null} mt-2 w-full`}
                     isDisabled={choosenTab == "Main" ? true : false}
                 />
             </div>

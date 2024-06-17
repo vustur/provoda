@@ -83,9 +83,22 @@ export class Community {
     async unban(target) {
         await dbPost("DELETE FROM communBans WHERE tag = ? AND commun = ?", [target, this.tag])
     }
+    async mod(target) {
+        await dbPost("UPDATE communMembers SET role = 'mod' WHERE tag = ? AND commun = ?", [target, this.tag])
+    }
+    async unmod(target) {
+        await dbPost("UPDATE communMembers SET role = 'member' WHERE tag = ? AND commun = ?", [target, this.tag])
+    }
     async checkIfBanned(target) {
         const banReq = await dbPost("SELECT * FROM communBans WHERE tag = ? AND commun = ?", [target, this.tag])
         if (banReq.length == 0) {
+            return false
+        }
+        return true
+    }
+    async checkIfMember(target) {
+        const memberReq = await dbPost("SELECT * FROM communMembers WHERE tag = ? AND commun = ?", [target, this.tag])
+        if (memberReq.length == 0) {
             return false
         }
         return true

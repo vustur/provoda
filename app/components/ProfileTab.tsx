@@ -123,7 +123,7 @@ export default function ProfileTab({ commun }: Props) {
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
             {role == "owner" || role == "mod" ? (
               <Button src="gear"
-                onClick={() => ctxVal.openCommunSettings()} />
+                onClick={() => ctxVal.openCommunSettings(commun, role)} />
             ) : null}
           </div>
         </div>
