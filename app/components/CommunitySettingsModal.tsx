@@ -193,7 +193,7 @@ export default function CommunSettings({ commun }: Props) {
                     <div className="flex flex-col">
                         <div className="inline-flex items-center justify-center w-full">
                             <Image
-                                src={"/images/placeholder.jpg"}
+                                src={"/images/default.png"}
                                 width={120}
                                 height={120}
                                 className="rounded-lg mr-4"
@@ -240,6 +240,7 @@ export default function CommunSettings({ commun }: Props) {
                                     <UserPreview
                                         tag={ban.tag}
                                         bio={ban.reason}
+                                        pfp={"none"}
                                         specButton="trash"
                                         specFunc={() => unban(ban.tag)}
                                         key={ban.tag}

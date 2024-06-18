@@ -1,10 +1,10 @@
 import dbPost from "./conn"
-import { Account } from "./main"
+import { Account, imgUploader } from "./main"
 import bcrypt from "bcrypt"
 
 export default async function handler(req: Request, res: Response){
     try {
-        const { token, pass = null, newPass = null, newNick = null, newBio = null, newMail = null } = req.body
+        const { token, pass = null, newPass = null, newNick = null, newBio = null, newMail = null, newAvatar = null } = req.body
         const user = new Account(token)
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
@@ -54,6 +54,10 @@ export default async function handler(req: Request, res: Response){
                 throw new Error("Wrong password")
             }
             await dbPost("UPDATE accounts SET mail = ? WHERE token = ?", [newMail, token]);
+        }
+        if (newAvatar){
+            const imgUploadedUrl = await imgUploader(newAvatar)
+            await dbPost("UPDATE accounts SET pfp = ? WHERE token = ?", [imgUploadedUrl, token]);
         }
         res.status(200).json("succ")
     } catch(err) {

@@ -13,9 +13,10 @@ type Props = {
     showOrig: boolean
     commid: number
     replies: any
+    pfp: String
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, replies }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, replies, pfp }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
@@ -77,20 +78,20 @@ export default function main({ authortag, textContent, date, postid, reputation,
         }, 1)
     }
 
-    const fetchReplies = async () => {
-        try {
-
-        }
-        catch (err) {
-            console.error(err.response.data)
-        }
-    }
-
     return (
         <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl">
             <div className="inline-flex items-start justify-center my-1.5 p-2.5"
                 onContextMenu={(e) => onRightClick(e)}>
-                <div className="inline-flex flex-col items-start justify-center w-full h-full">
+                { !showOrig &&
+                <Image
+                    src={pfp ? pfp : "/images/default.png"}
+                    width={40}
+                    height={40}
+                    className="rounded-xl mr-4"
+                    alt="Avatar"
+                />
+                }
+                <div className="inline-flex flex-col items-start w-full h-full">
                     {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
                     <div className={`inline-flex relative w-full h-fit ${width > 400 ? "justify-between" : "flex-col"} `}>
                         <p className="text-base font-semibold text-[#8a8a8a] truncate cursor-pointer"

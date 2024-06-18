@@ -1,4 +1,5 @@
 import dbPost from "./conn"
+const imgbbUploader = require("imgbb-uploader")
 
 export class Account {
     constructor(token = null, tag = null) {
@@ -255,6 +256,22 @@ export class Comment {
         }
         await dbPost("DELETE FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
     }
+}
+
+export const imgUploader = async (img) => {
+    // todo: server side check
+    let key = process.env.IMGHOST_KEY
+    let url
+    await imgbbUploader({ apiKey: key, base64string: img })
+        .then((response) => {
+            console.log(response.url)
+            url = response.url
+        })
+        .catch((error) => {
+            console.error(error)
+            throw new Error(error.message)
+        });
+    return url
 }
 
 export default function handler(req: Request, res: Response) {

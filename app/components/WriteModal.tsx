@@ -173,12 +173,15 @@ export default function WriteModal() {
                 />
                 {writeType == "write" &&
                     <div className="inline-flex items-center w-full">
-                        <p className="text-white text-sm mt-2">Attach image: </p>
+                        <label className="cursor-pointer rounded-lg p-1 my-2 font-semibold text-white bg-[#816b9d] hover:bg-[#9179b4] transition-all duration-150 ease-in-out">
                         <input
                             type="file"
                             className="ml-2 text-sm text-white"
                             onChange={(e) => onAttach(e)}
+                            className="hidden"
                         />
+                        Attach image
+                        </label>
                     </div>
                 }
                 { writeType == "write" &&
@@ -186,6 +189,11 @@ export default function WriteModal() {
                         { attach ?
                             "Image attached"
                         : "No image attached"}
+                        { attach &&
+                            <span className="text-purple-300 text-sm ml-2 cursor-pointer" onClick={() => setAttach(null)}>
+                                Clear
+                            </span>
+                        }
                     </p>
                 }
                 {errText ? <p className="text-red-300 text-sm mt-2">{errText}</p> : null}

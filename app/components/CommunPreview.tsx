@@ -9,7 +9,7 @@ export default function CommunPreview({ tag }: Props) {
         <div className="inline-flex flex-row mb-2 items-center justify-start bg-[#333333] w-full rounded-lg p-3 cursor-pointer"
         onClick={() => window.location = "/c/" + tag}>
             <Image
-                src={"/images/placeholder.jpg"}
+                src={"/images/default.png"}
                 width={40}
                 height={40}
                 className="rounded-xl mr-4"

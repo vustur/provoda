@@ -119,7 +119,7 @@ export default function PostsTab({ commun }: Props) {
       {commun != null && communData[0] != "Fetching" ? (
         <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
           <Image
-            src={"/images/placeholder.jpg"}
+            src={"/images/default.png"}
             width={80}
             height={80}
             className="rounded-2xl mr-4"
@@ -182,6 +182,7 @@ export default function PostsTab({ commun }: Props) {
                 token={token}
                 postid={post.id}
                 isOpen={false}
+                attach={JSON.parse(post.content)['attach']}
               />
             ))}
           </div>

@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Provoda",
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
         <style>{`body { background-color: #2a2a2a; }`}</style>
         <link rel="icon" href={metadata.icon} type="image/x-icon"/>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={font.className}>{children}</body>
     </html>
   );
 }

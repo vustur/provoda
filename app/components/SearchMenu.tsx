@@ -44,6 +44,7 @@ export default function SearchMenu({ isOpen }: Props) {
                             nick={acc.nick}
                             tag={acc.tag}
                             bio={acc.bio}
+                            pfp={acc.pfp}
                         />
                     )
                 }
@@ -70,6 +71,7 @@ export default function SearchMenu({ isOpen }: Props) {
                             token={token}
                             postid={post.id}
                             isOpen={false}
+                            attach={JSON.parse(post.content)['attach']}
                         />
                     )
                 }

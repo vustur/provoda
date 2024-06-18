@@ -106,7 +106,7 @@ export default function PostsTab({ nick }: Props) {
       {accountData != "Fetching" && accountData != "Not found" ? (
         <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
           <Image
-            src={"/images/placeholder.jpg"}
+            src={accountData.pfp ? accountData.pfp : "/images/default.png"}
             width={80}
             height={80}
             className="rounded-2xl mr-4"
@@ -141,6 +141,7 @@ export default function PostsTab({ nick }: Props) {
                 community={cntn.commun}
                 reputation={cntn.reputation}
                 isOpen={false}
+                attach={JSON.parse(cntn.content)['attach']}
               />
             )
           }
@@ -150,7 +151,7 @@ export default function PostsTab({ nick }: Props) {
               <Comment
                 key={cntn.id}
                 postid={cntn.postId}
-                textContent={cntn.text}
+                textContent={cntn.content}
                 date={cntn.date}
                 authortag={cntn.authortag}
                 reputation={cntn.reputation}

@@ -102,6 +102,15 @@ export default ({ title, author, community, textContent, reputation, date, token
                         />
                     </div>
                 }
+                {attach && !isOpen &&
+                    <Image
+                        src={attach}
+                        alt="Attachment"
+                        height={80}
+                        width={80}
+                        className="rounded-sm my-2"
+                    />
+                }
             </div>
             <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
                 <Image

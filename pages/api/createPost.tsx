@@ -1,7 +1,6 @@
 import dbPost from "./conn"
 import axios from "axios"
-const imgbbUploader = require("imgbb-uploader")
-import { Post, Account, Community } from "./main";
+import { Post, Account, Community, imgUploader } from "./main";
 
 export default async function handler(req: Request, res: Response) {
     try {
@@ -29,19 +28,10 @@ export default async function handler(req: Request, res: Response) {
             throw new Error("Content too short (min 3 chars for title and 10 chars for content)")
         }
         if (content.attach) {
-            // todo: server side check
-            let key = process.env.IMGHOST_KEY
-            console.log(key)
-            await imgbbUploader({apiKey: key, base64string: content.attach})
-                .then((response) => {
-                    console.log(response)
-                    nContent.attach = response.url
-                })
-                .catch((error) => console.error(error));
-            if (nContent.attach.length > 100) {
-                console.log("Looks like attach failed, so setting content attach to null")
-                nContent.attach = null
-            }
+            const imgUploadedUrl = await imgUploader(content.attach)
+            nContent.attach = imgUploadedUrl
+            console.log(imgUploadedUrl)
+            console.log(nContent.attach)
         }
         console.log(nContent)
         const post = new Post(user.tag, commun, null, null, nContent)

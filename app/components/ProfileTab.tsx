@@ -84,7 +84,7 @@ export default function ProfileTab({ commun }: Props) {
         <div className={`inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4
         ${width <= 750 && isShow ? "mt-32" : ""}`}>
           <Image
-            src={"/images/placeholder.jpg"}
+            src={selfData.pfp ? selfData.pfp : "/images/default.png"}
             width={140}
             height={140}
             className="rounded-2xl"
@@ -109,7 +109,7 @@ export default function ProfileTab({ commun }: Props) {
       ) : communData != "Error" ? (
         <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
           <Image
-            src={"/images/placeholder.jpg"}
+            src={"/images/default.png"}
             width={140}
             height={140}
             className="rounded-2xl"

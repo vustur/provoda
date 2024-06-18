@@ -13,6 +13,7 @@ export default function AccSettings() {
     const [newMail, setNewMail] = useState(null)
     const [newPassword, setNewPassword] = useState(null)
     const [currentPassword, setCurrentPassword] = useState(null)
+    const [attach, setAttach] = useState(null)
     const [choosenTab, setChoosenTab] = useState("Profile")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
@@ -48,7 +49,8 @@ export default function AccSettings() {
             setIsBtnDisabled(true)
             const sendNick = newNick ? newNick : null
             const sendBio = newBio ? newBio : null
-            const req = await axios.post("/api/editAccount", { token, newNick: sendNick, newBio: sendBio })
+            const sendAvatar = attach ? attach : null
+            const req = await axios.post("/api/editAccount", { token, newNick: sendNick, newBio: sendBio, newAvatar: sendAvatar })
             const data = req.data
             console.log(data)
             setErrText(null)
@@ -83,6 +85,31 @@ export default function AccSettings() {
         }
     }
 
+    const onAttach = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const fileSizeLimit = 10 * 1024 * 1024
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif']
+        if (file.size > fileSizeLimit) {
+            setErrText('Max allowed file size is ' + fileSizeLimit / 1024 / 1024 + 'MB')
+            return
+        }
+        const { name: fileName } = file;
+        const fileExtension = fileName.slice((fileName.lastIndexOf('.') - 1 >>> 0) + 2)
+        if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
+            setErrText('Only images or gifs are allowed (' + allowedExtensions.join(', ') + ')')
+            return
+        }
+
+        const reader = new FileReader()
+        reader.onload = () => {
+            const base64Data = reader.result.split(',')[1]
+            setAttach(base64Data)
+        }
+        reader.readAsDataURL(file)
+        setErrText(null)
+    }
+
     useEffect(() => {
         setCtxVal(prevVal => ({ ...prevVal, openAccountSettings: () => openASModal() }))
     }, [])
@@ -108,13 +135,37 @@ export default function AccSettings() {
                 {choosenTab == "Profile" ? (
                     <div className="flex flex-col">
                         <div className="inline-flex items-center justify-center w-full">
-                            <Image
-                                src={"/images/placeholder.jpg"}
-                                width={120}
-                                height={120}
-                                className="rounded-lg mr-4"
-                                alt="placeholder"
-                            />
+                            <div className="flex flex-col">
+                                <Image
+                                    src={userData && userData.pfp ? userData.pfp : "/images/default.png"}
+                                    width={120}
+                                    height={120}
+                                    className="rounded-lg mr-4"
+                                    alt="placeholder"
+                                />
+                                <div className="inline-flex items-center w-full">
+                                    <label className="cursor-pointer rounded-lg p-1 my-2 font-semibold text-white bg-[#816b9d] hover:bg-[#9179b4] transition-all duration-150 ease-in-out">
+                                        <input
+                                            type="file"
+                                            className="ml-2 text-sm text-white"
+                                            onChange={(e) => onAttach(e)}
+                                            className="hidden"
+                                        />
+                                        Upload avatar
+                                    </label>
+                                </div>
+                                <p className="text-white">
+                                    {attach ?
+                                        "Img attached"
+                                        : ""}
+                                    {attach &&
+                                        <span className="text-purple-300 text-sm ml-2 cursor-pointer" onClick={() => setAttach(null)}>
+                                            <br/>
+                                            Clear
+                                        </span>
+                                    }
+                                </p>
+                            </div>
                             <div>
                                 <input
                                     value={newNick}
@@ -174,7 +225,7 @@ export default function AccSettings() {
                     isSpecial={true}
                     className="mt-2 w-full"
                     isTextCentered={true}
-                    isDisabled={choosenTab == "Profile" ? (!newNick && !newBio) && !isBtnDisabled : choosenTab == "Danger" ? (!newMail && !newPassword && !currentPassword) && !isBtnDisabled : null}
+                    isDisabled={choosenTab == "Profile" ? (!newNick && !newBio && !attach) && !isBtnDisabled : choosenTab == "Danger" ? (!newMail && !newPassword && !currentPassword) && !isBtnDisabled : null}
                 />
             </div>
         </div>
