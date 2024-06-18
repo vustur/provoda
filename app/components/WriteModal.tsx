@@ -14,6 +14,7 @@ export default function WriteModal() {
     const [writeType, setWriteType] = useState("write") // write or edit
     const [origPostId, setOrigPostId] = useState(null)
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
+    const [attach, setAttach] = useState(null)
     const { ctxVal, setCtxVal } = useContext(mainContext)
     let token = localStorage.getItem("token")
 
@@ -50,12 +51,38 @@ export default function WriteModal() {
         }
     }
 
+    const onAttach = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const fileSizeLimit = 10 * 1024 * 1024
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif']
+        if (file.size > fileSizeLimit) {
+            setErrText('Max allowed file size is ' + fileSizeLimit / 1024 / 1024 + 'MB')
+            return
+        }
+        const { name: fileName } = file;
+        const fileExtension = fileName.slice((fileName.lastIndexOf('.') - 1 >>> 0) + 2)
+        if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
+            setErrText('Only images or gifs are allowed (' + allowedExtensions.join(', ') + ')')
+            return
+        }
+
+        const reader = new FileReader()
+        reader.onload = () => {
+            const base64Data = reader.result.split(',')[1]
+            setAttach(base64Data)
+        }
+        reader.readAsDataURL(file)
+        setErrText(null)
+    }
+
     const Post = async () => {
         try {
             setIsBtnDisabled(true)
             let content = {
                 title,
-                text: textContent
+                text: textContent,
+                attach: attach || null
             }
             const fetch = await axios.post("/api/createPost", { token, commun: choosenCommun, content })
             const data = fetch.data
@@ -67,7 +94,7 @@ export default function WriteModal() {
             ctxVal.refreshPosts()
             setIsBtnDisabled(false)
         } catch (err) {
-            console.error(err.response.data)
+            console.error(err)
             setErrText(err.response.data)
             setIsBtnDisabled(false)
         }
@@ -144,6 +171,23 @@ export default function WriteModal() {
                     onChange={(e) => setTextContent(e.target.value)}
                     row={5}
                 />
+                {writeType == "write" &&
+                    <div className="inline-flex items-center w-full">
+                        <p className="text-white text-sm mt-2">Attach image: </p>
+                        <input
+                            type="file"
+                            className="ml-2 text-sm text-white"
+                            onChange={(e) => onAttach(e)}
+                        />
+                    </div>
+                }
+                { writeType == "write" &&
+                    <p className="text-white">
+                        { attach ?
+                            "Image attached"
+                        : "No image attached"}
+                    </p>
+                }
                 {errText ? <p className="text-red-300 text-sm mt-2">{errText}</p> : null}
                 {/* <button
                     className="mt-3 w-full rounded-md bg-[#816b9d] hover:bg-[#77658e] text-white text-sm p-2 font-semibold transition ease-in-out duration-300 truncate"

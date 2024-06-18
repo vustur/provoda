@@ -143,6 +143,7 @@ export default function PostsTab({ id }: Props) {
             token={token}
             postid={postData.id}
             isOpen={true}
+            attach={postData.content.attach}
           />
         ) : postData == "Fetching" ? (
           <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
