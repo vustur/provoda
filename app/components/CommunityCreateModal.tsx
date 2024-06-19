@@ -8,7 +8,7 @@ export default function WriteModal() {
     const [isOpen, setIsOpen] = useState(false)
     const [errText, setErrText] = useState(null)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = localStorage.getItem("token")
+    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     const openCCModal = () => {
         setIsOpen(true)

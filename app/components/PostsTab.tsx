@@ -17,7 +17,7 @@ export default function PostsTab({ commun }: Props) {
   const [communData, setCommunData] = useState(["Fetching"])
   const [communs, setCommuns] = useState([])
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = localStorage.getItem("token")
+  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)

@@ -25,7 +25,7 @@ export default function CommunSettings({ commun }: Props) {
     const [banReason, setBanReason] = useState("")
     const [selfRole, setSelfRole] = useState("none")
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = localStorage.getItem("token")
+    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     const openCSModal = (commun, role) => {
         setIsOpen(true)

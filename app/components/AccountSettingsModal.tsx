@@ -17,7 +17,7 @@ export default function AccSettings() {
     const [choosenTab, setChoosenTab] = useState("Profile")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = localStorage.getItem("token")
+    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     const openASModal = () => {
         setIsOpen(true)

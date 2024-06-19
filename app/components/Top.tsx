@@ -11,7 +11,7 @@ export default function Top() {
   const [isProfileShow, setIsProfileShow] = useState(false)
   const [searchText, setSearchText] = useState("")
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = localStorage.getItem("token")
+  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)

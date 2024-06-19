@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { RateLimiterMemory } from 'rate-limiter-flexible'
 
 const rateLimiter = new RateLimiterMemory({
-    points: 8,
+    points: 16,
     duration: 5,
   });
   

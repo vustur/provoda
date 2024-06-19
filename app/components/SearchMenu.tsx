@@ -15,7 +15,7 @@ export default function SearchMenu({ isOpen }: Props) {
     const [data, setData] = useState({acc: [], comm: [], post: []})
     const [isSearched, setIsSearched] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = localStorage.getItem("token")
+    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     const search = async (searchText) => {
         try {

@@ -23,7 +23,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
-    let token = localStorage.getItem("token")
+    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     useEffect(() => {
         setWidth(window.innerWidth)

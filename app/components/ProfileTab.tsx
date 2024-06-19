@@ -16,7 +16,7 @@ export default function ProfileTab({ commun }: Props) {
   const [role, setRole] = useState("member")
   const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = localStorage.getItem("token")
+  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)
