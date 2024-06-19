@@ -24,6 +24,9 @@ export default function Top() {
 
   const checkIfExists = async () => {
     try {
+      if (!token){
+        throw new Error("No token in localStorage")
+      }
       const req = await axios.post("/api/getAccount", { "input": token })
       const data = req.data
       console.log(data)

@@ -1,23 +1,26 @@
 import dbPost from "./conn"
-import { Account, Community } from "./main"
+import { Account, Community, imgUploader } from "./main"
 
 export default async function handler(req: Request, res: Response){
     try {
-        const { token, commun } = req.body
+        const { token, commun, newAvatar = null } = req.body
         const user = new Account(token)
+        const community = new Community(commun)
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
         await user.fetchUnknowns()
-        const community = new Community(commun)
         if (!await community.checkIfExists()){
             throw new Error("Community not found")
         }
-        if (await user.getRole(commun) != 'owner' && await user.getRole(commun) != 'mod'){
+        if (!await user.getRole(user.tag) == "owner"){
             throw new Error("No permissions")
         }
-        const bansReq = await dbPost("SELECT * FROM communBans WHERE commun = ?", [commun]);
-        res.status(200).json(bansReq)
+        if (newAvatar){
+            const imgUploadedUrl = await imgUploader(newAvatar)
+            await dbPost("UPDATE communities SET pfp = ? WHERE tag = ?", [imgUploadedUrl, commun]);
+        }
+        res.status(200).json("succ")
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

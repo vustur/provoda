@@ -13,7 +13,7 @@ export default async function handler(req: Request, res: Response){
         if (targetUser.checkIfExists() == false){
             throw new Error("Target not found")
         }
-        await mod.fetchUnknows()
+        await mod.fetchUnknowns()
         const modrole = await mod.getRole(commun)
         console.log(commun)
         console.log(modrole)

@@ -110,7 +110,7 @@ export default function PostsTab({ nick }: Props) {
             width={80}
             height={80}
             className="rounded-2xl mr-4"
-            alt="placeholder"
+            alt="Pfp"
           />
           <div className="inline-flex flex-col items-start justify-start">
             <p className="text-2xl   font-semibold text-[#f1f1f1] truncate">{accountData.nick}</p>

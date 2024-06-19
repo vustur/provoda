@@ -21,7 +21,7 @@ export default function UserPreview({ nick, tag, bio, pfp, specButton, specFunc 
                     width={40}
                     height={40}
                     className="rounded-2xl mr-4"
-                    alt="placeholder"
+                    alt="Pfp"
                 />
                 }
                 <div className="inline-flex flex-col items-start justify-start">

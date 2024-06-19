@@ -11,7 +11,7 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        await user.fetchUnknows()
+        await user.fetchUnknowns()
         const commnt = new Comment(commid)
         if (!await commnt.checkIfExists()){
             throw new Error("Comment not found")

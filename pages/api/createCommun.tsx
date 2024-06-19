@@ -14,7 +14,7 @@ export default async function handler(req: Request, res: Response) {
             throw new Error("Community tag already used");
         }
         await dbPost("INSERT INTO communities (tag) VALUES (?)", [actualCommun])
-        await user.fetchUnknows()
+        await user.fetchUnknowns()
         await user.joinCommunity(actualCommun, 'owner')
         res.status(200).json('succ')
     } catch (err) {

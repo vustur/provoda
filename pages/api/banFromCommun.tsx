@@ -5,7 +5,7 @@ export default async function handler(req: Request, res: Response){
     try {
         const { token, target, commun, reason } = req.body
         const mod = new Account(token)
-        await mod.fetchUnknows()
+        await mod.fetchUnknowns()
         const targetUser = new Account(null, target)
         const community = new Community(commun)
         if (!await mod.checkIfExists()){
@@ -14,8 +14,8 @@ export default async function handler(req: Request, res: Response){
         if (!await targetUser.checkIfExists()){
             throw new Error("Target not found")
         }
-        await mod.fetchUnknows()
-        await targetUser.fetchUnknows()
+        await mod.fetchUnknowns()
+        await targetUser.fetchUnknowns()
         const modrole = await mod.getRole(commun)
         const targetrole = await targetUser.getRole(commun)
         if (modrole != 'owner' && modrole != 'mod'){

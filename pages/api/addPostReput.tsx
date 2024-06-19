@@ -11,7 +11,7 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        await user.fetchUnknows()
+        await user.fetchUnknowns()
         const post = new Post(user.tag, null, null, null, null, postid)
         if (!await post.checkIfExists()){
             throw new Error("Post not found")

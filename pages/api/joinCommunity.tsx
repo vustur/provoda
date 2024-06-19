@@ -8,7 +8,7 @@ export default async function handler(req: Request, res: Response){
         if (!await user.checkIfExists()){
             throw new Error("Acc not found")
         }
-        await user.fetchUnknows()
+        await user.fetchUnknowns()
         if (await user.checkIfJoined(commun)){
             throw new Error("Already joined")
         }

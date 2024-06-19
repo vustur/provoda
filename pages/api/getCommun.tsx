@@ -5,7 +5,7 @@ export default async function handler(req: Request, res: Response){
     try {
         const { token, commun } = req.body
         let data = {}
-        const tagReq = await dbPost("SELECT tag FROM communities WHERE tag = ?", [commun]);
+        const tagReq = await dbPost("SELECT tag, pfp FROM communities WHERE tag = ?", [commun]);
         if(tagReq.length == 0) {
             throw new Error("Unknown community");
         }
@@ -18,7 +18,7 @@ export default async function handler(req: Request, res: Response){
             if (!await user.checkIfExists()){
                 throw new Error("Acc not found")
             }
-            await user.fetchUnknows()
+            await user.fetchUnknowns()
             role = await user.getRole(commun)
         }
         data['owner'] = memReq.filter(item => item.role === 'owner').map(item => item.tag)[0]

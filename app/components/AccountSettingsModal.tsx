@@ -141,7 +141,7 @@ export default function AccSettings() {
                                     width={120}
                                     height={120}
                                     className="rounded-lg mr-4"
-                                    alt="placeholder"
+                                    alt="Pfp"
                                 />
                                 <div className="inline-flex items-center w-full">
                                     <label className="cursor-pointer rounded-lg p-1 my-2 font-semibold text-white bg-[#816b9d] hover:bg-[#9179b4] transition-all duration-150 ease-in-out">

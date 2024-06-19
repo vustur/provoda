@@ -119,15 +119,15 @@ export default function PostsTab({ commun }: Props) {
       {commun != null && communData[0] != "Fetching" ? (
         <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
           <Image
-            src={"/images/default.png"}
+            src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
             width={80}
             height={80}
             className="rounded-2xl mr-4"
-            alt="placeholder"
+            alt="Pfp"
           />
           <div className="inline-flex flex-col items-start justify-start">
-            <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData['main']['tag']}</p>
-            <p className="text-lg  font-semibold text-[#bababa] truncate">{communData['mems'] + " members"}</p>
+            <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
+            <p className="text-lg  font-semibold text-[#bababa] truncate">{communData.mems + " members"}</p>
           </div>
           {!communs.includes(commun) ? (
             <div className="flex flex-row-reverse w-full mr-10">

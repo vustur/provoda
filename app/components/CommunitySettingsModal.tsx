@@ -21,6 +21,7 @@ export default function CommunSettings({ commun }: Props) {
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const [banInput, setBanInput] = useState("")
     const [modInput, setModInput] = useState("")
+    const [attach, setAttach] = useState(null)
     const [banReason, setBanReason] = useState("")
     const [selfRole, setSelfRole] = useState("none")
     const { ctxVal, setCtxVal } = useContext(mainContext)
@@ -136,12 +137,13 @@ export default function CommunSettings({ commun }: Props) {
     const saveCommun = async () => {
         try {
             setIsBtnDisabled(true)
-            const req = await axios.post("", { token, })
+            const sendAvatar = attach ? attach : null
+            const req = await axios.post("/api/editCommun", { token, commun, newAvatar: sendAvatar })
             const data = req.data
             console.log(data)
             setErrText(null)
             setIsOpen(false)
-            ctxVal.refreshAccount()
+            // refresh
             setIsBtnDisabled(false)
         }
         catch (err) {
@@ -149,6 +151,31 @@ export default function CommunSettings({ commun }: Props) {
             setErrText(err.response.data)
             setIsBtnDisabled(false)
         }
+    }
+
+    const onAttach = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const fileSizeLimit = 10 * 1024 * 1024
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif']
+        if (file.size > fileSizeLimit) {
+            setErrText('Max allowed file size is ' + fileSizeLimit / 1024 / 1024 + 'MB')
+            return
+        }
+        const { name: fileName } = file;
+        const fileExtension = fileName.slice((fileName.lastIndexOf('.') - 1 >>> 0) + 2)
+        if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
+            setErrText('Only images or gifs are allowed (' + allowedExtensions.join(', ') + ')')
+            return
+        }
+
+        const reader = new FileReader()
+        reader.onload = () => {
+            const base64Data = reader.result.split(',')[1]
+            setAttach(base64Data)
+        }
+        reader.readAsDataURL(file)
+        setErrText(null)
     }
 
     useEffect(() => {
@@ -174,16 +201,17 @@ export default function CommunSettings({ commun }: Props) {
                         onClick={() => {
                             setChoosenTab("Bans")
                             bans.length == 0 && fetchBans()
-                    }}>
+                        }}>
                         Bans
                     </button>
-                    { selfRole == "owner" &&
+                    {selfRole == "owner" &&
                         <button className={`text-lg text-[#c1c1c1] font-semibold hover:text-purple-300 transition ease-in-out duration-100
                     ${choosenTab == "Mods" ? "text-purple-300 underline font-bold" : ""}`}
                             onClick={
-                            () => {setChoosenTab("Mods")
-                            mods.length == 0 && fetchMods()
-                        }}>
+                                () => {
+                                    setChoosenTab("Mods")
+                                    mods.length == 0 && fetchMods()
+                                }}>
                             Mods
                         </button>
                     }
@@ -192,13 +220,37 @@ export default function CommunSettings({ commun }: Props) {
                 {choosenTab == "Main" ? (
                     <div className="flex flex-col">
                         <div className="inline-flex items-center justify-center w-full">
-                            <Image
-                                src={"/images/default.png"}
-                                width={120}
-                                height={120}
-                                className="rounded-lg mr-4"
-                                alt="placeholder"
-                            />
+                            <div className="flex flex-col">
+                                <Image
+                                    src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
+                                    width={120}
+                                    height={120}
+                                    className="rounded-lg mr-4"
+                                    alt="Pfp"
+                                />
+                                <div className="inline-flex items-center w-full">
+                                    <label className="cursor-pointer rounded-lg p-1 my-2 font-semibold text-white bg-[#816b9d] hover:bg-[#9179b4] transition-all duration-150 ease-in-out">
+                                        <input
+                                            type="file"
+                                            className="ml-2 text-sm text-white"
+                                            onChange={(e) => onAttach(e)}
+                                            className="hidden"
+                                        />
+                                        Upload avatar
+                                    </label>
+                                </div>
+                                <p className="text-white">
+                                    {attach ?
+                                        "Img attached"
+                                        : ""}
+                                    {attach &&
+                                        <span className="text-purple-300 text-sm ml-2 cursor-pointer" onClick={() => setAttach(null)}>
+                                            <br/>
+                                            Clear
+                                        </span>
+                                    }
+                                </p>
+                            </div>
                             <div>
                                 <p className="text-lg font-semibold text-[#bdbdbd] my-2">
                                     # {communData?.main.tag}
@@ -302,12 +354,12 @@ export default function CommunSettings({ commun }: Props) {
                 ) : null}
                 {errText && <p className="text-red-300 text-sm mt-2">{errText}</p>}
                 <Button
-                    onClick={choosenTab == "Main" ? () => { } : choosenTab == "Bans" ? () => { } : null}
+                    onClick={choosenTab == "Main" ? () => saveCommun() : choosenTab == "Bans" ? () => { } : null}
                     text="Save"
                     isSpecial={true}
                     isTextCentered={true}
                     className={`${choosenTab == "Bans" || choosenTab == "Mods" ? "hidden" : null} mt-2 w-full`}
-                    isDisabled={choosenTab == "Main" ? true : false}
+                    isDisabled={choosenTab == "Main" ? (!attach) || isBtnDisabled : false}
                 />
             </div>
         </div>

@@ -3,7 +3,6 @@ import Image from "next/image"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PostContextMenu from "./PostContextMenu";
-import { on } from "process";
 
 type Props = {
     title: String
@@ -106,9 +105,9 @@ export default ({ title, author, community, textContent, reputation, date, token
                     <Image
                         src={attach}
                         alt="Attachment"
-                        height={80}
-                        width={80}
-                        className="rounded-sm my-2"
+                        height={120}
+                        width={120}
+                        className="rounded-lg my-2"
                     />
                 }
             </div>

@@ -88,7 +88,7 @@ export default function ProfileTab({ commun }: Props) {
             width={140}
             height={140}
             className="rounded-2xl"
-            alt="placeholder"
+            alt="Pfp"
           />
           <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{selfData != "Fetching" ? selfData.nick : "Fetching..."}</p>
           <p className="text-sm -mt-3 font-semibold text-[#7f7f7f]">{selfData != "Fetching" ? "@" + selfData.tag : "Fetching..."}</p>
@@ -109,11 +109,11 @@ export default function ProfileTab({ commun }: Props) {
       ) : communData != "Error" ? (
         <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
           <Image
-            src={"/images/default.png"}
+            src={communData != "Fetching" && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
             width={140}
             height={140}
             className="rounded-2xl"
-            alt="placeholder"
+            alt="Pfp"
           />
           <p className="text-xl my-2 font-semibold text-[#dbdbdb] truncate">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>

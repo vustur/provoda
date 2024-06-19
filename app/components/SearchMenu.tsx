@@ -54,6 +54,7 @@ export default function SearchMenu({ isOpen }: Props) {
                         <CommunPreview
                             key={comm.id}
                             tag={comm.tag}
+                            pfp={comm.pfp}
                         />
                     )
                 }

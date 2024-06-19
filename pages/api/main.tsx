@@ -6,7 +6,7 @@ export class Account {
         this.token = token
         this.tag = tag
     }
-    async fetchUnknows() {
+    async fetchUnknowns() {
         if (this.token) {
             let dbReq = await dbPost("SELECT tag FROM accounts WHERE token = ?", [this.token])
             this.tag = dbReq[0]['tag']
