@@ -82,14 +82,14 @@ export default function main({ authortag, textContent, date, postid, reputation,
         <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl">
             <div className="inline-flex items-start justify-center my-1.5 p-2.5"
                 onContextMenu={(e) => onRightClick(e)}>
-                { !showOrig &&
-                <Image
-                    src={pfp ? pfp : "/images/default.png"}
-                    width={40}
-                    height={40}
-                    className="rounded-xl mr-4"
-                    alt="Avatar"
-                />
+                {!showOrig &&
+                    <Image
+                        src={pfp ? pfp : "/images/default.png"}
+                        width={40}
+                        height={40}
+                        className="rounded-xl mr-4"
+                        alt="Avatar"
+                    />
                 }
                 <div className="inline-flex flex-col items-start w-full h-full">
                     {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
@@ -100,7 +100,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             {date}</p>
                     </div>
                     <p className="text-lg text-[#dcdcdc]"
-                    style={{ whiteSpace: "pre-wrap" }}
+                        style={{ whiteSpace: "pre-wrap" }}
                     >{textContent}</p>
                 </div>
                 <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
@@ -133,10 +133,10 @@ export default function main({ authortag, textContent, date, postid, reputation,
                 </div>
                 <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent}></CommntContextMenu>
             </div>
-            { replies && replies.length != 0 &&
+            {replies && replies.length != 0 &&
                 <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer mx-3 mb-2" onClick={() => setShowReplies(!showReplies)}>{showReplies ? "Hide replies" : "Show replies"}</p>
             }
-            { replies && showReplies &&
+            {replies && showReplies &&
                 replies.map((reply) => {
                     return (
                         <CommentReply

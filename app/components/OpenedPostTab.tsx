@@ -5,6 +5,7 @@ import { mainContext } from "./PageBase"
 import axios from "axios";
 import WluffyError from "./WluffyError";
 import Image from "next/image";
+import Button from "./IconButton";
 
 type Props = {
   id: Number
@@ -57,6 +58,8 @@ export default function PostsTab({ id }: Props) {
   const refresh = () => {
     fetchPost(id)
     fetchComments(id)
+    setInEditCommId(0)
+    setReplyCommId(0)
   }
 
   const fetchPost = async (id) => {
@@ -100,6 +103,7 @@ export default function PostsTab({ id }: Props) {
       refresh()
     } catch (err) {
       console.error(err.response.data)
+      alert(err.response.data)
     }
   }
 
@@ -113,6 +117,7 @@ export default function PostsTab({ id }: Props) {
       refresh()
     } catch (err) {
       console.error(err.response.data)
+      alert(err.response.data)
     }
   }
 
@@ -158,6 +163,15 @@ export default function PostsTab({ id }: Props) {
             Comments
           </p>
         ) : null}
+        {comments != "Fetching" &&
+          <Button
+            src="refresh"
+            onClick={() => refresh()}
+            isSpecial={true}
+            text="Refresh"
+            className="mb-2 bg-opacity-70"
+          />
+        }
         {comments != "Fetching" && comments != "None" && comments != "Post not found" && postData != "Not found" && postData != "Error" ? (
           comments.map((comment) => (
             <Comment

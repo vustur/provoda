@@ -11,9 +11,10 @@ type Props = {
     reputation: number
     showOrig: boolean
     commid: number
+    pfp: String
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, pfp }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
@@ -74,20 +75,18 @@ export default function main({ authortag, textContent, date, postid, reputation,
         }, 1)
     }
 
-    const fetchReplies = async () => {
-        try {
-
-        }
-        catch (err) {
-            console.error(err.response.data)
-        }
-    }
-
     return (
         <div className="flex flex-row w-full bg-[#2d2d2d] my-2 rounded-xl">
             <div className="bg-[#4e4e4e] border-1 w-[2px] h-full mx-3"></div>
-            <div className="inline-flex items-start justify-center my-1.5 p-2.5 w-full"
+            <div className="inline-flex items-start justify-center my-1.5 p-2.5 w-full h-fit"
                 onContextMenu={(e) => onRightClick(e)}>
+                <Image
+                    src={pfp ? pfp : "/images/default.png"}
+                    width={40}
+                    height={40}
+                    className="rounded-xl mr-4"
+                    alt="Avatar"
+                />
                 <div className="inline-flex flex-col items-start justify-center w-full h-full">
                     {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
                     <div className={`inline-flex relative w-full h-fit ${width > 400 ? "justify-between" : "flex-col"} `}>
@@ -97,7 +96,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             {date}</p>
                     </div>
                     <p className="text-lg text-[#dcdcdc]"
-                    style={{ whiteSpace: "pre-wrap" }}
+                        style={{ whiteSpace: "pre-wrap" }}
                     >{textContent}</p>
                 </div>
                 <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">

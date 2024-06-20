@@ -33,7 +33,7 @@ export default function Top() {
       sessionStorage.setItem("tag", data[0].tag)
     }
     catch (err) {
-      console.error(err.response.data)
+      console.error(err)
       console.log("Looks like token is invalid, going to login page")
       console.log(localStorage)
       window.location = "/login"

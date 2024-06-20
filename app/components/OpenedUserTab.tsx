@@ -105,13 +105,20 @@ export default function PostsTab({ nick }: Props) {
       style={{ overflowY: "scroll" }}>
       {accountData != "Fetching" && accountData != "Not found" ? (
         <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
-          <Image
-            src={accountData.pfp ? accountData.pfp : "/images/default.png"}
-            width={80}
-            height={80}
-            className="rounded-2xl mr-4"
-            alt="Pfp"
-          />
+          <div className="w-32 h-32">
+            <Image
+              src={accountData.pfp ? accountData.pfp : "/images/default.png"}
+              width={80}
+              height={80}
+              className="rounded-2xl"
+              alt="Pfp"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
           <div className="inline-flex flex-col items-start justify-start">
             <p className="text-2xl   font-semibold text-[#f1f1f1] truncate">{accountData.nick}</p>
             <p className="text-lg    font-semibold text-[#bababa] truncate">@ {accountData.tag}</p>

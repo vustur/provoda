@@ -118,13 +118,20 @@ export default function PostsTab({ commun }: Props) {
       style={{ overflowY: "scroll" }}>
       {commun != null && communData[0] != "Fetching" ? (
         <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
-          <Image
-            src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
-            width={80}
-            height={80}
-            className="rounded-2xl mr-4"
-            alt="Pfp"
-          />
+          <div className="w-36 h-20 mr-4">
+            <Image
+              src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
+              width={80}
+              height={80}
+              className="rounded-2xl"
+              alt="Pfp"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
           <div className="inline-flex flex-col items-start justify-start">
             <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
             <p className="text-lg  font-semibold text-[#bababa] truncate">{communData.mems + " members"}</p>
@@ -169,7 +176,8 @@ export default function PostsTab({ commun }: Props) {
               onClick={() => refresh()}
               isSpecial={true}
               text="Refresh"
-              className="mb-2 bg-opacity-70" />
+              className="mb-2 bg-opacity-70" 
+            />
             {posts.map((post) => (
               <Post
                 key={post.id}
@@ -190,7 +198,7 @@ export default function PostsTab({ commun }: Props) {
           null
         )
       }
-      { commun != null && communData[0] != "Fetching" &&
+      {commun != null && communData[0] != "Fetching" &&
         <CommunitySettings
           commun={commun}
         />
