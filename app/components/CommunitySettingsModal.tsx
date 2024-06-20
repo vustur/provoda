@@ -302,7 +302,7 @@ export default function CommunSettings({ commun }: Props) {
                         ) : (
                             <div className="mt-10">
                                 <WluffyError
-                                    image="wluffy_with_box_light.png"
+                                    image="wluffy_smoker_light.png"
                                     textOne="No bans"
                                     textTwo="Banned users cannot post or comment on this community"
                                     scale={280}
@@ -342,7 +342,7 @@ export default function CommunSettings({ commun }: Props) {
                         ) : (
                             <div className="mt-10">
                                 <WluffyError
-                                    image="wluffy_with_box_light.png"
+                                    image="wluffy_smoker_light.png"
                                     textOne="No mods"
                                     textTwo="Mods can ban users, delete posts and comments from this community"
                                     scale={280}
