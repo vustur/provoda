@@ -2,7 +2,7 @@ import Image from "next/image"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import CommntContextMenu from "./CommntContextMenu"
-import CommentReply from "./CommentReply"
+import Comment from "./Comment"
 
 type Props = {
     authortag: string
@@ -12,17 +12,20 @@ type Props = {
     reputation: number
     showOrig: boolean
     commid: number
-    replies: any
+    // replies: any // replies used for old comment reply system
     pfp: String
+    replyto: number
+    allComs: any
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, replies, pfp }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, /*replies,*/ pfp, replyto, allComs }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+    const [replies, setReplies] = useState([])
     let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
     useEffect(() => {
@@ -33,6 +36,14 @@ export default function main({ authortag, textContent, date, postid, reputation,
         addEventListener("resize", onDeviceResize)
         addEventListener("click", onLeftClick)
         addEventListener("contextmenu", onRClickAnywhere)
+        if (replies.length == 0 && allComs){
+            for (const replyElm of allComs){
+                if (replyElm.replyto == commid){
+                    // console.log(replyElm)
+                    setReplies(prevVal => ([...prevVal, replyElm]))
+                }
+            }
+        }
     }, [])
 
     const upvote = async (dir) => {
@@ -79,67 +90,77 @@ export default function main({ authortag, textContent, date, postid, reputation,
     }
 
     return (
-        <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl">
-            <div className="inline-flex items-start justify-center my-1.5 p-2.5"
-                onContextMenu={(e) => onRightClick(e)}>
-                {!showOrig &&
-                    <Image
-                        src={pfp ? pfp : "/images/default.png"}
-                        width={40}
-                        height={40}
-                        className="rounded-xl mr-4"
-                        alt="Avatar"
-                    />
-                }
-                <div className="inline-flex flex-col items-start w-full h-full">
-                    {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
-                    <div className={`inline-flex relative w-full h-fit ${width > 400 ? "justify-between" : "flex-col"} `}>
-                        <p className="text-base font-semibold text-[#8a8a8a] truncate cursor-pointer"
-                            onClick={() => window.location = `/u/${authortag}`}>@ {authortag}</p>
-                        <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer">
-                            {date}</p>
+        <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl pb-1">
+            <div className="w-full h-full flex flex-row my-2">
+                {replyto != 0 ? (
+                    null
+                ) : null}
+                <div className="inline-flex w-full items-start justify-center my-1.5 p-2.5"
+                    onContextMenu={(e) => onRightClick(e)}>
+                    {!showOrig &&
+                        <Image
+                            src={pfp ? pfp : "/images/default.png"}
+                            width={40}
+                            height={40}
+                            className="rounded-xl mr-4"
+                            alt="Avatar"
+                        />
+                    }
+                    <div className="inline-flex flex-col items-start w-full h-full">
+                        {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
+                        <div className={`inline-flex relative w-full h-fit ${width > 400 ? "justify-between" : "flex-col"} `}>
+                            <p className="text-base font-semibold text-[#8a8a8a] truncate cursor-pointer"
+                                onClick={() => window.location = `/u/${authortag}`}>@ {authortag}</p>
+                            <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer">
+                                {date}</p>
+                        </div>
+                        <p className="text-lg text-[#dcdcdc]"
+                            style={{ whiteSpace: "pre-wrap" }}
+                        >{textContent}</p>
                     </div>
-                    <p className="text-lg text-[#dcdcdc]"
-                        style={{ whiteSpace: "pre-wrap" }}
-                    >{textContent}</p>
+                    <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
+                        <Image
+                            src={"/icons/chevron_up.svg"}
+                            alt="Up"
+                            height={32}
+                            width={32}
+                            className="cursor-pointer"
+                            onClick={() => upvote("up")}
+                        />
+                        <p className="text-md font-bold text-[#f2f2f2]">{rep.toString()}</p>
+                        <Image
+                            src={"/icons/chevron_up.svg"}
+                            alt="Up"
+                            height={32}
+                            width={32}
+                            className="rotate-180 cursor-pointer"
+                            onClick={() => upvote("down")}
+                        />
+                        <Image
+                            src={"/icons/adjst.svg"}
+                            alt="Up"
+                            height={32}
+                            width={32}
+                            className="cursor-pointer opacity-40"
+                            id="postsettings"
+                            onClick={(e) => onRightClick(e)}
+                        />
+                    </div>
+                    <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent}></CommntContextMenu>
                 </div>
-                <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
-                    <Image
-                        src={"/icons/chevron_up.svg"}
-                        alt="Up"
-                        height={32}
-                        width={32}
-                        className="cursor-pointer"
-                        onClick={() => upvote("up")}
-                    />
-                    <p className="text-md font-bold text-[#f2f2f2]">{rep.toString()}</p>
-                    <Image
-                        src={"/icons/chevron_up.svg"}
-                        alt="Up"
-                        height={32}
-                        width={32}
-                        className="rotate-180 cursor-pointer"
-                        onClick={() => upvote("down")}
-                    />
-                    <Image
-                        src={"/icons/adjst.svg"}
-                        alt="Up"
-                        height={32}
-                        width={32}
-                        className="cursor-pointer opacity-40"
-                        id="postsettings"
-                        onClick={(e) => onRightClick(e)}
-                    />
-                </div>
-                <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent}></CommntContextMenu>
             </div>
             {replies && replies.length != 0 &&
                 <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer mx-3 mb-2" onClick={() => setShowReplies(!showReplies)}>{showReplies ? "Hide replies" : "Show replies"}</p>
             }
-            {replies && showReplies &&
+            <div className="h-full w-full flex flex-row">
+            {replies.length != 0 && showReplies &&
+            <div className="bg-[#4e4e4e] border border-[#4e4e4e] w-[2px] h-full mx-3"></div>
+            }
+            <div className="flex flex-col w-full h-full">
+            {replies.length != 0 && showReplies &&
                 replies.map((reply) => {
                     return (
-                        <CommentReply
+                        <Comment
                             key={reply.id}
                             authortag={reply.authortag}
                             textContent={reply.content}
@@ -147,11 +168,14 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             postid={reply.postid}
                             reputation={reply.reputation}
                             commid={reply.id}
-                            replies={reply.replies}
+                            replyto={commid}
+                            allComs={allComs}
                         />
                     )
                 })
             }
+            </div>
+            </div>
         </div>
     )
 }

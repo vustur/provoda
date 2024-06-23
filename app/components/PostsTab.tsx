@@ -117,36 +117,40 @@ export default function PostsTab({ commun }: Props) {
     <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl pb-16"
       style={{ overflowY: "scroll" }}>
       {commun != null && communData[0] != "Fetching" ? (
-        <div className="inline-flex flex-row items-center justify-start bg-[#2d2d2d] w-full rounded-t-xl p-3">
-          <div className="w-36 h-20 mr-4">
-            <Image
-              src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
-              width={80}
-              height={80}
-              className="rounded-2xl"
-              alt="Pfp"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
+        <div className="inline-flex flex-row items-center justify-between bg-[#2d2d2d] w-full rounded-t-xl p-3">
+          <div className="flex flex-row items-center">
+            <div className="w-20 h-20 mr-4">
+              <Image
+                src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
+                width={80}
+                height={80}
+                className="rounded-2xl"
+                alt="Pfp"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
+            <div className="inline-flex flex-col items-start justify-start w-fit">
+              <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
+              <p className="text-lg  font-semibold text-[#bababa] truncate">{communData.mems + " members"}</p>
+            </div>
           </div>
-          <div className="inline-flex flex-col items-start justify-start">
-            <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
-            <p className="text-lg  font-semibold text-[#bababa] truncate">{communData.mems + " members"}</p>
-          </div>
-          {!communs.includes(commun) ? (
-            <div className="flex flex-row-reverse w-full mr-10">
+          <div className="flex flex-row gap-2 mr-5">
+            {!communs.includes(commun) ? (
               <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
                 onClick={() => joinCommun()}>Join</button>
-            </div>
-          ) : communs.includes(commun) ? (
-            <div className="flex flex-row-reverse w-full mr-10">
+            ) : communs.includes(commun) ? (
               <button className="text-lg text-[#f1f1f1] bg-purple-400 p-2 hover:bg-purple-500 bg-opacity-70 hover:bg-opacity-50 rounded-xl font-semibold transition ease-in-out duration-300"
                 onClick={() => leaveCommun()}>Leave</button>
-            </div>
-          ) : null}
+            ) : null}
+            {communData.role == "owner" || communData.role == "mod" ? (
+              <Button src="gear"
+                onClick={() => ctxVal.openCommunSettings(commun, communData.role)} />
+            ) : null}
+          </div>
         </div>
       ) : null
       }
@@ -176,7 +180,7 @@ export default function PostsTab({ commun }: Props) {
               onClick={() => refresh()}
               isSpecial={true}
               text="Refresh"
-              className="mb-2 bg-opacity-70" 
+              className="mb-2 bg-opacity-70"
             />
             {posts.map((post) => (
               <Post

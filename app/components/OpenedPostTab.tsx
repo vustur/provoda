@@ -134,85 +134,91 @@ export default function PostsTab({ id }: Props) {
   }
 
   return (
-    <div className={`inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl`}
-      style={{ overflowY: "scroll" }}>
-      <div className="inline-flex flex-col items-start justify-start w-full h-[77vh] overflow-scroll">
-        {postData != "Fetching" && postData != "Not found" ? (
-          <Post
-            title={postData.content.title}
-            author={postData.authortag}
-            date={postData.date}
-            textContent={postData.content.text}
-            reputation={postData.reputation}
-            community={postData.commun}
-            token={token}
-            postid={postData.id}
-            isOpen={true}
-            attach={postData.content.attach}
-          />
-        ) : postData == "Fetching" ? (
-          <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
-        ) : postData == "Not found" ? (
-          <WluffyError
-            image="wluffy_wires_light.png"
-            textOne="Post not found"
-          />
+    <div className="h-full w-full bg-[#363636]">
+      <div className={`inline-flex flex-col space-y-3 items-center justify-start w-full h-[90vh] px-[15px] pt-3 rounded-tr-xl`}
+        style={{ overflowY: "scroll" }}>
+        <div className="inline-flex flex-col items-start justify-start w-full h-max overflow-scroll">
+          {postData != "Fetching" && postData != "Not found" ? (
+            <Post
+              title={postData.content.title}
+              author={postData.authortag}
+              date={postData.date}
+              textContent={postData.content.text}
+              reputation={postData.reputation}
+              community={postData.commun}
+              token={token}
+              postid={postData.id}
+              isOpen={true}
+              attach={postData.content.attach}
+            />
+          ) : postData == "Fetching" ? (
+            <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
+          ) : postData == "Not found" ? (
+            <WluffyError
+              image="wluffy_wires_light.png"
+              textOne="Post not found"
+            />
+          ) : null}
+          {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
+            <p className="text-lg font-semibold text-[#727272] w-full pl-2">
+              Comments
+            </p>
+          ) : null}
+          {comments != "Fetching" &&
+            <Button
+              src="refresh"
+              onClick={() => refresh()}
+              isSpecial={true}
+              text="Refresh (temp broken)"
+              className="mb-2 bg-opacity-70"
+              isDisabled={true}
+            />
+          }
+          {comments != "Fetching" && comments != "None" && comments != "Post not found" && postData != "Not found" && postData != "Error" ? (
+            comments.map((comment) => (
+              comment.replyto == 0 ? (
+              <Comment
+                key={comment.id}
+                authortag={comment.authortag}
+                textContent={comment.content}
+                date={comment.date}
+                postid={comment.postid}
+                reputation={comment.reputation}
+                commid={comment.id}
+                replyto={0}
+                allComs={comments}
+              />
+              ) : null
+            ))
+          ) : comments == "Fetching" ? (
+            <p className="text-xl font-semibold text-[#545454] text-center">Fetching comments...</p>
+          ) : comments == "None" ? (
+            <WluffyError
+              image="wluffy_with_box_light.png"
+              textOne="No comments"
+              textTwo="Be the first to comment!"
+            />
+          ) : null
+          }
+        </div>
+        {inEditCommId != 0 ? (
+          <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
+        ) : replyCommId != 0 ? (
+          <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
         ) : null}
         {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
-          <p className="text-lg font-semibold text-[#727272] w-full pl-2">
-            Comments
-          </p>
+          <textarea
+            type="text"
+            placeholder="Write a comment..."
+            className="w-full h-8 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
+            onKeyDown={(e) => {
+              onKeyDownInCommWrite(e)
+            }}
+          />
         ) : null}
-        {comments != "Fetching" &&
-          <Button
-            src="refresh"
-            onClick={() => refresh()}
-            isSpecial={true}
-            text="Refresh"
-            className="mb-2 bg-opacity-70"
-          />
-        }
-        {comments != "Fetching" && comments != "None" && comments != "Post not found" && postData != "Not found" && postData != "Error" ? (
-          comments.map((comment) => (
-            <Comment
-              key={comment.id}
-              authortag={comment.authortag}
-              textContent={comment.content}
-              date={comment.date}
-              postid={comment.postid}
-              reputation={comment.reputation}
-              commid={comment.id}
-              replies={comment.replies}
-            />
-          ))
-        ) : comments == "Fetching" ? (
-          <p className="text-xl font-semibold text-[#545454] text-center">Fetching comments...</p>
-        ) : comments == "None" ? (
-          <WluffyError
-            image="wluffy_with_box_light.png"
-            textOne="No comments"
-            textTwo="Be the first to comment!"
-          />
-        ) : null
-        }
       </div>
-      {inEditCommId != 0 ? (
-        <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
-      ) : replyCommId != 0 ? (
-        <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
-      ) : null}
-      {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
-        <textarea
-          type="text"
-          placeholder="Write a comment..."
-          className="w-full h-8 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
-          value={commentInput}
-          onChange={(e) => setCommentInput(e.target.value)}
-          onKeyDown={(e) => {
-            onKeyDownInCommWrite(e)
-          }}
-        />
-      ) : null}
     </div>
   )
 }
