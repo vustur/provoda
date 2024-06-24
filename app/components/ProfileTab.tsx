@@ -39,6 +39,13 @@ export default function ProfileTab({ commun }: Props) {
 
   const toggleProfile = (mode) => {
     setIsShow(mode)
+    setCtxVal(prevVal => ({
+      ...prevVal,
+      isProfileOpen: mode
+    }))
+    // if (mode){
+    //   ctxVal.toggleCommuns(false)
+    // }
   }
 
   const fetchSelf = async () => {
@@ -79,7 +86,7 @@ export default function ProfileTab({ commun }: Props) {
 
   return (
     <div className={`items-center justify-start bg-gradient-to-b from-[#2a2a2a] to-[#303030] w-4/12 h-full px-4 shadow-2xl
-        ${width <= 750 && !isShow ? "hidden" : ""} ${width <= 750 && isShow ? "absolute right-0 top-0 w-fit h-full" : ""} `}>
+        ${width <= 750 && !isShow && "hidden"} ${width <= 750 && isShow && "absolute right-0 w-fit h-full"} ${width < 500 && isShow ? "top-0" : width >= 500 ? "top-8" : ""} `}>
       {commun == null ? (
         <div className={`inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4
         ${width <= 750 && isShow ? "mt-32" : ""}`}>

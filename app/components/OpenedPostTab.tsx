@@ -135,7 +135,7 @@ export default function PostsTab({ id }: Props) {
 
   return (
     <div className="h-full w-full bg-[#363636]">
-      <div className={`inline-flex flex-col space-y-3 items-center justify-start w-full h-[90vh] px-[15px] pt-3 rounded-tr-xl`}
+      <div className="inline-flex flex-col space-y-3 items-center justify-start w-full h-[90vh] px-[15px] pt-3 rounded-tr-xl mb-4"
         style={{ overflowY: "scroll" }}>
         <div className="inline-flex flex-col items-start justify-start w-full h-max overflow-scroll">
           {postData != "Fetching" && postData != "Not found" ? (

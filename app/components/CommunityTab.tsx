@@ -9,6 +9,7 @@ import { mainContext } from "./PageBase"
 export default function CommunityTab() {
   const [width, setWidth] = useState(1000)
   const [communs, setCommuns] = useState(["Fetching"])
+  const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
@@ -19,8 +20,23 @@ export default function CommunityTab() {
     }
     addEventListener("resize", onDeviceResize)
     fetchCommuns()
-    setCtxVal(prevVal => ({ ...prevVal, refreshCommuns: () => fetchCommuns() }))
+    setCtxVal(prevVal => ({
+      ...prevVal,
+      refreshCommuns: () => fetchCommuns(),
+      toggleCommuns: (mode) => toggleCommuns(mode)
+    }))
   }, [])
+
+  const toggleCommuns = (mode) => {
+    setIsShow(mode)
+    setCtxVal(prevVal => ({
+      ...prevVal,
+      isCommunsOpen: mode
+    }))
+    // if (mode){
+    //   ctxVal.toggleProfile(false)
+    // }
+  }
 
   const fetchCommuns = async () => {
     try {
@@ -37,8 +53,8 @@ export default function CommunityTab() {
   }
 
   return (
-    <div className={`inline-flex flex-col items-start justify-start bg-[#2d2d2d] w-4/12 h-full px-[17px] overflow-y-auto
-            ${width <= 570 ? "hidden" : ""}`}>
+    <div className={`inline-flex flex-col items-start justify-start bg-[#2d2d2d] w-4/12 h-full px-[17px] overflow-y-auto z-20
+            ${width <= 570 && !isShow && "hidden"} ${width <= 570 && isShow && "absolute left-0 w-fit h-full"} ${width < 500 && isShow ? "top-0" : width >= 500 ? "top-8" : ""}`}>
       <div className="relative w-[116px] h-3">
       </div>
       <div className="flex flex-col items-start justify-start relative py-[5px]">

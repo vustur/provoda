@@ -4,17 +4,17 @@ import CommunityTab from "@/app/components/CommunityTab"
 import PostsTab from "@/app/components/PostsTab"
 import Top from "@/app/components/Top"
 import PageBase from "@/app/components/PageBase"
+import MainContent from "@/app/components/MainContent"
 
-export default function main({ params }: { params: { slug: string } }){
+export default function main({ params }: { params: { slug: string } }) {
     return (
         <PageBase>
-        <Top />
-            {/* Main part of page */}
-            <div className="w-full h-full flex flex-row">
-              <CommunityTab />
-              <PostsTab commun={params.slug} />
-              <ProfileTab commun={params.slug} />
-            </div>
+            <Top />
+            <MainContent>
+                <CommunityTab />
+                <PostsTab commun={params.slug} />
+                <ProfileTab commun={params.slug} />
+            </MainContent>
         </PageBase>
     )
 }

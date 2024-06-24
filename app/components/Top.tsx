@@ -8,7 +8,6 @@ import axios from "axios"
 
 export default function Top() {
   const [width, setWidth] = useState(1000)
-  const [isProfileShow, setIsProfileShow] = useState(false)
   const [searchText, setSearchText] = useState("")
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
@@ -24,7 +23,7 @@ export default function Top() {
 
   const checkIfExists = async () => {
     try {
-      if (!token){
+      if (!token) {
         throw new Error("No token in localStorage")
       }
       const req = await axios.post("/api/getAccount", { "input": token })
@@ -41,15 +40,15 @@ export default function Top() {
   }
 
   return (
-    <div className="inline-flex items-center justify-start w-full z-30">
-      {width > 300 ? (
+    <div className="inline-flex items-center justify-start w-full z-30 bg-[#2b2b2b]">
+      {width > 400 ? (
         <div className="w-4/12">
           <p className="w-fit ml-3 cursor-pointer font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#e0e0e0] to-[#9354B1]"
             onClick={() => window.location = "/"}
           >Provoda</p>
         </div>
       ) : null}
-      {width > 570 ? (
+      {width > 570 && (
         <input
           className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20"
           placeholder="Type to search on Provoda..."
@@ -64,38 +63,53 @@ export default function Top() {
           }}
           value={searchText}
         />
-      ) : null}
+      )}
       {/* Btns */}
       <div className={`relative h-12 px-2.5 flex items-center
        ${width <= 570 ? "w-full" : "w-4/12"} ${width <= 300 ? "mx-auto flex justify-center" : "flex-row-reverse"} `}>
-        <div className={`p-1 h-fit flex space-x-2.5 items-center justify-center ${width <= 300 ? "mx-auto" : ""} bg-[#3c3c3c] rounded-md`}>
-          {width <= 300 ? (
+        <div className={`p-1 h-fit flex space-x-2.5 items-center justify-center ${width <= 400 ? "mx-auto" : ""} bg-[#3c3c3c] rounded-md`}>
+          {width <= 400 && (
             <Button
-              src="house"
+              src="halfarrow"
               onClick={() => window.location = "/"}
             />
-          ) : null}
-          {width <= 750 ? (
+          )}
+          {width <= 570 && (
+            <Button
+              src="house"
+              onClick={() => {
+                ctxVal.toggleCommuns(!ctxVal.isCommunsOpen)
+                setCtxVal(prevVal => ({
+                  ...prevVal,
+                  isCommunsOpen: !ctxVal.isCommunsOpen
+                }))
+              }}
+            />
+          )}
+          {width <= 750 && (
             <Button
               src="user"
               onClick={() => {
-                ctxVal.toggleProfile(!isProfileShow)
-                setIsProfileShow(!isProfileShow)
+                ctxVal.toggleProfile(!ctxVal.isProfileOpen)
+                setCtxVal(prevVal => ({
+                  ...prevVal,
+                  isProfileOpen: !ctxVal.isProfileOpen
+                }))
               }}
             />
-          ) : null}
-          {width <= 570 ? (
-            <Button
-              src="search"
-            />
-          ) : null}
+          )}
           <Button src="pen"
             isSpecial={true}
             onClick={() => ctxVal.openWriteFunc("write")}
           />
+          {width <= 570 && (
+            <Button
+              src="search"
+            />
+          )}
           <Button src="bell" />
           <Button src="gear"
-          onClick={() => ctxVal.openAccountSettings()}/>
+            onClick={() => ctxVal.openAccountSettings()} />
         </div>
       </div>
       <WriteModal />

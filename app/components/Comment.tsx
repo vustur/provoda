@@ -36,9 +36,9 @@ export default function main({ authortag, textContent, date, postid, reputation,
         addEventListener("resize", onDeviceResize)
         addEventListener("click", onLeftClick)
         addEventListener("contextmenu", onRClickAnywhere)
-        if (replies.length == 0 && allComs){
-            for (const replyElm of allComs){
-                if (replyElm.replyto == commid){
+        if (replies.length == 0 && allComs) {
+            for (const replyElm of allComs) {
+                if (replyElm.replyto == commid) {
                     // console.log(replyElm)
                     setReplies(prevVal => ([...prevVal, replyElm]))
                 }
@@ -91,11 +91,8 @@ export default function main({ authortag, textContent, date, postid, reputation,
 
     return (
         <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl pb-1">
-            <div className="w-full h-full flex flex-row my-2">
-                {replyto != 0 ? (
-                    null
-                ) : null}
-                <div className="inline-flex w-full items-start justify-center my-1.5 p-2.5"
+            <div className="w-full h-full flex flex-row">
+                <div className="inline-flex w-full items-start justify-center p-1.5"
                     onContextMenu={(e) => onRightClick(e)}>
                     {!showOrig &&
                         <Image
@@ -108,17 +105,13 @@ export default function main({ authortag, textContent, date, postid, reputation,
                     }
                     <div className="inline-flex flex-col items-start w-full h-full">
                         {showOrig ? <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer" onClick={() => window.location = `/p/${postid}`}>## {postid}</p> : null}
-                        <div className={`inline-flex relative w-full h-fit ${width > 400 ? "justify-between" : "flex-col"} `}>
-                            <p className="text-base font-semibold text-[#8a8a8a] truncate cursor-pointer"
-                                onClick={() => window.location = `/u/${authortag}`}>@ {authortag}</p>
-                            <p className="text-sm font-semibold text-[#757474] truncate cursor-pointer">
-                                {date}</p>
-                        </div>
+                        <p className="text-base font-semibold text-[#8a8a8a] cursor-pointer"
+                            onClick={() => window.location = `/u/${authortag}`}>@ {authortag} <span className="text-[#555555] ml-2 truncate">{date}</span></p>
                         <p className="text-lg text-[#dcdcdc]"
                             style={{ whiteSpace: "pre-wrap" }}
                         >{textContent}</p>
                     </div>
-                    <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-6 h-fit">
+                    <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-5 h-fit">
                         <Image
                             src={"/icons/chevron_up.svg"}
                             alt="Up"
@@ -150,31 +143,31 @@ export default function main({ authortag, textContent, date, postid, reputation,
                 </div>
             </div>
             {replies && replies.length != 0 &&
-                <p className="text-sm font-semibold text-[#b9b9b9] cursor-pointer mx-3 mb-2" onClick={() => setShowReplies(!showReplies)}>{showReplies ? "Hide replies" : "Show replies"}</p>
+                <p className="text-sm font-semibold text-[#4b4b4b] cursor-pointer ml-2 mb-2" onClick={() => setShowReplies(!showReplies)}>{showReplies ? "Hide replies" : "Show replies"}</p>
             }
             <div className="h-full w-full flex flex-row">
-            {replies.length != 0 && showReplies &&
-            <div className="bg-[#4e4e4e] border border-[#4e4e4e] w-[2px] h-full mx-3"></div>
-            }
-            <div className="flex flex-col w-full h-full">
-            {replies.length != 0 && showReplies &&
-                replies.map((reply) => {
-                    return (
-                        <Comment
-                            key={reply.id}
-                            authortag={reply.authortag}
-                            textContent={reply.content}
-                            date={reply.date}
-                            postid={reply.postid}
-                            reputation={reply.reputation}
-                            commid={reply.id}
-                            replyto={commid}
-                            allComs={allComs}
-                        />
-                    )
-                })
-            }
-            </div>
+                {replies.length != 0 && showReplies &&
+                    <div className="bg-[#4e4e4e] border border-[#4e4e4e] w-[2px] h-full mx-2"></div>
+                }
+                <div className="flex flex-col w-full h-full">
+                    {replies.length != 0 && showReplies &&
+                        replies.map((reply) => {
+                            return (
+                                <Comment
+                                    key={reply.id}
+                                    authortag={reply.authortag}
+                                    textContent={reply.content}
+                                    date={reply.date}
+                                    postid={reply.postid}
+                                    reputation={reply.reputation}
+                                    commid={reply.id}
+                                    replyto={commid}
+                                    allComs={allComs}
+                                />
+                            )
+                        })
+                    }
+                </div>
             </div>
         </div>
     )
