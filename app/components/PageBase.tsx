@@ -16,7 +16,7 @@ export default function PageBase({ children }) {
 
     return (
         <mainContext.Provider value={{ctxVal, setCtxVal}}>
-            <div className={`absolute bg-[#2a2a2a] w-full flex overflow-x-hidden ${width <= 500 ? "h-full flex-col-reverse" : "h-full flex-col"}`}>{children}</div>
+            <div className={`absolute bg-[#2a2a2a] w-full flex overflow-hidden ${width <= 500 ? "h-full flex-col-reverse" : "h-full flex-col"}`}>{children}</div>
         </mainContext.Provider>
     );
 }

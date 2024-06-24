@@ -118,7 +118,7 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
   return (
     show && (
       <div className={`inline-flex flex-col absolute items-start justify-center bg-[#474747] p-2 rounded-lg shadow-lg z-20`}
-        style={{ top: `${mousePos.y}px`, left: `${mousePos.x}px` }}>
+        style={{ top: `${mousePos.y}px`, left: `${mousePos.x - 110}px` }}>
         {
           btns.map((btn) => (
             <button className="text-lg flex mb-1 p-1 w-full rounded-lg text-[#c1c1c1] hover:text-purple-300 hover:bg-[#3d3d3d] transition ease-in-out duration-300 truncate"

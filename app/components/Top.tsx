@@ -9,6 +9,7 @@ import axios from "axios"
 export default function Top() {
   const [width, setWidth] = useState(1000)
   const [searchText, setSearchText] = useState("")
+  const [isMobileSearch, setIsMobileSearch] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
@@ -48,9 +49,9 @@ export default function Top() {
           >Provoda</p>
         </div>
       ) : null}
-      {width > 570 && (
+      {width > 570 || isMobileSearch ? (
         <input
-          className="w-5/12 h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20"
+          className={`${isMobileSearch && width <= 570 ? "w-full ml-1" : "w-5/12"} h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20`}
           placeholder="Type to search on Provoda..."
           onChange={(e) => {
             setSearchText(e.target.value)
@@ -63,10 +64,11 @@ export default function Top() {
           }}
           value={searchText}
         />
-      )}
+      ) : null }
       {/* Btns */}
       <div className={`relative h-12 px-2.5 flex items-center
-       ${width <= 570 ? "w-full" : "w-4/12"} ${width <= 300 ? "mx-auto flex justify-center" : "flex-row-reverse"} `}>
+       ${width <= 570 && !isMobileSearch ? "w-full" : "w-4/12"} ${width <= 300 ? "mx-auto flex justify-center" : "flex-row-reverse"} `}>
+        { !isMobileSearch ? (
         <div className={`p-1 h-fit flex space-x-2.5 items-center justify-center ${width <= 400 ? "mx-auto" : ""} bg-[#3c3c3c] rounded-md`}>
           {width <= 400 && (
             <Button
@@ -103,14 +105,19 @@ export default function Top() {
             onClick={() => ctxVal.openWriteFunc("write")}
           />
           {width <= 570 && (
-            <Button
-              src="search"
+            <Button src="search"
+              onClick={() => setIsMobileSearch(true)}
             />
           )}
-          <Button src="bell" />
+          <Button src="bell"
+            onClick={() => alert("Notifications will be added later :/")}/>
           <Button src="gear"
             onClick={() => ctxVal.openAccountSettings()} />
         </div>
+        ) : (
+          <Button src="halfarrow"
+            onClick={() => setIsMobileSearch(false)} />
+        )}
       </div>
       <WriteModal />
       <AccountSettingsModal />

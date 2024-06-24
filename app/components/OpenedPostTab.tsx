@@ -210,7 +210,7 @@ export default function PostsTab({ id }: Props) {
           <textarea
             type="text"
             placeholder="Write a comment..."
-            className="w-full h-8 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
+            className="w-full h-16 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
             value={commentInput}
             onChange={(e) => setCommentInput(e.target.value)}
             onKeyDown={(e) => {

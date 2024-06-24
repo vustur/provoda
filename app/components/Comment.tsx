@@ -90,7 +90,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
     }
 
     return (
-        <div className="flex flex-col w-full bg-[#2d2d2d] my-2 rounded-xl pb-1">
+        <div className="flex flex-col w-full bg-[#2f2f2f] my-2 rounded-xl pb-1">
             <div className="w-full h-full flex flex-row">
                 <div className="inline-flex w-full items-start justify-center p-1.5"
                     onContextMenu={(e) => onRightClick(e)}>
