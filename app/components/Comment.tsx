@@ -99,8 +99,8 @@ export default function main({ authortag, textContent, date, postid, reputation,
                     {!showOrig &&
                         <Avatar
                             src={pfp}
-                            size={5}
-                            pixels={40}
+                            size={3}
+                            pixels={80}
                         />
                     }
                     <div className="inline-flex flex-col items-start w-full h-full">

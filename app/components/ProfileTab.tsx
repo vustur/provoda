@@ -95,6 +95,7 @@ export default function ProfileTab({ commun }: Props) {
             src={communData && selfData.pfp && selfData.pfp}
             size={8}
             pixels={140}
+            nomargin={true}
           />
           <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{selfData != "Fetching" ? selfData.nick : "Fetching..."}</p>
           <p className="text-sm -mt-3 font-semibold text-[#7f7f7f]">{selfData != "Fetching" ? "@" + selfData.tag : "Fetching..."}</p>

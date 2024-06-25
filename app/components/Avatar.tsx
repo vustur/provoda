@@ -4,14 +4,15 @@ type Props = {
     src: String,
     size: String,
     pixels: numbers,
-    nomargin: boolean
+    nomargin: boolean,
+    className: string
 }
 
-export default function Avatar({src, size, pixels, nomargin} : Props) {
+export default function Avatar({src, size, pixels, nomargin, className} : Props) {
 
     return (
-    <div className={`${nomargin ? "" : "mr-4"}`}
-    style={{width: `${size}rem`, height: `${size}rem`}}>
+    <div className={`${nomargin ? "" : "mr-4"} ${className}`}
+    style={{width: `${size}rem`, height: `${size}rem`, minWidth: `${size}rem`, minHeight: `${size}rem`,}}>
         <Image
             src={src ? src : "/images/default.png"}
             width={pixels}
