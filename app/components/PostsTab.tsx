@@ -6,6 +6,7 @@ import Image from "next/image";
 import Button from "./IconButton";
 import CommunitySettings from "./CommunitySettingsModal"
 import WluffyError from "./WluffyError";
+import Avatar from "./Avatar"
 
 type Props = {
   commun: String
@@ -119,20 +120,11 @@ export default function PostsTab({ commun }: Props) {
       {commun != null && communData[0] != "Fetching" ? (
         <div className="inline-flex flex-row items-center justify-between bg-[#2d2d2d] w-full rounded-t-xl p-3">
           <div className="flex flex-row items-center">
-            <div className="w-20 h-20 mr-4">
-              <Image
-                src={communData && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
-                width={80}
-                height={80}
-                className="rounded-2xl"
-                alt="Pfp"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            </div>
+            <Avatar
+            src={communData && communData.main.pfp && communData.main.pfp}
+            size={5}
+            pixels={80}
+            />
             <div className="inline-flex flex-col items-start justify-start w-fit">
               <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
               <p className="text-lg  font-semibold text-[#bababa] truncate">{communData.mems + " members"}</p>

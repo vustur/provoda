@@ -3,6 +3,7 @@ import Image from "next/image"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PostContextMenu from "./PostContextMenu";
+import { parseTextToPMD } from "./utils"
 
 type Props = {
     title: String
@@ -89,7 +90,7 @@ export default ({ title, author, community, textContent, reputation, date, token
                 </div>
                 <p className="text-lg mt-1 text-[#dcdcdc]"
                     style={{ whiteSpace: "pre-wrap" }}
-                >{!isOpen && textContent.length > 150 ? textContent.substring(0, 150) + "..." : textContent}</p>
+                dangerouslySetInnerHTML={{__html: isOpen ? parseTextToPMD(textContent) : parseTextToPMD(textContent).substring(0, 150) + "..."}}></p>
                 {attach && isOpen &&
                     <div className="w-full mt-3 bg-[#3a3a3a] flex items-center justify-center rounded-lg">
                         <Image

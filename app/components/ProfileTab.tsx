@@ -3,6 +3,7 @@ import axios from "axios"
 import { useEffect, useState, useContext } from "react"
 import Button from "./IconButton"
 import { mainContext } from "./PageBase"
+import Avatar from "./Avatar"
 
 type Props = {
   commun: any
@@ -90,20 +91,11 @@ export default function ProfileTab({ commun }: Props) {
       {commun == null ? (
         <div className={`inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4
         ${width <= 750 && isShow ? "mt-32" : ""}`}>
-          <div className="w-32 h-32">
-            <Image
-              src={selfData.pfp ? selfData.pfp : "/images/default.png"}
-              width={140}
-              height={140}
-              className="rounded-2xl"
-              alt="Pfp"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-          </div>
+          <Avatar
+            src={communData && selfData.pfp && selfData.pfp}
+            size={8}
+            pixels={140}
+          />
           <p className="text-xl my-2 font-semibold text-[#dbdbdb]">{selfData != "Fetching" ? selfData.nick : "Fetching..."}</p>
           <p className="text-sm -mt-3 font-semibold text-[#7f7f7f]">{selfData != "Fetching" ? "@" + selfData.tag : "Fetching..."}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] my-2"></div>
@@ -122,20 +114,12 @@ export default function ProfileTab({ commun }: Props) {
         </div>
       ) : communData != "Error" ? (
         <div className="inline-flex flex-col items-center justify-start w-full h-full mt-8 px-4">
-          <div className="w-32 h-32">
-            <Image
-              src={communData != "Fetching" && communData.main.pfp ? communData.main.pfp : "/images/default.png"}
-              width={140}
-              height={140}
-              className="rounded-2xl"
-              alt="Pfp"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-          </div>
+          <Avatar
+            src={communData != "Fetching" && communData.main.pfp && communData.main.pfp}
+            size={8}
+            pixels={140}
+            nomargin={true}
+          />
           <p className="text-xl my-2 font-semibold text-[#dbdbdb] truncate">{communData != "Fetching" ? "# " + communData.main.tag : "Fetching..."}</p>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-1 mt-1"></div>
           <p className="text-lg mt-1 font-semibold text-[#b9b9b9] text-left">{communData != "Fetching" ? communData.mems + " members" : "Fetching..."}</p>

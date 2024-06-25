@@ -3,6 +3,8 @@ import { mainContext } from "./PageBase"
 import Image from "next/image"
 import Button from "./IconButton"
 import axios from "axios"
+import Avatar from "./Avatar"
+import { checkUpl } from "./utils"
 
 export default function AccSettings() {
     const [isOpen, setIsOpen] = useState(false)
@@ -86,28 +88,13 @@ export default function AccSettings() {
     }
 
     const onAttach = (e) => {
-        const file = e.target.files[0]
-        if (!file) return
-        const fileSizeLimit = 10 * 1024 * 1024
-        const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif']
-        if (file.size > fileSizeLimit) {
-            setErrText('Max allowed file size is ' + fileSizeLimit / 1024 / 1024 + 'MB')
-            return
+        try {
+            checkUpl(e, setAttach)
+            setErrText(null)
         }
-        const { name: fileName } = file;
-        const fileExtension = fileName.slice((fileName.lastIndexOf('.') - 1 >>> 0) + 2)
-        if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
-            setErrText('Only images or gifs are allowed (' + allowedExtensions.join(', ') + ')')
-            return
+        catch (e) {
+            setErrText(e.message)
         }
-
-        const reader = new FileReader()
-        reader.onload = () => {
-            const base64Data = reader.result.split(',')[1]
-            setAttach(base64Data)
-        }
-        reader.readAsDataURL(file)
-        setErrText(null)
     }
 
     useEffect(() => {
@@ -135,13 +122,12 @@ export default function AccSettings() {
                 {choosenTab == "Profile" ? (
                     <div className="flex flex-col">
                         <div className="inline-flex items-center justify-center w-full">
-                            <div className="flex flex-col">
-                                <Image
-                                    src={userData && userData.pfp ? userData.pfp : "/images/default.png"}
-                                    width={120}
-                                    height={120}
-                                    className="rounded-lg mr-4"
-                                    alt="Pfp"
+                            <div className="flex flex-col items-center">
+                                <Avatar
+                                    src={userData && userData.pfp && userData.pfp}
+                                    size={5}
+                                    pixels={80}
+                                    nomargin={true}
                                 />
                                 <div className="inline-flex items-center w-full">
                                     <label className="cursor-pointer rounded-lg p-1 my-2 font-semibold text-white bg-[#816b9d] hover:bg-[#9179b4] transition-all duration-150 ease-in-out">
@@ -160,7 +146,7 @@ export default function AccSettings() {
                                         : ""}
                                     {attach &&
                                         <span className="text-purple-300 text-sm ml-2 cursor-pointer" onClick={() => setAttach(null)}>
-                                            <br/>
+                                            <br />
                                             Clear
                                         </span>
                                     }

@@ -3,6 +3,8 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import CommntContextMenu from "./CommntContextMenu"
 import Comment from "./Comment"
+import Avatar from "./Avatar"
+import { parseTextToPMD } from "./utils"
 
 type Props = {
     authortag: string
@@ -95,12 +97,10 @@ export default function main({ authortag, textContent, date, postid, reputation,
                 <div className="inline-flex w-full items-start justify-center p-1.5"
                     onContextMenu={(e) => onRightClick(e)}>
                     {!showOrig &&
-                        <Image
-                            src={pfp ? pfp : "/images/default.png"}
-                            width={40}
-                            height={40}
-                            className="rounded-xl mr-4"
-                            alt="Avatar"
+                        <Avatar
+                            src={pfp}
+                            size={5}
+                            pixels={40}
                         />
                     }
                     <div className="inline-flex flex-col items-start w-full h-full">
@@ -109,7 +109,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             onClick={() => window.location = `/u/${authortag}`}>@ {authortag} <span className="text-[#555555] ml-2 truncate">{date}</span></p>
                         <p className="text-lg text-[#dcdcdc]"
                             style={{ whiteSpace: "pre-wrap" }}
-                        >{textContent}</p>
+                        dangerouslySetInnerHTML={{__html: parseTextToPMD(textContent)}}></p>
                     </div>
                     <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-5 h-fit">
                         <Image

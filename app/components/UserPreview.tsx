@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Button from "./IconButton"
+import Avatar from "./Avatar"
 
 type Props = {
     nick: String
@@ -16,20 +17,11 @@ export default function UserPreview({ nick, tag, bio, pfp, specButton, specFunc 
             <div className="inline-flex flex-row items-center justify-start w-[90%] rounded-lg p-3 mb-2 cursor-pointer"
                 onClick={() => window.location = "/u/" + tag}>
                 {pfp != "none" &&
-                    <div className="w-20 h-20 mr-4">
-                        <Image
-                            src={pfp ? pfp : "/images/default.png"}
-                            width={80}
-                            height={80}
-                            className="rounded-2xl"
-                            alt="Pfp"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                            }}
-                        />
-                    </div>
+                    <Avatar
+                        src={pfp}
+                        size={5}
+                        pixels={80}
+                    />
                 }
                 <div className="inline-flex flex-col items-start justify-start">
                     <p className="text-xl     font-semibold text-[#f1f1f1] truncate">{nick ? nick : ""}</p>

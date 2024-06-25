@@ -24,6 +24,7 @@ export default function WriteModal() {
         fetchCommuns()
         if (newContent) {
             setTextContent(newContent)
+            console.log(textContent)
         }
         if (postId) {
             setOrigPostId(postId)
@@ -161,6 +162,7 @@ export default function WriteModal() {
                         type="text"
                         placeholder="Title"
                         className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
+                        value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
                     : null}
@@ -168,6 +170,7 @@ export default function WriteModal() {
                     type="text"
                     placeholder="Text content (description)"
                     className="mt-3 w-full rounded-md bg-[#393939] text-white text-sm p-2 h-full"
+                    value={textContent}
                     onChange={(e) => setTextContent(e.target.value)}
                     row={5}
                 />
