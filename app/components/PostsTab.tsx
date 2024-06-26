@@ -17,6 +17,8 @@ export default function PostsTab({ commun }: Props) {
   const [posts, setPosts] = useState(["Fetching"])
   const [communData, setCommunData] = useState(["Fetching"])
   const [communs, setCommuns] = useState([])
+  const [offset, setOffset] = useState(10)
+  const [isMorePostFetching, setIsMorePostFetching] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
 
@@ -54,6 +56,23 @@ export default function PostsTab({ commun }: Props) {
     }
   }
 
+  const extendFeed = async () => {
+    setIsMorePostFetching(true)
+    try {
+      const fetch = await axios.post("/api/loadFeed", { token, offset })
+      const data = fetch.data
+      setPosts(prevPosts => [...prevPosts, ...data])
+      setOffset(offset + 10)
+      console.log(data)
+      setIsMorePostFetching(false)
+    } catch (err) {
+      console.error(err.response.data)
+      if (err.response.data != "No communities") {
+        setIsMorePostFetching(false)
+      }
+    }
+  }
+
   const fetchPostsByCommun = async (commun) => {
     try {
       const fetch = await axios.post("/api/loadCommunityPosts", { token, commun })
@@ -66,6 +85,21 @@ export default function PostsTab({ commun }: Props) {
       }
       if (err.response.data == "Community not found") {
         setPosts(["Community not found"])
+      }
+    }
+  }
+
+  const extendPostsByCommun = async (commun) => {
+    setIsMorePostFetching(true)
+    try {
+      const fetch = await axios.post("/api/loadCommunityPosts", { token, commun, offset })
+      const data = fetch.data
+      setOffset(offset + 10)
+      setPosts(prevPosts => [...prevPosts, ...data])
+    } catch (err) {
+      console.error(err.response.data)
+      if (err.response.data != "No posts") {
+        setIsMorePostFetching(false)
       }
     }
   }
@@ -121,9 +155,9 @@ export default function PostsTab({ commun }: Props) {
         <div className="inline-flex flex-row items-center justify-between bg-[#2d2d2d] w-full rounded-t-xl p-3">
           <div className="flex flex-row items-center">
             <Avatar
-            src={communData && communData.main.pfp && communData.main.pfp}
-            size={5}
-            pixels={80}
+              src={communData && communData.main.pfp && communData.main.pfp}
+              size={5}
+              pixels={80}
             />
             <div className="inline-flex flex-col items-start justify-start w-fit">
               <p className="text-2xl font-semibold text-[#f1f1f1] truncate"># {communData.main.tag}</p>
@@ -189,6 +223,14 @@ export default function PostsTab({ commun }: Props) {
                 attach={JSON.parse(post.content)['attach']}
               />
             ))}
+            <Button
+              src="refresh"
+              onClick={commun ? () => extendPostsByCommun(commun) : () => extendFeed()}
+              isSpecial={true}
+              text="Load more"
+              isDisabled={isMorePostFetching}
+              className="mb-2 bg-opacity-70"
+            />
           </div>
         ) : (
           null
