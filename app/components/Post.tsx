@@ -90,7 +90,7 @@ export default ({ title, author, community, textContent, reputation, date, token
                 </div>
                 <p className="text-lg mt-1 text-[#dcdcdc]"
                     style={{ whiteSpace: "pre-wrap" }}
-                dangerouslySetInnerHTML={{__html: isOpen ? parseTextToPMD(textContent) : parseTextToPMD(textContent).substring(0, 150) + "..."}}></p>
+                dangerouslySetInnerHTML={{__html: isOpen || textContent.length < 150  ? parseTextToPMD(textContent) : parseTextToPMD(textContent).substring(0, 150) + "..."}}></p>
                 {attach && isOpen &&
                     <div className="w-full mt-3 bg-[#3a3a3a] flex items-center justify-center rounded-lg">
                         <Image
