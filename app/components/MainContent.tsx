@@ -12,7 +12,7 @@ export default function MainContent({ children }) {
       }, [])
 
     return (
-        <div className={`w-full h-full flex flex-row ${width > 500 ? "pb-12" : "pt-12"}`}>
+        <div className={`w-full h-[100%] flex flex-row ${width > 500 ? "pb-12" : "pt-12"}`} style={{flexShrink: 0}}>
             {children}
         </div>
     )

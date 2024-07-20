@@ -1,9 +1,10 @@
 'use client'
 import Image from "next/image"
-import axios from "axios";
-import { useEffect, useState } from "react";
-import PostContextMenu from "./PostContextMenu";
+import axios from "axios"
+import { useContext, useEffect, useState } from "react"
+import PostContextMenu from "./PostContextMenu"
 import { parseTextToPMD } from "./utils"
+import { mainContext } from "./PageBase"
 
 type Props = {
     title: String
@@ -24,6 +25,7 @@ export default ({ title, author, community, textContent, reputation, date, token
     const [rep, setRep] = useState(reputation)
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+    const { ctxVal, setCtxVal } = useContext(mainContext)
 
     const upvote = async (dir) => {
         try {
@@ -98,7 +100,8 @@ export default ({ title, author, community, textContent, reputation, date, token
                             alt="Attachment"
                             height={300}
                             width={300}
-                            className="rounded-sm"
+                            className="rounded-sm cursor-pointer"
+                            onClick={() => ctxVal.openPictureView(attach)}
                         />
                     </div>
                 }
@@ -108,7 +111,8 @@ export default ({ title, author, community, textContent, reputation, date, token
                         alt="Attachment"
                         height={120}
                         width={120}
-                        className="rounded-lg my-2"
+                        className="rounded-lg my-2 cursor-pointer"
+                        onClick={() => ctxVal.openPictureView(attach)}
                     />
                 }
             </div>

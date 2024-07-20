@@ -169,9 +169,8 @@ export default function PostsTab({ id }: Props) {
               src="refresh"
               onClick={() => refresh()}
               isSpecial={true}
-              text="Refresh (temp broken)"
+              text="Refresh"
               className="mb-2 bg-opacity-70"
-              isDisabled={true}
             />
           }
           {comments != "Fetching" && comments != "None" && comments != "Post not found" && postData != "Not found" && postData != "Error" ? (

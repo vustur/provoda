@@ -149,7 +149,7 @@ export default function PostsTab({ commun }: Props) {
   }
 
   return (
-    <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-full px-[15px] pt-3 rounded-tr-xl"
+    <div className="inline-flex flex-col space-y-3 items-center justify-start bg-[#363636] w-full h-[100%] px-[15px] pt-3 rounded-tr-xl"
       style={{ overflowY: "scroll" }}>
       {commun != null && communData[0] != "Fetching" ? (
         <div className="inline-flex flex-row items-center justify-between bg-[#2d2d2d] w-full rounded-t-xl p-3">

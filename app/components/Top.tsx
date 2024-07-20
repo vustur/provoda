@@ -3,6 +3,7 @@ import Button from "./IconButton"
 import WriteModal from "./WriteModal"
 import AccountSettingsModal from "./AccountSettingsModal"
 import SearchMenu from "./SearchMenu"
+import PictureModal from "./PictureViewModal"
 import { mainContext } from "./PageBase"
 import axios from "axios"
 
@@ -122,6 +123,7 @@ export default function Top() {
       <WriteModal />
       <AccountSettingsModal />
       <SearchMenu isOpen={searchText.length > 0} />
+      <PictureModal />
     </div>
   )
 }
