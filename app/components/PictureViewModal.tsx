@@ -16,6 +16,7 @@ export default function PictureModal() {
     const onLeftClick = (e) => {
         if (e.target.id == "backdrop") {
             setIsOpen(false)
+            setUrl(null)
         }
     }
 
@@ -32,7 +33,7 @@ export default function PictureModal() {
                         src={url}
                         height={600}
                         width={600}
-                        quality={100}
+                        quality={70}
                     />
                 }
             </div>

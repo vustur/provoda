@@ -1,4 +1,6 @@
 import Image from "next/image"
+import { useContext } from "react"
+import { mainContext } from "./PageBase"
 
 type Props = {
     src: String,
@@ -9,6 +11,7 @@ type Props = {
 }
 
 export default function Avatar({src, size, pixels, nomargin, className} : Props) {
+    const { ctxVal, useCtxVal } = useContext(mainContext)
 
     return (
     <div className={`${nomargin ? "" : "mr-4"} ${className}`}
@@ -17,13 +20,14 @@ export default function Avatar({src, size, pixels, nomargin, className} : Props)
             src={src ? src : "/images/default.png"}
             width={pixels}
             height={pixels}
-            className="rounded-2xl"
+            className={`rounded-2xl ${src ? "cursor-pointer" : null}`}
             alt="Pfp"
             style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
             }}
+            onClick={src ? () => ctxVal.openPictureView(src) : () => (null)}
         />
     </div>
     )
