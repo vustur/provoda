@@ -20,7 +20,7 @@ export default function PostsTab({ commun }: Props) {
   const [offset, setOffset] = useState(10)
   const [isMorePostFetching, setIsMorePostFetching] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
   useEffect(() => {
     setWidth(window.innerWidth)

@@ -28,7 +28,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
     const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
     const [replies, setReplies] = useState([])
-    let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
+    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
     useEffect(() => {
         setWidth(window.innerWidth)

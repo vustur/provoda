@@ -11,7 +11,7 @@ export default function CommunityTab() {
   const [communs, setCommuns] = useState(["Fetching"])
   const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
   useEffect(() => {
     setWidth(window.innerWidth)

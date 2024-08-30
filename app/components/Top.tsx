@@ -13,7 +13,7 @@ export default function Top() {
   const [isMobileSearch, setIsMobileSearch] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   const [isAnon, setIsAnon] = useState(false)
-  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
   useEffect(() => {
     if (token){
