@@ -226,10 +226,10 @@ export default function PostsTab({ commun }: Props) {
           <WluffyError
             image={"wluffy_wires_light.png"}
             textOne={
-              "Feed posts cannot be loaded without login"
+              "Feed cannot be loaded without login"
             }
           />
-        ) : posts.length > 0 && posts[0] != Object ? (
+        ) : posts.length > 0 && typeof posts[0] == 'object' ? (
           <div className="w-full">
             <Button
               src="refresh"

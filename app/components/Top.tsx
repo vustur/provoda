@@ -36,7 +36,7 @@ export default function Top() {
     catch (err) {
       console.error(err)
       console.log("Looks like token is invalid OR not found. NoReg mode")
-      sessionStorage.setItem("tag", "Anon")
+      sessionStorage.setItem("tag", "anon")
     }
   }
 
@@ -52,7 +52,7 @@ export default function Top() {
       {width > 570 || isMobileSearch ? (
         <input
           className={`${isMobileSearch && width <= 570 ? "w-full ml-1" : "w-5/12"} h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20`}
-          placeholder="Type to search on Provoda..."
+          placeholder={`${width <= 750 || !token} Type to search on Provoda...`}
           onChange={(e) => {
             setSearchText(e.target.value)
           }}
@@ -64,67 +64,67 @@ export default function Top() {
           }}
           value={searchText}
         />
-      ) : null }
+      ) : null}
       {/* Btns */}
       <div className={`relative h-12 px-2.5 flex items-center
        ${width <= 570 && !isMobileSearch ? "w-full" : "w-4/12"} ${width <= 300 ? "mx-auto flex justify-center" : "flex-row-reverse"} `}>
-        { !isMobileSearch ? (
-        <div className={`p-1 h-fit flex space-x-2.5 items-center justify-center ${width <= 400 ? "mx-auto" : ""} bg-[#3c3c3c] rounded-md`}>
-          {width <= 400 && (
-            <Button
-              src="halfarrow"
-              onClick={() => window.location = "/"}
-            />
-          )}
-          {width <= 570 && (
-            <Button
-              src="house"
-              onClick={() => {
-                ctxVal.toggleCommuns(!ctxVal.isCommunsOpen)
-                setCtxVal(prevVal => ({
-                  ...prevVal,
-                  isCommunsOpen: !ctxVal.isCommunsOpen
-                }))
-              }}
-            />
-          )}
-          {width <= 750 || !token && (
-            <Button
-              src="user"
-              onClick={() => {
-                if (token) {
-                ctxVal.toggleProfile(!ctxVal.isProfileOpen)
-                setCtxVal(prevVal => ({
-                  ...prevVal,
-                  isProfileOpen: !ctxVal.isProfileOpen
-                }))
-                } else {
-                  window.location="/login"
-                }
-              }}
-            />
-          )}
-          {token && (
-          <Button src="pen"
-            isSpecial={true}
-            onClick={() => ctxVal.openWriteFunc("write")}
-          />
-          )}
-          {width <= 570 && (
-            <Button src="search"
-              onClick={() => setIsMobileSearch(true)}
-            />
-          )}
-          {token && (
-          <Button src="bell"
-            onClick={() => alert("Notifications will be added later :/")}
-          />
-          )}
-          {token && (
-          <Button src="gear"
-            onClick={() => ctxVal.openAccountSettings()} />
-          )}
-        </div>
+        {!isMobileSearch ? (
+          <div className={`p-1 h-fit flex space-x-2.5 items-center justify-center ${width <= 400 ? "mx-auto" : ""} bg-[#3c3c3c] rounded-md`}>
+            {width <= 400 && (
+              <Button
+                src="halfarrow"
+                onClick={() => window.location = "/"}
+              />
+            )}
+            {width <= 570 && (
+              <Button
+                src="house"
+                onClick={() => {
+                  ctxVal.toggleCommuns(!ctxVal.isCommunsOpen)
+                  setCtxVal(prevVal => ({
+                    ...prevVal,
+                    isCommunsOpen: !ctxVal.isCommunsOpen
+                  }))
+                }}
+              />
+            )}
+            {width <= 750 || !token ? (
+              <Button
+                src="user"
+                onClick={() => {
+                  if (token) {
+                    ctxVal.toggleProfile(!ctxVal.isProfileOpen)
+                    setCtxVal(prevVal => ({
+                      ...prevVal,
+                      isProfileOpen: !ctxVal.isProfileOpen
+                    }))
+                  } else {
+                    window.location = "/login"
+                  }
+                }}
+              />
+            ) : null}
+            {token && (
+              <Button src="pen"
+                isSpecial={true}
+                onClick={() => ctxVal.openWriteFunc("write")}
+              />
+            )}
+            {width <= 570 && (
+              <Button src="search"
+                onClick={() => setIsMobileSearch(true)}
+              />
+            )}
+            {token && (
+              <Button src="bell"
+                onClick={() => alert("Notifications will be added later :/")}
+              />
+            )}
+            {token && (
+              <Button src="gear"
+                onClick={() => ctxVal.openAccountSettings()} />
+            )}
+          </div>
         ) : (
           <Button src="halfarrow"
             onClick={() => setIsMobileSearch(false)} />

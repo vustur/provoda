@@ -67,7 +67,7 @@ export default function ProfileTab({ commun }: Props) {
     }
     try {
       const fetch = await axios.post("/api/getAccount", { input: token })
-      const data = fetch.data
+      const data = fetch.data[0]
       setSelfData(data)
       console.log(data)
       await fetchSelfRep(data.tag)
@@ -122,7 +122,7 @@ export default function ProfileTab({ commun }: Props) {
           </div>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
-          { token &&
+          { localStorage.getItem('tag') != "anon" &&
             <Button
               src="arrow_tr"
               onClick={() => window.location = "/u/" + selfData.tag}

@@ -173,20 +173,20 @@ export default function PostsTab({ id }: Props) {
               className="mb-2 bg-opacity-70"
             />
           }
-          {comments != "Fetching" && comments != "None" && comments != "Post not found" && postData != "Not found" && postData != "Error" ? (
+          {typeof comments == 'object' && typeof postData == 'object' ? (
             comments.map((comment) => (
               comment.replyto == 0 ? (
-              <Comment
-                key={comment.id}
-                authortag={comment.authortag}
-                textContent={comment.content}
-                date={comment.date}
-                postid={comment.postid}
-                reputation={comment.reputation}
-                commid={comment.id}
-                replyto={0}
-                allComs={comments}
-              />
+                <Comment
+                  key={comment.id}
+                  authortag={comment.authortag}
+                  textContent={comment.content}
+                  date={comment.date}
+                  postid={comment.postid}
+                  reputation={comment.reputation}
+                  commid={comment.id}
+                  replyto={0}
+                  allComs={comments}
+                />
               ) : null
             ))
           ) : comments == "Fetching" ? (
@@ -200,23 +200,27 @@ export default function PostsTab({ id }: Props) {
           ) : null
           }
         </div>
-        {inEditCommId != 0 ? (
-          <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
-        ) : replyCommId != 0 ? (
-          <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
-        ) : null}
-        {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
-          <textarea
-            type="text"
-            placeholder="Write a comment..."
-            className="w-full h-16 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
-            value={commentInput}
-            onChange={(e) => setCommentInput(e.target.value)}
-            onKeyDown={(e) => {
-              onKeyDownInCommWrite(e)
-            }}
-          />
-        ) : null}
+        {token &&
+          <div className="w-full">
+            {inEditCommId != 0 ? (
+              <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
+            ) : replyCommId != 0 ? (
+              <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
+            ) : null}
+            {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
+              <textarea
+                type="text"
+                placeholder="Write a comment..."
+                className="w-full h-16 bg-[#424242] text-[#ebebeb] text-sm font-semibold px-3.5 py-1.5 rounded-lg"
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+                onKeyDown={(e) => {
+                  onKeyDownInCommWrite(e)
+                }}
+              />
+            ) : null}
+          </div>
+        }
       </div>
     </div>
   )
