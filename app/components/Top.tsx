@@ -12,9 +12,13 @@ export default function Top() {
   const [searchText, setSearchText] = useState("")
   const [isMobileSearch, setIsMobileSearch] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
+  const [isAnon, setIsAnon] = useState(false)
   let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
+    if (token){
+      setIsAnon(true)
+    }
     setWidth(window.innerWidth)
     const onDeviceResize = () => {
       setWidth(window.innerWidth)
@@ -52,7 +56,7 @@ export default function Top() {
       {width > 570 || isMobileSearch ? (
         <input
           className={`${isMobileSearch && width <= 570 ? "w-full ml-1" : "w-5/12"} h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20`}
-          placeholder={`${width <= 750 || !token} Type to search on Provoda...`}
+          placeholder="Type to search on Provoda..."
           onChange={(e) => {
             setSearchText(e.target.value)
           }}
@@ -88,7 +92,7 @@ export default function Top() {
                 }}
               />
             )}
-            {width <= 750 || !token ? (
+            {width <= 750 || isAnon ? (
               <Button
                 src="user"
                 onClick={() => {
@@ -104,7 +108,7 @@ export default function Top() {
                 }}
               />
             ) : null}
-            {token && (
+            {isAnon && (
               <Button src="pen"
                 isSpecial={true}
                 onClick={() => ctxVal.openWriteFunc("write")}
@@ -115,12 +119,12 @@ export default function Top() {
                 onClick={() => setIsMobileSearch(true)}
               />
             )}
-            {token && (
+            {isAnon && (
               <Button src="bell"
                 onClick={() => alert("Notifications will be added later :/")}
               />
             )}
-            {token && (
+            {isAnon && (
               <Button src="gear"
                 onClick={() => ctxVal.openAccountSettings()} />
             )}
