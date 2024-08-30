@@ -16,7 +16,7 @@ export default function PostsTab({ nick }: Props) {
   const [accountContent, setAccountContent] = useState("Fetching")
   const [accRep, setAccRep] = useState("Fetching")
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)

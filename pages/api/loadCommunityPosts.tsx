@@ -1,13 +1,9 @@
 import dbPost from "./conn"
-import { Account, Community } from "./main";
+import { Community } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
         const { token, commun, limit = 10, offset = 0 } = req.body
-        const user = new Account(token)
-        if (!await user.checkIfExists()){
-            throw new Error("Acc not found")
-        }
         const community = new Community(commun)
         if (!await community.checkIfExists()){
             throw new Error("Community not found")

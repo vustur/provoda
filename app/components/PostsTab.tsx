@@ -20,7 +20,7 @@ export default function PostsTab({ commun }: Props) {
   const [offset, setOffset] = useState(10)
   const [isMorePostFetching, setIsMorePostFetching] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)
@@ -43,6 +43,10 @@ export default function PostsTab({ commun }: Props) {
   }
 
   const fetchFeed = async () => {
+    if (!token) {
+      setPosts(["NoToken"])
+      return
+    }
     try {
       const fetch = await axios.post("/api/loadFeed", { token })
       const data = fetch.data
@@ -116,6 +120,9 @@ export default function PostsTab({ commun }: Props) {
   }
 
   const fetchCommuns = async () => {
+    if (!token){
+      return
+    }
     try {
       const fetch = await axios.post("/api/getUserCommuns", { token })
       const data = fetch.data
@@ -185,21 +192,44 @@ export default function PostsTab({ commun }: Props) {
           <div className="flex flex-col items-center justify-center h-full">
             <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
           </div>
-        ) : posts[0] == "No communities" || posts[0] == "No posts" || posts[0] == "Community not found" ? (
+        ) : posts[0] == "No communities" ? (
           <WluffyError
-            image={posts[0] == "No posts" ? "wluffy_with_box_light.png" : "wluffy_wires_light.png"}
+            image={"wluffy_wires_light.png"}
             textOne={
-              posts[0] == "No communities" ? "No communities or no posts in your communities yet..."
-                : posts[0] == "No posts" ? "No posts in this community yet..."
-                  : "Community not found..."
+              "No communities or no posts in your communities yet..."
             }
             textTwo={
-              posts[0] == "No communities" ? "Join some to load feed!"
-                : posts[0] == "No posts" ? "Post something first!"
-                  : ""
+              "Join some to load feed!"
             }
           />
-        ) : posts.length > 0 && posts[0] != "No communities" && posts[0] != "No posts" && posts[0] != "Fetching" ? (
+        ) : posts[0] == "No posts" ? (
+          <WluffyError
+            image={"wluffy_with_box_light.png"}
+            textOne={
+              "No posts in this community yet..."
+            }
+            textTwo={
+              "Posts something first!"
+            }
+          />
+        ) : posts[0] == "Community not found" ? (
+          <WluffyError
+            image={"wluffy_wires_light.png"}
+            textOne={
+              "No communities or no posts in your communities yet..."
+            }
+            textTwo={
+              "Join some communities!"
+            }
+          />
+        ) : posts[0] == "NoToken" ? (
+          <WluffyError
+            image={"wluffy_wires_light.png"}
+            textOne={
+              "Feed posts cannot be loaded without login"
+            }
+          />
+        ) : posts.length > 0 && posts[0] != Object ? (
           <div className="w-full">
             <Button
               src="refresh"
@@ -233,7 +263,15 @@ export default function PostsTab({ commun }: Props) {
             />
           </div>
         ) : (
-          null
+          <WluffyError
+          image={"wluffy_wires_light.png"}
+          textOne={
+            "Something unknown and unexpected went wrong"
+          }
+          textTwo={
+            `Thats end of if else statement and all conditions are false // ${posts.length > 0}`
+          }
+        />
         )
       }
       {commun != null && communData[0] != "Fetching" &&

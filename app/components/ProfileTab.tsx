@@ -17,7 +17,7 @@ export default function ProfileTab({ commun }: Props) {
   const [role, setRole] = useState("member")
   const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)
@@ -50,9 +50,24 @@ export default function ProfileTab({ commun }: Props) {
   }
 
   const fetchSelf = async () => {
+    if (!token) {
+      setSelfData({
+        id: 0,
+        nick: "Anon",
+        tag: "anon",
+        bio: "Login to enjoy all Provoda features!",
+        pfp: null
+      })
+      setSelfRep({
+        allRep: "-",
+        postRep: "-",
+        commRep: "-"
+      })
+      return
+    }
     try {
       const fetch = await axios.post("/api/getAccount", { input: token })
-      const data = fetch.data[0]
+      const data = fetch.data
       setSelfData(data)
       console.log(data)
       await fetchSelfRep(data.tag)
@@ -107,10 +122,12 @@ export default function ProfileTab({ commun }: Props) {
           </div>
           <div className="bg-[#4e4e4e] border-1 w-[75%] h-[1px] mb-2 mt-4"></div>
           <div className="inline-flex space-x-1 items-start justify-center relative w-[83px] h-[22px] py-1">
+          { token &&
             <Button
               src="arrow_tr"
               onClick={() => window.location = "/u/" + selfData.tag}
             />
+          }
           </div>
         </div>
       ) : communData != "Error" ? (

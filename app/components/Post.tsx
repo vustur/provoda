@@ -28,6 +28,9 @@ export default ({ title, author, community, textContent, reputation, date, token
     const { ctxVal, setCtxVal } = useContext(mainContext)
 
     const upvote = async (dir) => {
+        if (!token){
+            alert("Login to upvote/downvote")
+        }
         try {
             if (dir == picked) {
                 const dbreq = await axios.post("/api/addPostReput", { "token": token, "postid": postid, "isPositive": true, "mode": "remove" })

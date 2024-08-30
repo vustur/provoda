@@ -11,7 +11,7 @@ export default function CommunityTab() {
   const [communs, setCommuns] = useState(["Fetching"])
   const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)
@@ -39,6 +39,10 @@ export default function CommunityTab() {
   }
 
   const fetchCommuns = async () => {
+    if (!token) {
+      setCommuns(["NoToken"])
+      return
+    }
     try {
       const fetch = await axios.post("/api/getUserCommuns", { token })
       const data = fetch.data
@@ -58,7 +62,7 @@ export default function CommunityTab() {
       <div className="relative w-[116px] h-3">
       </div>
       <div className="flex flex-col items-start justify-start relative py-[5px]">
-        {communs[0] != "Fetching" ? (
+        {communs[0] != "Fetching" && token ? (
           <Button
             src="plus"
             onClick={() => ctxVal.openCommunCreate()}
@@ -76,6 +80,10 @@ export default function CommunityTab() {
           ) : communs[0] == "No communities" ? (
             <div className="flex flex-col items-center justify-center h-full">
               <p className="text-xl font-semibold text-[#545454] text-center">No communities</p>
+            </div>
+          ) : communs[0] == "NoToken" ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-xl font-semibold text-[#545454] text-center">Login to view communities</p>
             </div>
           ) : (
             communs.map((community) => {

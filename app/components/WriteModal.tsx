@@ -16,7 +16,7 @@ export default function WriteModal() {
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const [attach, setAttach] = useState(null)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+    let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
     const openWriteModal = (type, newContent, postId) => {
         setIsOpen(true)

@@ -12,7 +12,7 @@ export default function Top() {
   const [searchText, setSearchText] = useState("")
   const [isMobileSearch, setIsMobileSearch] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+  let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
   useEffect(() => {
     setWidth(window.innerWidth)
@@ -35,9 +35,8 @@ export default function Top() {
     }
     catch (err) {
       console.error(err)
-      console.log("Looks like token is invalid, going to login page")
-      console.log(localStorage)
-      window.location = "/login"
+      console.log("Looks like token is invalid OR not found. NoReg mode")
+      sessionStorage.setItem("tag", "Anon")
     }
   }
 
@@ -89,31 +88,42 @@ export default function Top() {
               }}
             />
           )}
-          {width <= 750 && (
+          {width <= 750 || !token && (
             <Button
               src="user"
               onClick={() => {
+                if (token) {
                 ctxVal.toggleProfile(!ctxVal.isProfileOpen)
                 setCtxVal(prevVal => ({
                   ...prevVal,
                   isProfileOpen: !ctxVal.isProfileOpen
                 }))
+                } else {
+                  window.location="/login"
+                }
               }}
             />
           )}
+          {token && (
           <Button src="pen"
             isSpecial={true}
             onClick={() => ctxVal.openWriteFunc("write")}
           />
+          )}
           {width <= 570 && (
             <Button src="search"
               onClick={() => setIsMobileSearch(true)}
             />
           )}
+          {token && (
           <Button src="bell"
-            onClick={() => alert("Notifications will be added later :/")}/>
+            onClick={() => alert("Notifications will be added later :/")}
+          />
+          )}
+          {token && (
           <Button src="gear"
             onClick={() => ctxVal.openAccountSettings()} />
+          )}
         </div>
         ) : (
           <Button src="halfarrow"

@@ -10,16 +10,16 @@ export default function AccSettings() {
     const [isOpen, setIsOpen] = useState(false)
     const [errText, setErrText] = useState(null)
     const [userData, setUserData] = useState(null)
-    const [newNick, setNewNick] = useState(null)
-    const [newBio, setNewBio] = useState(null)
-    const [newMail, setNewMail] = useState(null)
-    const [newPassword, setNewPassword] = useState(null)
-    const [currentPassword, setCurrentPassword] = useState(null)
+    const [newNick, setNewNick] = useState("")
+    const [newBio, setNewBio] = useState("")
+    const [newMail, setNewMail] = useState("")
+    const [newPassword, setNewPassword] = useState("")
+    const [currentPassword, setCurrentPassword] = useState("")
     const [attach, setAttach] = useState(null)
     const [choosenTab, setChoosenTab] = useState("Profile")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+    let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
     const openASModal = () => {
         setIsOpen(true)
@@ -136,6 +136,7 @@ export default function AccSettings() {
                                             className="ml-2 text-sm text-white"
                                             onChange={(e) => onAttach(e)}
                                             className="hidden"
+                                            value={undefined}
                                         />
                                         Upload avatar
                                     </label>

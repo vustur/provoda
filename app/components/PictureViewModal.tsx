@@ -6,7 +6,7 @@ export default function PictureModal() {
     const [isOpen, setIsOpen] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
     const [url, setUrl] = useState(null)
-    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+    let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
     const openPVModal = (url) => {
         setIsOpen(true)

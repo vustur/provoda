@@ -28,7 +28,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
     const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
     const [replies, setReplies] = useState([])
-    let token = typeof window !== "undefined" ? window.localStorage.getItem('token') : null
+    let token = typeof window !== "undefined" && window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null
 
     useEffect(() => {
         setWidth(window.innerWidth)
@@ -49,6 +49,9 @@ export default function main({ authortag, textContent, date, postid, reputation,
     }, [])
 
     const upvote = async (dir) => {
+        if (!token){
+            alert("Login to upvote/downvote")
+        }
         try {
             if (dir == picked) {
                 const dbreq = await axios.post("/api/addCommReput", { "token": token, "commid": commid, "isPositive": true, "mode": "remove" })
