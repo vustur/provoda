@@ -83,7 +83,7 @@ export default function PostsTab({ id }: Props) {
 
   const fetchComments = async (id) => {
     try {
-      const fetch = await axios.post("/api/getPostComments", { postid: id })
+      const fetch = await axios.post("/api/getPostComments", { postid: id, token })
       const data = fetch.data
       console.log(data)
       setComments(data)
@@ -190,6 +190,7 @@ export default function PostsTab({ id }: Props) {
                   commid={comment.id}
                   replyto={0}
                   allComs={comments}
+                  ownStatus={comment.ownStatus}
                 />
               ) : null
             ))

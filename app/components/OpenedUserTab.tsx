@@ -141,14 +141,14 @@ export default function PostsTab({ nick }: Props) {
               <Post
                 key={cntn.id}
                 postid={cntn.id}
-                title={JSON.parse(cntn.content)['title']}
-                textContent={JSON.parse(cntn.content)['text']}
+                title={cntn.content.title}
+                textContent={cntn.content.text}
                 date={cntn.date}
                 author={cntn.authortag}
                 community={cntn.commun}
                 reputation={cntn.reputation}
                 isOpen={false}
-                attach={JSON.parse(cntn.content)['attach']}
+                attach={cntn.content.attach}
               />
             )
           }

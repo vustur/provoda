@@ -13,15 +13,16 @@ type Props = {
   postcommun: string
   content: string
   isreply: boolean
+  ownStatus: number
 }
 
-export default function PostContextMenu({ show, commid, token, mousePos, authortag, postcommun, content, isreply }: Props) {
+export default function PostContextMenu({ show, commid, token, mousePos, authortag, postcommun, content, isreply, ownStatus }: Props) {
   const [btns, setBtns] = useState([
-    {
-      name: "Share",
-      icon: "share",
-      function: () => navigator.clipboard.writeText(window.location.origin + "/p/" + postid)
-    },
+    // { // will make comment share later
+    //   name: "Share",
+    //   icon: "share",
+    //   function: () => navigator.clipboard.writeText(window.location.origin + "/p/" + postid)
+    // },
     {
       name: "Report",
       icon: "flag",
@@ -34,7 +35,7 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
     addSpecBtns()
 
     if (btns.find((btn) => btn.name == "Reply")) return
-    if (!isreply){
+    if (!isreply) {
       setBtns([
         ...btns,
         {
@@ -44,7 +45,7 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
             if (ctxVal.commReplyTo != null) {
               ctxVal.commReplyTo(commid)
             } else {
-              alert("Comment cannot be replied at this page. Go to post page to edit it")
+              alert("Comment cannot be replied at this page. Go to post page to reply")
             }
           }
         },
@@ -55,42 +56,37 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
   const addSpecBtns = async () => {
     if (show != true) return
     if (btns.find((btn) => btn.name == "Delete")) return
-    let role = "member"
-    const check = () => {
-      if (authortag == sessionStorage.getItem("tag")) {
-        setBtns([
-          ...btns,
-          {
-            name: "Delete",
-            icon: "trash",
-            function: () => deleteComment()
-          },
-          {
-            name: "Edit",
-            icon: "pentwo",
-            function: () => {
-              if (ctxVal.editComment != null) {
-                ctxVal.editComment(content, commid)
-              } else {
-                alert("Comment cannot be edited at this page. Go to post page to edit it")
-              }
+
+    if (ownStatus == 2) {
+      setBtns([
+        ...btns,
+        {
+          name: "Delete",
+          icon: "trash",
+          function: () => deleteComment()
+        },
+        {
+          name: "Edit",
+          icon: "pentwo",
+          function: () => {
+            if (ctxVal.editComment != null) {
+              ctxVal.editComment(content, commid)
+            } else {
+              alert("Comment cannot be edited at this page. Go to post page to edit it")
             }
           }
-        ])
-      } else if (role == "owner" || role == "mod") {
-        setBtns([
-          ...btns,
-          {
-            name: "Delete",
-            icon: "trash",
-            function: () => deleteComment()
-          }
-        ])
-      }
+        }
+      ])
+    } else if (ownStatus == 1) {
+      setBtns([
+        ...btns,
+        {
+          name: "Delete",
+          icon: "trash",
+          function: () => deleteComment()
+        }
+      ])
     }
-
-    role = await getRole()
-    check()
   }
 
   const deleteComment = async () => {
@@ -99,17 +95,6 @@ export default function PostContextMenu({ show, commid, token, mousePos, authort
       const data = fetch.data
       console.log(data)
       ctxVal.refresh()
-    } catch (err) {
-      console.error(err.response.data)
-    }
-  }
-
-  const getRole = async () => {
-    try {
-      const fetch = await axios.post("/api/getRoleByComment", { commid, token })
-      const data = fetch.data
-      console.log(data)
-      return data
     } catch (err) {
       console.error(err.response.data)
     }

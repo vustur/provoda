@@ -1,12 +1,18 @@
 import dbPost from "./conn"
-import { Account, Post } from "./main";
+import { Account, Post, commsParser } from "./main";
 
 export default async function handler(req: Request, res: Response) {
     try {
-        const { postid } = req.body
+        const { postid, token } = req.body
         const post = new Post(null, null, null, null, null, postid)
         if (!await post.checkIfExists()) {
             throw new Error("Post not found")
+        }
+        let user = new Account(token)
+        if (await user.checkIfExists()){
+            await user.fetchUnknowns()
+        } else {
+            user = null
         }
         // OLD COMMENT REPLY CHECK SYSTEM
         // let comReq = await dbPost("SELECT * FROM comments WHERE postId = ? AND replyto  = 0 ORDER BY reputation DESC", [postid]);
@@ -34,11 +40,7 @@ export default async function handler(req: Request, res: Response) {
         //     }
         // });
         let comReq = await dbPost("SELECT * FROM comments WHERE postId = ? ORDER BY reputation DESC", [postid]);
-        for (let i = 0; i < comReq.length; i++) { // for comments
-            let comm = comReq[i]
-            let base64 = Buffer.from(comm["content"]).toString('base64')
-            comReq[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
-        }
+        comReq = await commsParser(comReq, user)
         res.status(200).json(comReq)
     } catch (err) {
         console.log(err.message)

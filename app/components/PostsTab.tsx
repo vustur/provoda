@@ -241,16 +241,16 @@ export default function PostsTab({ commun }: Props) {
             {posts.map((post) => (
               <Post
                 key={post.id}
-                title={JSON.parse(post.content)['title']}
+                title={post.content.title}
                 author={post.authortag}
                 date={post.date}
-                textContent={JSON.parse(post.content)['text']}
+                textContent={post.content.text}
                 reputation={post.reputation}
                 community={post.commun}
                 token={token}
                 postid={post.id}
                 isOpen={false}
-                attach={JSON.parse(post.content)['attach']}
+                attach={post.content.attach}
                 ownStatus={post.ownStatus}
               />
             ))}

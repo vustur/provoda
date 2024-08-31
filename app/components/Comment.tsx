@@ -18,9 +18,10 @@ type Props = {
     pfp: String
     replyto: number
     allComs: any
+    ownStatus: number
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, /*replies,*/ pfp, replyto, allComs }: Props) {
+export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, pfp, replyto, allComs, ownStatus }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
@@ -142,7 +143,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             onClick={(e) => onRightClick(e)}
                         />
                     </div>
-                    <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent}></CommntContextMenu>
+                    <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent} ownStatus={ownStatus} />
                 </div>
             </div>
             {replies && replies.length != 0 &&
@@ -166,6 +167,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                                     commid={reply.id}
                                     replyto={commid}
                                     allComs={allComs}
+                                    ownStatus={reply.ownStatus}
                                 />
                             )
                         })

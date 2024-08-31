@@ -20,7 +20,7 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
     {
       name: "Share",
       icon: "share",
-      function: () => navigator.clipboard.writeText(window.location.origin + "/p/" + postid)
+      function: () => {navigator.clipboard.writeText(window.location.origin + "/p/" + postid); alert("Ссылка на пост скопирована в буфер обмена")}
     },
     {
       name: "Report",

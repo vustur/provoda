@@ -15,9 +15,8 @@ export default async function handler(req: Request, res: Response){
         } else {
             user = null
         }
-        console.log(post)
         const parsedPosts = await postsParser([{ ...post }], user, true)
-        res.status(200).json(parsedPosts[0])
+        res.status(200).json({ ...parsedPosts[0] })
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

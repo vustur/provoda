@@ -298,6 +298,7 @@ export const postsParser = async (posts, user: Account = null) => {
         if (post['content']['title'] == null) {
             let base64 = Buffer.from(post["content"]).toString('base64')
             postsArr[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+            postsArr[i]["content"] = JSON.parse(postsArr[i]["content"])
         }
         if (user == null) {
             continue
@@ -311,6 +312,33 @@ export const postsParser = async (posts, user: Account = null) => {
         }
     }
     return postsArr
+}
+
+export const commsParser = async (comms, user: Account = null) => {
+    let commsArr = comms
+    let moderatedCommuns = []
+    if (user != null) {
+        moderatedCommuns = await user.getModeratedCommuns()
+    }
+    if (commsArr.length == 0) {
+        throw new Error("No comments")
+    }
+    for (let i = 0; i < commsArr.length; i++) {
+        let comm = commsArr[i]
+        let base64 = Buffer.from(comm["content"]).toString('base64')
+        commsArr[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+        if (user == null) {
+            continue
+        }
+        if (user.tag == commsArr[i]["authortag"]) {
+            commsArr[i]["ownStatus"] = 2
+            continue
+        }
+        if (moderatedCommuns.includes(commsArr[i]["commun"])) {
+            commsArr[i]["ownStatus"] = 1
+        }
+    }
+    return commsArr
 }
 
 export default function handler(req: Request, res: Response) {
