@@ -5,9 +5,19 @@ export default async function handler(req: Request, res: Response) {
     try {
         const { token, commun } = req.body
         const actualCommun = commun.toLowerCase();
+        const allowedChars = /^[a-z0-9]+$/;
         const user = new Account(token)
         if (!await user.checkIfExists()) {
             throw new Error("Acc not found")
+        }
+        if (actualCommun.length > 19) {
+            throw new Error("Tag too long")
+        }
+        if (actualCommun.length < 3) {
+            throw new Error("Tag too short")
+        }
+        if (!actualCommun.match(allowedChars)) {
+            throw new Error("Only a-z, 0-9 allowed in community tag")
         }
         const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [actualCommun]);
         if (uniqueCommunResult.length > 0) {

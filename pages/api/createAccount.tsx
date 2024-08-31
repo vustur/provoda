@@ -7,7 +7,7 @@ export default async function handler(req: Request, res: Response){
         const { tag, mail, pass } = req.body
         console.log(req.body)
         const tagAllowedChars = /^[a-z0-9_]*$/;
-        if (tag.length > 15) {
+        if (tag.length > 19) {
             throw new Error("Tag too long");
         } else if (tag.length < 3) {
             throw new Error("Tag too short");
