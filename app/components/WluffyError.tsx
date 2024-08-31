@@ -1,13 +1,16 @@
 import Image from "next/image"
+import Button from "./IconButton"
 
 type Props = {
     image: string
     textOne: string
     textTwo: string
     scale: number
+    buttonText: string
+    buttonFunc: () => void
 }
 
-export default function WluffyError({ image, textOne, textTwo, scale }: Props) {
+export default function WluffyError({ image, textOne, textTwo, scale, buttonText, buttonFunc }: Props) {
     return (
         <div className="flex items-center justify-center h-full w-full">
             <div className="mx-auto flex flex-col items-center justify-center">
@@ -21,6 +24,15 @@ export default function WluffyError({ image, textOne, textTwo, scale }: Props) {
                 />
                 <p className="text-2xl font-bold text-[#878787] text-center">{textOne}</p>
                 <p className="text-lg  font-bold text-[#878787] text-center">{textTwo}</p>
+                { buttonText &&
+                    <Button
+                    text={buttonText}
+                    isSpecial={true}
+                    isTextCentered={true}
+                    className="mt-2 px-3"
+                    onClick={buttonFunc}
+                    />
+                }
             </div>
         </div>
     )
