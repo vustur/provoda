@@ -16,7 +16,7 @@ export class Account {
         }
     }
     async register(mail, hashedPass) {
-        await dbPost("INSERT INTO accounts (tag, nick, token, mail, pass) VALUES (?, ?, ?, ?, ?)", [this.tag, this.tag, this.token, mail, hashedPass]);
+        await dbPost("INSERT INTO accounts (tag, nick, token, mail, pass, bio) VALUES (?, ?, ?, ?, ?, ?)", [this.tag, this.tag, this.token, mail, hashedPass, 'Nothing to see here...']);
     }
     async delete() {
         await dbPost("DELETE FROM accounts WHERE token = ?", [this.token])
@@ -83,7 +83,7 @@ export class Community {
     constructor(tag) {
         this.tag = tag
     }
-    async ban(target, reason) {
+    async ban(target, reason = 'No reason provided') {
         await dbPost("INSERT INTO communBans (tag, commun, reason) VALUES (?, ?, ?)", [target, this.tag, reason]);
     }
     async unban(target) {
