@@ -19,10 +19,14 @@ export default function PostsTab({ id }: Props) {
   const [isShift, setIsShift] = useState(false)
   const [inEditCommId, setInEditCommId] = useState(0)
   const [replyCommId, setReplyCommId] = useState(0)
+  const [isAnon, setIsAnon] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
   useEffect(() => {
+    if (!token) {
+      setIsAnon(true)
+    }
     setWidth(window.innerWidth)
     const onDeviceResize = () => {
       setWidth(window.innerWidth)
@@ -64,10 +68,9 @@ export default function PostsTab({ id }: Props) {
 
   const fetchPost = async (id) => {
     try {
-      const fetch = await axios.post("/api/getPost", { id })
-      const data = fetch.data.post
-      console.log(data)
-      setPostData(data)
+      const fetch = await axios.post("/api/getPost", { id, token })
+      console.log(fetch.data)
+      setPostData(fetch.data)
     } catch (err) {
       console.error(err.response.data)
       if (err.response.data == "Not found") {
@@ -150,6 +153,7 @@ export default function PostsTab({ id }: Props) {
               postid={postData.id}
               isOpen={true}
               attach={postData.content.attach}
+              ownStatus={postData.ownStatus}
             />
           ) : postData == "Fetching" ? (
             <p className="text-xl font-semibold text-[#545454] text-center">Fetching posts...</p>
@@ -200,14 +204,12 @@ export default function PostsTab({ id }: Props) {
           ) : null
           }
         </div>
-        {token &&
-          <div className="w-full">
-            {inEditCommId != 0 ? (
+            {inEditCommId != 0 && !isAnon ? (
               <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Editing comment {inEditCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setInEditCommId(0)}>Cancel</span></p>
-            ) : replyCommId != 0 ? (
+            ) : replyCommId != 0 && !isAnon ? (
               <p className="text-sm w-full font-semibold text-[#7d7d7d] text-left">Replying to {replyCommId}. <span className="text-purple-300 cursor-pointer" onClick={() => setReplyCommId(0)}>Cancel</span></p>
             ) : null}
-            {comments != "Fetching" && postData != "Not found" && postData != "Error" ? (
+            {typeof comments == 'object' && typeof postData == 'object' && !isAnon ? (
               <textarea
                 type="text"
                 placeholder="Write a comment..."
@@ -220,8 +222,6 @@ export default function PostsTab({ id }: Props) {
               />
             ) : null}
           </div>
-        }
-      </div>
     </div>
   )
 }

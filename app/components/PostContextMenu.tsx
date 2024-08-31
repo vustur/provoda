@@ -12,9 +12,10 @@ type Props = {
   authortag: string
   postcommun: string
   content: string
+  ownStatus: number
 }
 
-export default function PostContextMenu({ show, postid, token, mousePos, authortag, postcommun, content }: Props) {
+export default function PostContextMenu({ show, postid, token, mousePos, authortag, postcommun, content, ownStatus }: Props) {
   const [btns, setBtns] = useState([
     {
       name: "Share",
@@ -36,36 +37,32 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
   const addSpecBtns = async () => {
     if (show != true) return
     if (btns.find((btn) => btn.name == "Delete")) return
-    let role = "member"
-    const check = () => {
-      if (authortag == sessionStorage.getItem("tag")) {
-        setBtns([
-          ...btns,
-          {
-            name: "Delete",
-            icon: "trash",
-            function: () => deletePost()
-          },
-          {
-            name: "Edit",
-            icon: "pentwo",
-            function: () => ctxVal.openWriteFunc("edit", content, postid)
-          }
-        ])
-      } else if (role == "owner" || role == "mod") {
-        setBtns([
-          ...btns,
-          {
-            name: "Delete",
-            icon: "trash",
-            function: () => deletePost()
-          }
-        ])
-      }
-    }
 
-    role = await getPost()
-    check()
+    if (ownStatus == 2) {
+      setBtns([
+        ...btns,
+        {
+          name: "Delete",
+          icon: "trash",
+          function: () => deletePost()
+        },
+        {
+          name: "Edit",
+          icon: "pentwo",
+          function: () => ctxVal.openWriteFunc("edit", content, postid)
+        }
+      ])
+    } else if (ownStatus == 1) {
+      setBtns([
+        ...btns,
+        {
+          name: "Delete",
+          icon: "trash",
+          function: () => deletePost()
+        }
+      ])
+    }
+    console.log(ownStatus)
   }
 
   const deletePost = async () => {
@@ -74,17 +71,6 @@ export default function PostContextMenu({ show, postid, token, mousePos, authort
       const data = fetch.data
       console.log(data)
       ctxVal.refreshPosts()
-    } catch (err) {
-      console.error(err.response.data)
-    }
-  }
-
-  const getPost = async () => {
-    try {
-      const fetch = await axios.post("/api/getPost", { id: postid, token })
-      const data = fetch.data
-      console.log(data)
-      return data.role
     } catch (err) {
       console.error(err.response.data)
     }

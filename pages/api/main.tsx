@@ -72,6 +72,11 @@ export class Account {
         }
         return targetRoleReq[0]['role']
     }
+    async getModeratedCommuns() {
+        const modCmReq = await dbPost("SELECT commun FROM communMembers WHERE tag = ? AND role IN (?)", [this.tag, ['owner', 'mod']]);
+        const mCommuns = modCmReq.map(commun => commun.commun)
+        return mCommuns
+    }
 }
 
 export class Community {
@@ -273,6 +278,35 @@ export const imgUploader = async (img) => {
         });
     return url
 }
+
+// ownStatus notes
+// 0 - any user, no edit or moderation
+// 1 - mod, moderation
+// 2 - OP user, edit and moderation
+export const postsParser = async (posts, user : Account = null) => {
+    let postsArr = posts
+    let moderatedCommuns = []
+    if (user != null) {
+        moderatedCommuns = await user.getModeratedCommuns()
+    }
+    if (postsArr.length == 0){
+        throw new Error("No communities")
+    }
+    for (let i = 0; i < postsArr.length; i++){
+        postsArr[i]["ownStatus"] = 0
+        if (user == null) {
+            continue
+        }
+        if (user.tag == postsArr[i]["authortag"]) {
+            postsArr[i]["ownStatus"] = 2
+            continue
+        }
+        if (moderatedCommuns.includes(postsArr[i]["commun"])){
+            postsArr[i]["ownStatus"] = 1
+        }
+    }
+    return postsArr
+} 
 
 export default function handler(req: Request, res: Response) {
     const stArray = [

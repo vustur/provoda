@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Community } from "./main";
+import { Community, Account, postsParser } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
@@ -8,15 +8,14 @@ export default async function handler(req: Request, res: Response){
         if (!await community.checkIfExists()){
             throw new Error("Community not found")
         }
+        let user = new Account(token)
+        if (await user.checkIfExists()){
+            await user.fetchUnknowns()
+        } else {
+            user = null
+        }
         let postsReq = await dbPost("SELECT * FROM posts WHERE commun = ? ORDER BY id DESC LIMIT ? OFFSET ?", [commun, limit, offset]);
-        for (let i = 0; i < postsReq.length; i++){
-            let post = postsReq[i]
-            let base64 = Buffer.from(post["content"]).toString('base64')
-            postsReq[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
-        }
-        if (postsReq.length == 0){
-            throw new Error("No posts")
-        }
+        postsReq = await postsParser(postsReq, user)
         res.status(200).json(postsReq)
     } catch(err) {
         console.log(err.message)

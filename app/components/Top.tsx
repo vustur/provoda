@@ -16,7 +16,7 @@ export default function Top() {
   let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
 
   useEffect(() => {
-    if (token){
+    if (!token){
       setIsAnon(true)
     }
     setWidth(window.innerWidth)
@@ -108,7 +108,7 @@ export default function Top() {
                 }}
               />
             ) : null}
-            {isAnon && (
+            {!isAnon && (
               <Button src="pen"
                 isSpecial={true}
                 onClick={() => ctxVal.openWriteFunc("write")}
@@ -119,12 +119,12 @@ export default function Top() {
                 onClick={() => setIsMobileSearch(true)}
               />
             )}
-            {isAnon && (
+            {!isAnon && (
               <Button src="bell"
                 onClick={() => alert("Notifications will be added later :/")}
               />
             )}
-            {isAnon && (
+            {!isAnon && (
               <Button src="gear"
                 onClick={() => ctxVal.openAccountSettings()} />
             )}

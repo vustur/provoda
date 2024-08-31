@@ -17,9 +17,10 @@ type Props = {
     postid: Number
     isOpen: boolean
     attach: String
+    ownStatus: number
 }
 
-export default ({ title, author, community, textContent, reputation, date, token, postid, isOpen, attach }: Props) => {
+export default ({ title, author, community, textContent, reputation, date, token, postid, isOpen, attach, ownStatus }: Props) => {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
@@ -147,7 +148,7 @@ export default ({ title, author, community, textContent, reputation, date, token
                     onClick={(e) => onRightClick(e)}
                 />
             </div>
-            <PostContextMenu show={isContextMenuOpen} postid={postid} token={token} authortag={author} mousePos={cursorPos} postcommun={community} content={textContent}></PostContextMenu>
+            <PostContextMenu show={isContextMenuOpen} postid={postid} token={token} authortag={author} mousePos={cursorPos} postcommun={community} content={textContent} ownStatus={ownStatus}></PostContextMenu>
         </div>
     )
 }

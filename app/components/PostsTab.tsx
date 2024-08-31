@@ -251,6 +251,7 @@ export default function PostsTab({ commun }: Props) {
                 postid={post.id}
                 isOpen={false}
                 attach={JSON.parse(post.content)['attach']}
+                ownStatus={post.ownStatus}
               />
             ))}
             <Button
@@ -269,7 +270,7 @@ export default function PostsTab({ commun }: Props) {
             "Something unknown and unexpected went wrong"
           }
           textTwo={
-            `Thats end of if else statement and all conditions are false // ${posts.length > 0}`
+            `Thats end of if else statement and all conditions are false`
           }
         />
         )
