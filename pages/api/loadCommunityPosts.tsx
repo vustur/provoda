@@ -15,6 +15,9 @@ export default async function handler(req: Request, res: Response){
             user = null
         }
         let postsReq = await dbPost("SELECT * FROM posts WHERE commun = ? ORDER BY id DESC LIMIT ? OFFSET ?", [commun, limit, offset]);
+        if (postsReq.length == 0) {
+            throw new Error("No posts")
+        }
         postsReq = await postsParser(postsReq, user)
         res.status(200).json(postsReq)
     } catch(err) {
