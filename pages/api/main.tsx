@@ -283,17 +283,22 @@ export const imgUploader = async (img) => {
 // 0 - any user, no edit or moderation
 // 1 - mod, moderation
 // 2 - OP user, edit and moderation
-export const postsParser = async (posts, user : Account = null) => {
+export const postsParser = async (posts, user: Account = null) => {
     let postsArr = posts
     let moderatedCommuns = []
     if (user != null) {
         moderatedCommuns = await user.getModeratedCommuns()
     }
-    if (postsArr.length == 0){
+    if (postsArr.length == 0) {
         throw new Error("No communities")
     }
-    for (let i = 0; i < postsArr.length; i++){
+    for (let i = 0; i < postsArr.length; i++) {
         postsArr[i]["ownStatus"] = 0
+        let post = postsArr[i]
+        if (post['content']['title'] == null) {
+            let base64 = Buffer.from(post["content"]).toString('base64')
+            postsArr[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+        }
         if (user == null) {
             continue
         }
@@ -301,12 +306,12 @@ export const postsParser = async (posts, user : Account = null) => {
             postsArr[i]["ownStatus"] = 2
             continue
         }
-        if (moderatedCommuns.includes(postsArr[i]["commun"])){
+        if (moderatedCommuns.includes(postsArr[i]["commun"])) {
             postsArr[i]["ownStatus"] = 1
         }
     }
     return postsArr
-} 
+}
 
 export default function handler(req: Request, res: Response) {
     const stArray = [
