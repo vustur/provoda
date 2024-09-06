@@ -8,7 +8,7 @@ import { parseTextToPMD } from "./utils"
 
 type Props = {
     authortag: string
-    textContent: string
+    content: any
     date: string
     postid: number
     reputation: number
@@ -21,7 +21,7 @@ type Props = {
     ownStatus: number
 }
 
-export default function main({ authortag, textContent, date, postid, reputation, showOrig, commid, pfp, replyto, allComs, ownStatus }: Props) {
+export default function main({ authortag, content, date, postid, reputation, showOrig, commid, pfp, replyto, allComs, ownStatus }: Props) {
     const [width, setWidth] = useState(1000)
     const [picked, setPicked] = useState("none")
     const [rep, setRep] = useState(reputation)
@@ -47,6 +47,8 @@ export default function main({ authortag, textContent, date, postid, reputation,
                 }
             }
         }
+        console.log(content)
+        console.log("^^^^ comments.tsx")
     }, [])
 
     const upvote = async (dir) => {
@@ -113,7 +115,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             onClick={() => window.location = `/u/${authortag}`}>@ {authortag} <span className="text-[#555555] ml-2 truncate">{date}</span></p>
                         <p className="text-lg text-[#dcdcdc]"
                             style={{ whiteSpace: "pre-wrap" }}
-                        dangerouslySetInnerHTML={{__html: parseTextToPMD(textContent)}}></p>
+                        dangerouslySetInnerHTML={{__html: parseTextToPMD(content.text)}}></p>
                     </div>
                     <div className="inline-flex flex-col ml-5 mr-3 items-center justify-center relative w-5 h-fit">
                         <Image
@@ -143,7 +145,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                             onClick={(e) => onRightClick(e)}
                         />
                     </div>
-                    <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={textContent} ownStatus={ownStatus} />
+                    <CommntContextMenu show={isContextMenuOpen} commid={commid} token={token} authortag={authortag} mousePos={cursorPos} content={content.text} ownStatus={ownStatus} />
                 </div>
             </div>
             {replies && replies.length != 0 &&
@@ -160,7 +162,7 @@ export default function main({ authortag, textContent, date, postid, reputation,
                                 <Comment
                                     key={reply.id}
                                     authortag={reply.authortag}
-                                    textContent={reply.content}
+                                    content={reply.content}
                                     date={reply.date}
                                     postid={reply.postid}
                                     reputation={reply.reputation}

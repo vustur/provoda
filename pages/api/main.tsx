@@ -196,12 +196,11 @@ export class Post {
 }
 
 export class Comment {
-    constructor(id = null, postid = null, authortag = null, text = null, attach = null, reputation = null, date = null) {
+    constructor(id = null, postid = null, authortag = null, content = null, attach = null, reputation = null, date = null) {
         this.id = id
         this.postid = postid
         this.authortag = authortag
-        this.text = text
-        this.attach = attach
+        this.content = content
         this.reputation = reputation
         this.date = date
     }
@@ -212,10 +211,10 @@ export class Comment {
         }
         this.postid = dbReq[0]['postId']
         this.authortag = dbReq[0]['authortag']
-        this.text = dbReq[0]['content']
-        this.attach = dbReq[0]['attach']
+        this.content = dbReq[0]['content']
         this.reputation = dbReq[0]['reputation']
         this.date = dbReq[0]['date']
+        await this.parseContent2Array()
         return dbReq
     }
     async checkIfExists() {
@@ -225,17 +224,23 @@ export class Comment {
         }
         return true
     }
+    async parseContent2Array() {
+        this.content = JSON.parse(this.content)
+    }
+    async parseContent2String() {
+        this.content = JSON.stringify(this.content)
+    }
     async create(replyid) {
         const now = new Date();
         const dateStr = `${now.getDate() < 10 ? '0' + now.getDate() : now.getDate()}.${now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1}.${now.getFullYear()}, ${now.getHours() < 10 ? '0' + now.getHours() : now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
         this.date = dateStr
-        await dbPost("INSERT INTO comments (postid, authortag, content, attach, date, replyto) VALUES (?, ?, ?, ?, ?, ?)", [this.postid, this.authortag, this.text, this.attach, this.date, replyid]);
+        await dbPost("INSERT INTO comments (postid, authortag, content, date, replyto) VALUES (?, ?, ?, ?, ?)", [this.postid, this.authortag, this.content, this.date, replyid]);
     }
     async delete() {
         await dbPost("DELETE FROM comments WHERE id = ?", [this.id])
     }
     async edit() {
-        await dbPost("UPDATE comments SET content = ? WHERE id = ?", [this.text, this.id])
+        await dbPost("UPDATE comments SET content = ? WHERE id = ?", [this.content, this.id])
     }
     async changeReput(isPositive, calltag) {
         const isAlrdRated = await dbPost("SELECT * FROM reputs WHERE id = ? AND usertag = ? AND type = 'comment'", [this.id, calltag])
@@ -327,6 +332,7 @@ export const commsParser = async (comms, user: Account = null) => {
         let comm = commsArr[i]
         let base64 = Buffer.from(comm["content"]).toString('base64')
         commsArr[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
+        commsArr[i]["content"] = JSON.parse(commsArr[i]["content"])
         if (user == null) {
             continue
         }

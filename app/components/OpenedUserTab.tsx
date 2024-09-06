@@ -158,7 +158,7 @@ export default function PostsTab({ nick }: Props) {
               <Comment
                 key={cntn.id}
                 postid={cntn.postId}
-                textContent={cntn.content}
+                content={cntn.content}
                 date={cntn.date}
                 authortag={cntn.authortag}
                 reputation={cntn.reputation}

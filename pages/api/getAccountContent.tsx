@@ -1,6 +1,6 @@
 import dbPost from "./conn"
 const bcrypt = require("bcrypt")
-import { Account, postsParser } from "./main";
+import { Account, postsParser, commsParser } from "./main";
 
 export default async function handler(req: Request, res: Response){
     try {
@@ -14,13 +14,9 @@ export default async function handler(req: Request, res: Response){
         if (postReq.length == 0 && commReq.length == 0){
             throw new Error("No content")
         }
-        let posts = await postsParser(postReq, )
-        for (let i = 0; i < commReq.length; i++){
-            let comm = commReq[i]
-            let base64 = Buffer.from(comm["content"]).toString('base64')
-            commReq[i]["content"] = Buffer.from(base64, 'base64').toString('utf-8')
-        }
-        res.status(200).json({posts, comments : commReq})
+        let posts = await postsParser(postReq)
+        let comments = await commsParser(commReq)
+        res.status(200).json({posts, comments})
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

@@ -9,7 +9,7 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Comment not found")
         }
         const dbReq = await dbPost("SELECT * FROM comments WHERE id = ?", [commid]);
-        res.status(200).json([dbReq])
+        res.status(200).json(dbReq)
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

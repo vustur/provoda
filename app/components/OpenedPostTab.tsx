@@ -100,7 +100,7 @@ export default function PostsTab({ id }: Props) {
   const submitComment = async () => {
     try {
       setCommentInput("")
-      const fetch = await axios.post("/api/createComm", { postid: id, text: commentInput, token, replyid: replyCommId })
+      const fetch = await axios.post("/api/createComm", { postid: id, content: {text: commentInput}, token, replyid: replyCommId })
       const data = fetch.data
       console.log(data)
       refresh()
@@ -140,7 +140,7 @@ export default function PostsTab({ id }: Props) {
     <div className="h-full w-full bg-[#363636]">
       <div className="inline-flex flex-col space-y-3 items-center justify-start w-full h-[90vh] px-[15px] pt-3 rounded-tr-xl mb-4"
         style={{ overflowY: "scroll" }}>
-        <div className="inline-flex flex-col items-start justify-start w-full h-max overflow-scroll">
+        <div className="inline-flex flex-col items-start justify-start w-full h-max">
           {postData != "Fetching" && postData != "Not found" ? (
             <Post
               title={postData.content.title}
@@ -183,7 +183,7 @@ export default function PostsTab({ id }: Props) {
                 <Comment
                   key={comment.id}
                   authortag={comment.authortag}
-                  textContent={comment.content}
+                  content={comment.content}
                   date={comment.date}
                   postid={comment.postid}
                   reputation={comment.reputation}

@@ -224,7 +224,7 @@ export default function PostsTab({ commun }: Props) {
           />
         ) : posts[0] == "NoToken" ? (
           <WluffyError
-            image={"wluffy_wires_light.png"}
+            image={"wluffy_helmet_light.png"}
             textOne={
               "Feed cannot be loaded without login"
             }
@@ -265,7 +265,7 @@ export default function PostsTab({ commun }: Props) {
           </div>
         ) : (
           <WluffyError
-          image={"wluffy_wires_light.png"}
+          image={"wluffy_helmet_light.png"}
           textOne={
             "Something unknown and unexpected went wrong"
           }

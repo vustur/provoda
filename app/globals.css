@@ -5,3 +5,31 @@
 body {
     overflow: hidden;
 }
+
+/* For some reason chrome has ugly scrollbars lol */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #626262;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #545454;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+* {
+    scrollbar-color: #626262 transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
