@@ -56,7 +56,7 @@ export default function Top() {
       {width > 570 || isMobileSearch ? (
         <input
           className={`${isMobileSearch && width <= 570 ? "w-full ml-1" : "w-5/12"} h-8 px-2 bg-[#3a3a3a] text-[#c2c2c2] rounded-lg z-20`}
-          placeholder="Type to search on Provoda..."
+          placeholder="Type and press enter to search on Provoda..."
           onChange={(e) => {
             setSearchText(e.target.value)
           }}

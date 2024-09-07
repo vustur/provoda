@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Account } from "./main";
+import { Account, reserved } from "./main";
 
 export default async function handler(req: Request, res: Response) {
     try {
@@ -18,6 +18,9 @@ export default async function handler(req: Request, res: Response) {
         }
         if (!actualCommun.match(allowedChars)) {
             throw new Error("Only a-z, 0-9 allowed in community tag")
+        }
+        if (reserved.includes(commun)) {
+            throw new Error("Tag is not allowed")
         }
         const uniqueCommunResult = await dbPost("SELECT * FROM communities WHERE tag = ?", [actualCommun]);
         if (uniqueCommunResult.length > 0) {

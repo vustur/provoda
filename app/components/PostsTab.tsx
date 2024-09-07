@@ -216,10 +216,7 @@ export default function PostsTab({ commun }: Props) {
           <WluffyError
             image={"wluffy_wires_light.png"}
             textOne={
-              "No communities or no posts in your communities yet..."
-            }
-            textTwo={
-              "Join some communities!"
+              "Community not found"
             }
           />
         ) : posts[0] == "NoToken" ? (
@@ -228,6 +225,11 @@ export default function PostsTab({ commun }: Props) {
             textOne={
               "Feed cannot be loaded without login"
             }
+            textTwo={
+              "Try searching for posts or communities!"
+            }
+            buttonText="Login"
+            buttonFunc={() => window.location = "/login"}
           />
         ) : posts.length > 0 && typeof posts[0] == 'object' ? (
           <div className="w-full">
@@ -270,7 +272,7 @@ export default function PostsTab({ commun }: Props) {
             "Something unknown and unexpected went wrong"
           }
           textTwo={
-            `Thats end of if else statement and all conditions are false`
+            `Try reloading page or reporting error to devs`
           }
         />
         )

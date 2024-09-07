@@ -1,6 +1,9 @@
 import dbPost from "./conn"
 const imgbbUploader = require("imgbb-uploader")
 
+// these words cannot be community name or user tag
+export const reserved = ['vustur', 'provoda', 'wluffy', 'official', 'anon']
+
 export class Account {
     constructor(token = null, tag = null) {
         this.token = token

@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Account } from "./main";
+import { Account, reserved } from "./main";
 const bcrypt = require("bcrypt")
 
 export default async function handler(req: Request, res: Response){
@@ -15,6 +15,8 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Only a-z, 0-9 and _ allowed in username");
         } else if (pass.length < 8) {
             throw new Error("Password too short (8 chars minimum)");
+        } else if (reserved.includes(tag)) {
+            throw new Error("Tag is not allowed")
         }
         const uniqueMailResult = await dbPost("SELECT * FROM accounts WHERE mail = ?", [mail]);
         if(uniqueMailResult.length > 0) {
