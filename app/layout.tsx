@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Provoda",
   icon: "/logo.png",
   openGraph: {
-    images: "/images/logo.png",
+    images: "/logo.png",
     type: "website",
     title: "Provoda App",
     description: "Check out Provoda app",
