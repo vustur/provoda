@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Account, reserved } from "./main";
+import { Account, reserved, genToken } from "./main"
 const bcrypt = require("bcrypt")
 
 export default async function handler(req: Request, res: Response){
@@ -28,12 +28,7 @@ export default async function handler(req: Request, res: Response){
         }
 
         const hashedPass = await bcrypt.hash(pass, 10)
-        let token = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*_-=+[],.~:;';
-        for (let i = 0; i < 50; i++) {
-          token += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        token += "/" + Buffer.from(tag).toString('base64')
+        const token = await genToken(new Date().toString())
         await new Account(token, tag).register(mail, hashedPass)
         res.status(200).json({token : token})
     } catch(err) {

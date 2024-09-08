@@ -153,7 +153,6 @@ export default function PostsTab({ nick }: Props) {
             )
           }
           if (cntn.type == "comment") {
-            console.log(cntn)
             return (
               <Comment
                 key={cntn.id}

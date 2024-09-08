@@ -168,7 +168,14 @@ export default function WriteModal() {
                     : null}
                 <textarea
                     type="text"
-                    placeholder="Text content (description)"
+                    placeholder={`Post body
+                    
+Use **text** to make text bold
+Use *text* to make text italic
+Use __text__ to make text underlined
+Use ~~text~~ to make text crossed out
+#community to mention community
+@user to mention user`}
                     className="mt-3 w-full rounded-md bg-[#393939] text-white text-sm p-2 h-full"
                     value={textContent}
                     onChange={(e) => setTextContent(e.target.value)}

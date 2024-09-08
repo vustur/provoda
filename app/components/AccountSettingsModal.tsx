@@ -79,6 +79,10 @@ export default function AccSettings() {
             setErrText(null)
             setIsOpen(false)
             setIsBtnDisabled(false)
+            if (data.token != 'none') {
+                alert('Your token has been updated')
+                localStorage.setItem('token', data.token)
+            }
         }
         catch (err) {
             console.error(err.response.data)
@@ -153,13 +157,12 @@ export default function AccSettings() {
                                     }
                                 </p>
                             </div>
-                            <div>
+                            <div className="ml-2">
                                 <input
                                     value={newNick}
                                     onChange={(e) => setNewNick(e.target.value)}
-                                    placeholder="nickname"
+                                    placeholder="Nickname"
                                     className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
-                                    defaultValue={userData?.nick}
                                 />
                                 <p className="text-lg font-semibold text-[#7c7c7c] my-2">
                                     @ {userData?.tag}
@@ -172,9 +175,8 @@ export default function AccSettings() {
                         <textarea
                             value={newBio}
                             onChange={(e) => setNewBio(e.target.value)}
-                            placeholder="bio"
+                            placeholder="Bio"
                             className="mt-3 w-full h-24 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
-                            defaultValue={userData?.bio}
                         />
                     </div>
                 ) : choosenTab == "Danger" ? (
@@ -182,9 +184,8 @@ export default function AccSettings() {
                         <input
                             value={newMail}
                             onChange={(e) => setNewMail(e.target.value)}
-                            placeholder="mail"
+                            placeholder="Mail"
                             className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
-                            defaultValue={userData?.mail}
                         />
                         <input
                             type="password"
@@ -194,7 +195,7 @@ export default function AccSettings() {
                             className="mt-3 w-full h-10 rounded-md bg-[#393939] text-white text-lg p-2 font-semibold"
                         />
                         <p className="text-sm font-semibold text-[#919191] my-2">
-                            To change danger zone, you should provide your current password
+                            To change danger zone, you should provide your current password. Also, your token will be changed after editing these settings
                         </p>
                         <input
                             type="password"

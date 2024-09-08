@@ -2,7 +2,7 @@ import dbPost from "./conn"
 const imgbbUploader = require("imgbb-uploader")
 
 // these words cannot be community name or user tag
-export const reserved = ['vustur', 'provoda', 'wluffy', 'official', 'anon']
+export const reserved = ['vustur', 'provoda', 'wluffy', 'official', 'anon', 'undefined', 'fetching']
 
 export class Account {
     constructor(token = null, tag = null) {
@@ -348,6 +348,16 @@ export const commsParser = async (comms, user: Account = null) => {
         }
     }
     return commsArr
+}
+
+export const genToken = async (secondPart) => {
+    let token = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*_-=+[],.~:;';
+    for (let i = 0; i < 50; i++) {
+        token += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    token += "/" + Buffer.from(secondPart).toString('base64')
+    return token
 }
 
 export default function handler(req: Request, res: Response) {

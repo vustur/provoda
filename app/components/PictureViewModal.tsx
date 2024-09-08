@@ -34,6 +34,7 @@ export default function PictureModal() {
                         height={600}
                         width={600}
                         quality={70}
+                        alt="Image from ImageViewModal"
                     />
                 }
             </div>

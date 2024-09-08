@@ -1,5 +1,5 @@
 import dbPost from "./conn"
-import { Account, imgUploader } from "./main"
+import { Account, imgUploader, genToken } from "./main"
 import bcrypt from "bcrypt"
 
 export default async function handler(req: Request, res: Response){
@@ -10,10 +10,9 @@ export default async function handler(req: Request, res: Response){
             throw new Error("Acc not found")
         }
         let rightPassProvided = false
+        let newTokenGl = "none"
         if (pass && (newPass || newMail)){
             const dbReq = await dbPost("SELECT pass FROM accounts WHERE token = ?", [token])
-            console.log(dbReq[0]['pass'])
-            console.log(pass)
             const isRightPass = await bcrypt.compare(pass, dbReq[0]['pass'])
             if (!isRightPass){
                 throw new Error("Wrong password")
@@ -30,7 +29,8 @@ export default async function handler(req: Request, res: Response){
             if (newPass.length < 8) {
                 throw new Error("Password too short (8 chars minimum)");
             }
-            await dbPost("UPDATE accounts SET pass WHERE token = ?", [newPass, token]);
+            const hashedPass = await bcrypt.hash(newPass, 10)
+            await dbPost("UPDATE accounts SET pass = ? WHERE token = ?", [hashedPass, token]);
         }
         if (newNick){
             if (newNick.length > 15) {
@@ -59,7 +59,13 @@ export default async function handler(req: Request, res: Response){
             const imgUploadedUrl = await imgUploader(newAvatar)
             await dbPost("UPDATE accounts SET pfp = ? WHERE token = ?", [imgUploadedUrl, token]);
         }
-        res.status(200).json("succ")
+        if (pass && (newPass || newMail)){
+            let newToken = await genToken(new Date().toString())
+            newTokenGl = newToken
+            console.log(newToken)
+            await dbPost("UPDATE accounts SET token = ? WHERE token = ?", [newToken, token]);
+        }
+        res.status(200).json({"status": "succ", "token": newTokenGl})
     } catch(err) {
         console.log(err.message)
         res.status(500).json(err.message)

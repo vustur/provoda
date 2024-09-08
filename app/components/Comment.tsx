@@ -47,8 +47,6 @@ export default function main({ authortag, content, date, postid, reputation, sho
                 }
             }
         }
-        console.log(content)
-        console.log("^^^^ comments.tsx")
     }, [])
 
     const upvote = async (dir) => {
