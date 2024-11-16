@@ -3,7 +3,7 @@
 Forum for communities
 Made using NextJS and TailwindCSS
 
-### How to install
+### How to use
 
 1. Clone repo
 2. Create `.env.local` in the root of the project
@@ -26,4 +26,5 @@ Made using NextJS and TailwindCSS
 ### Other
 
 If you have any questions or suggestions, please open issue or contact me on [telegram](https://t.me/vustur) (Also check my [tg channel](https://t.me/vusturs) / [site](https://vustur.xyz) with my projects!)
+
 Note: provoda.vercel.app is test instance of Provoda, dont expect it to work
