@@ -273,9 +273,8 @@ export class Comment {
 
 export const imgUploader = async (img) => {
     // todo: server side check
-    let key = process.env.IMGHOST_KEY
     let url
-    await imgbbUploader({ apiKey: key, base64string: img })
+    await imgbbUploader({ apiKey: process.env.IMGHOST_KEY, base64string: img, cheveretoHost: process.env.IMGHOST })
         .then((response) => {
             console.log(response.url)
             url = response.url
