@@ -6,6 +6,7 @@ import SearchMenu from "./SearchMenu"
 import PictureModal from "./PictureViewModal"
 import { mainContext } from "./PageBase"
 import axios from "axios"
+import Cookies from "js-cookie"
 
 export default function Top() {
   const [width, setWidth] = useState(1000)
@@ -13,7 +14,7 @@ export default function Top() {
   const [isMobileSearch, setIsMobileSearch] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
   const [isAnon, setIsAnon] = useState(false)
-  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     if (!token){
@@ -30,7 +31,7 @@ export default function Top() {
   const checkIfExists = async () => {
     try {
       if (!token) {
-        throw new Error("No token in localStorage")
+        throw new Error("No token")
       }
       const req = await axios.post("/api/getAccount", { "input": token })
       const data = req.data

@@ -2,13 +2,14 @@ import React, { useState, useEffect, useContext } from "react"
 import { mainContext } from "./PageBase"
 import Button from "./IconButton"
 import axios from "axios"
+import Cookies from "js-cookie"
 
 export default function WriteModal() {
     const [tag, setTag] = useState()
     const [isOpen, setIsOpen] = useState(false)
     const [errText, setErrText] = useState(null)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+    let token = Cookies.get("token") || null
 
     const openCCModal = () => {
         setIsOpen(true)

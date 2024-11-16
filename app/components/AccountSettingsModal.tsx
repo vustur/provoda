@@ -5,6 +5,7 @@ import Button from "./IconButton"
 import axios from "axios"
 import Avatar from "./Avatar"
 import { checkUpl } from "./utils"
+import Cookies from "js-cookie"
 
 export default function AccSettings() {
     const [isOpen, setIsOpen] = useState(false)
@@ -19,7 +20,7 @@ export default function AccSettings() {
     const [choosenTab, setChoosenTab] = useState("Profile")
     const [isBtnDisabled, setIsBtnDisabled] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+    let token = Cookies.get("token") || null
 
     const openASModal = () => {
         setIsOpen(true)
@@ -81,7 +82,7 @@ export default function AccSettings() {
             setIsBtnDisabled(false)
             if (data.token != 'none') {
                 alert('Your token has been updated')
-                localStorage.setItem('token', data.token)
+                Cookies.set("token", data.token)
             }
         }
         catch (err) {

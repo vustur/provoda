@@ -6,6 +6,7 @@ import axios from "axios";
 import WluffyError from "./WluffyError";
 import Image from "next/image";
 import Button from "./IconButton";
+import Cookies from "js-cookie"
 
 type Props = {
   id: Number
@@ -21,7 +22,7 @@ export default function PostsTab({ id }: Props) {
   const [replyCommId, setReplyCommId] = useState(0)
   const [isAnon, setIsAnon] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     if (!token) {

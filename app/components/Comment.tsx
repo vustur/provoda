@@ -5,6 +5,7 @@ import CommntContextMenu from "./CommntContextMenu"
 import Comment from "./Comment"
 import Avatar from "./Avatar"
 import { parseTextToPMD } from "./utils"
+import Cookies from "js-cookie"
 
 type Props = {
     authortag: string
@@ -29,7 +30,7 @@ export default function main({ authortag, content, date, postid, reputation, sho
     const [showReplies, setShowReplies] = useState(true)
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
     const [replies, setReplies] = useState([])
-    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+    let token = Cookies.get("token") || null
 
     useEffect(() => {
         setWidth(window.innerWidth)

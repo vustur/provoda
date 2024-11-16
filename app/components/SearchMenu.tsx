@@ -6,6 +6,7 @@ import CommunPreview from "./CommunPreview"
 import WluffyError from "./WluffyError"
 import Post from "./Post"
 import axios from "axios"
+import Cookies from "js-cookie"
 
 type Props = {
     isOpen: boolean
@@ -15,7 +16,7 @@ export default function SearchMenu({ isOpen }: Props) {
     const [data, setData] = useState({acc: [], comm: [], post: []})
     const [isSearched, setIsSearched] = useState(false)
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+    let token = Cookies.get("token") || null
 
     const search = async (searchText) => {
         try {

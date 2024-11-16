@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react"
 import Button from "./IconButton"
 import { mainContext } from "./PageBase"
 import Avatar from "./Avatar"
+import Cookies from "js-cookie"
 
 type Props = {
   commun: any
@@ -18,7 +19,7 @@ export default function ProfileTab({ commun }: Props) {
   const [isShow, setIsShow] = useState(false)
   const [isAnon, setIsAnon] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" && (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null)
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     setWidth(window.innerWidth)

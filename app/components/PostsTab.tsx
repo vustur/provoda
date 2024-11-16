@@ -7,6 +7,7 @@ import Button from "./IconButton";
 import CommunitySettings from "./CommunitySettingsModal"
 import WluffyError from "./WluffyError";
 import Avatar from "./Avatar"
+import Cookies from "js-cookie"
 
 type Props = {
   commun: String
@@ -20,7 +21,7 @@ export default function PostsTab({ commun }: Props) {
   const [offset, setOffset] = useState(10)
   const [isMorePostFetching, setIsMorePostFetching] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     setWidth(window.innerWidth)

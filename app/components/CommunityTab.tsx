@@ -5,13 +5,14 @@ import CommunityButton from "./CommunityButton"
 import CommunityCreateModal from "./CommunityCreateModal"
 import Button from "./IconButton"
 import { mainContext } from "./PageBase"
+import Cookies from "js-cookie"
 
 export default function CommunityTab() {
   const [width, setWidth] = useState(1000)
   const [communs, setCommuns] = useState(["Fetching"])
   const [isShow, setIsShow] = useState(false)
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     setWidth(window.innerWidth)

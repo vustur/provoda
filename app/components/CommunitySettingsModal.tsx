@@ -7,6 +7,7 @@ import UserPreview from "./UserPreview"
 import axios from "axios"
 import Avatar from "./Avatar"
 import { checkUpl } from "./utils"
+import Cookies from "js-cookie"
 
 type Props = {
     commun: String
@@ -27,7 +28,7 @@ export default function CommunSettings({ commun }: Props) {
     const [banReason, setBanReason] = useState("")
     const [selfRole, setSelfRole] = useState("none")
     const { ctxVal, setCtxVal } = useContext(mainContext)
-    let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+    let token = Cookies.get("token") || null
 
     const openCSModal = (commun, role) => {
         setIsOpen(true)

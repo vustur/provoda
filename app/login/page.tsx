@@ -1,6 +1,7 @@
 'use client'
 import axios from "axios"
 import { useState } from "react"
+import Cookies from "js-cookie"
 
 export default function Home() {
     const [isLogin, setIsLogin] = useState(true)
@@ -32,7 +33,7 @@ export default function Home() {
     }
 
     const succLogin = async (token) => {
-        localStorage.setItem("token", token)
+        Cookies.set('token', token)
         setErrText(null)
         await new Promise(res => setTimeout(res, 1000))
         window.location.href = "/"

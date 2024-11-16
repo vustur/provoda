@@ -5,6 +5,7 @@ import { mainContext } from "./PageBase"
 import axios from "axios";
 import Image from "next/image";
 import WluffyError from "./WluffyError";
+import Cookies from "js-cookie"
 
 type Props = {
   nick: String
@@ -16,7 +17,7 @@ export default function PostsTab({ nick }: Props) {
   const [accountContent, setAccountContent] = useState("Fetching")
   const [accRep, setAccRep] = useState("Fetching")
   const { ctxVal, setCtxVal } = useContext(mainContext)
-  let token = typeof window !== "undefined" ? (window.localStorage.getItem("token") != null ? window.localStorage.getItem('token') : null) : null
+  let token = Cookies.get("token") || null
 
   useEffect(() => {
     setWidth(window.innerWidth)
