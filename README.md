@@ -7,8 +7,7 @@ Made using NextJS and TailwindCSS
 
 1. Clone repo
 2. Create `.env.local` in the root of the project
-3. Add .env.local to root
-4. Edit it like this:
+3. Edit it like this:
 
    ```
    DB_HOST= *Db host. Example: localhost*
@@ -19,10 +18,10 @@ Made using NextJS and TailwindCSS
    IMGHOST= *image host api, only chevereto-based apis (check /pages/api/main.tsx, imgUploader method). Example: imgbb.com*
    IMGHOST_KEY= *image host key*
    ```
-5. Import `base.sql` to database
-6. Run `npm run build`, then `npm run start`
-7. Open `localhost:3000`
-8. Have fun!
+4. Import `base.sql` to database
+5. Run `npm run build`, then `npm run start`
+6. Open `localhost:3000`
+7. Have fun!
 
 ### Other
 
